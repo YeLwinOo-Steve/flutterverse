@@ -1,3 +1,6 @@
+# Daily data job: fetches pub.dev and GitHub stats and commits them to the
+# `data` branch. A successful run triggers deploy-web.
+
 name: ingest
 
 on:

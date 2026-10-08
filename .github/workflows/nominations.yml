@@ -3,6 +3,7 @@ name: nominations
 # Hall of Fame nominations arrive as issues from the forms in
 # .github/ISSUE_TEMPLATE. `triage` checks each new one automatically;
 # `command` lets maintainers act on it with `/shortlist` or `/decline <reason>`.
+# See CONTRIBUTING.md, "Hall of Fame nominations".
 
 on:
   issues:
