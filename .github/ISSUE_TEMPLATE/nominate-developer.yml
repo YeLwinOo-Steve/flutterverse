@@ -1,0 +1,26 @@
+# Field labels are parsed by packages/fv_ingest/lib/src/nominations.dart
+# (NominationField). Rename them in both places.
+name: Nominate a developer
+description: Propose a developer for the Flutterverse Hall of Fame.
+title: 'Hall of Fame nomination: @'
+labels: [nomination]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nominations are checked automatically, then reviewed by the editorial team before each edition.
+        If someone has already nominated this person, add a 👍 to that issue instead.
+  - type: input
+    id: username
+    attributes:
+      label: GitHub username
+      placeholder: felangel
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why they deserve it
+      description: What have they built or done for the Flutter and Dart community?
+    validations:
+      required: true

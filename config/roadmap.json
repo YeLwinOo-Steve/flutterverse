@@ -1,0 +1,3498 @@
+{
+ "dart": {
+  "name": "Dart",
+  "intro": "From your first variable to isolates, tooling and publishing packages. Open a stop to see what to learn, key concepts and official resources.",
+  "stages": [
+   {
+    "title": "Getting started",
+    "time": "2 days",
+    "blurb": "Install the SDK, run code instantly in the browser and learn how a Dart program is structured.",
+    "build": "A command-line “hello, name” program that reads input.",
+    "topics": [
+     {
+      "t": "Install the Dart SDK",
+      "d": "Install via the Flutter SDK or standalone and confirm with dart --version.",
+      "sub": [
+       "SDK channels",
+       "PATH setup",
+       "dart --version"
+      ],
+      "res": [
+       [
+        "Get the Dart SDK",
+        "https://dart.dev/get-dart"
+       ]
+      ]
+     },
+     {
+      "t": "DartPad",
+      "d": "Write and run Dart in the browser with zero setup — ideal for experiments.",
+      "sub": [
+       "Run & share snippets",
+       "Samples"
+      ],
+      "res": [
+       [
+        "DartPad",
+        "https://dartpad.dev"
+       ]
+      ]
+     },
+     {
+      "t": "Program structure",
+      "d": "Every app starts at main(). Learn imports, libraries and comments.",
+      "sub": [
+       "main()",
+       "import",
+       "Libraries",
+       "Comments"
+      ],
+      "res": [
+       [
+        "Language tour",
+        "https://dart.dev/language"
+       ]
+      ]
+     },
+     {
+      "t": "dart CLI",
+      "d": "Create, run, compile and format projects from the terminal.",
+      "sub": [
+       "dart create",
+       "dart run",
+       "dart compile exe",
+       "dart pub"
+      ],
+      "res": [
+       [
+        "dart tool",
+        "https://dart.dev/tools/dart-tool"
+       ]
+      ]
+     },
+     {
+      "t": "Compilation targets",
+      "d": "How the same code runs as JIT, native AOT, JavaScript or Wasm.",
+      "sub": [
+       "JIT for development",
+       "AOT native",
+       "dart2js",
+       "dart2wasm"
+      ],
+      "res": [
+       [
+        "Platforms",
+        "https://dart.dev/overview#platform"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Language basics",
+    "time": "1 week",
+    "blurb": "The building blocks: variables, types, operators, control flow, functions and errors.",
+    "build": "A tip calculator CLI with input validation.",
+    "topics": [
+     {
+      "t": "Variables",
+      "d": "Declare with var, final and const, and understand type inference.",
+      "sub": [
+       "var",
+       "final vs const",
+       "Type inference",
+       "Default values"
+      ],
+      "res": [
+       [
+        "Variables",
+        "https://dart.dev/language/variables"
+       ]
+      ]
+     },
+     {
+      "t": "Built-in types",
+      "d": "Numbers, strings, booleans, runes and symbols.",
+      "sub": [
+       "int & double",
+       "String interpolation",
+       "Multi-line strings",
+       "bool"
+      ],
+      "res": [
+       [
+        "Built-in types",
+        "https://dart.dev/language/built-in-types"
+       ]
+      ]
+     },
+     {
+      "t": "Operators",
+      "d": "Arithmetic, equality, type tests, cascades and conditional expressions.",
+      "sub": [
+       "is / as",
+       "?? and ??=",
+       "Cascade ..",
+       "Ternary"
+      ],
+      "res": [
+       [
+        "Operators",
+        "https://dart.dev/language/operators"
+       ]
+      ]
+     },
+     {
+      "t": "Control flow",
+      "d": "Branch and loop through your logic.",
+      "sub": [
+       "if / else",
+       "for & for-in",
+       "while",
+       "switch expressions"
+      ],
+      "res": [
+       [
+        "Branches",
+        "https://dart.dev/language/branches"
+       ],
+       [
+        "Loops",
+        "https://dart.dev/language/loops"
+       ]
+      ]
+     },
+     {
+      "t": "Functions",
+      "d": "Functions are first-class objects with flexible parameters.",
+      "sub": [
+       "Named parameters",
+       "Optional & default",
+       "Arrow syntax",
+       "Closures"
+      ],
+      "res": [
+       [
+        "Functions",
+        "https://dart.dev/language/functions"
+       ]
+      ]
+     },
+     {
+      "t": "Error handling",
+      "d": "Throw, catch and clean up with exceptions.",
+      "sub": [
+       "try / catch / finally",
+       "throw",
+       "Custom exceptions",
+       "assert"
+      ],
+      "res": [
+       [
+        "Error handling",
+        "https://dart.dev/language/error-handling"
+       ]
+      ]
+     },
+     {
+      "t": "Type system basics",
+      "d": "Static typing with escape hatches: dynamic, Object and type aliases.",
+      "sub": [
+       "dynamic vs Object",
+       "typedef",
+       "Type tests",
+       "Type inference"
+      ],
+      "res": [
+       [
+        "Type system",
+        "https://dart.dev/language/type-system"
+       ]
+      ]
+     },
+     {
+      "t": "Cascades & spreads",
+      "d": "Chain operations on one object without temporaries.",
+      "sub": [
+       ".. cascade",
+       "?.. null-aware cascade",
+       "Builder style"
+      ],
+      "res": [
+       [
+        "Cascade notation",
+        "https://dart.dev/language/operators#cascade-notation"
+       ]
+      ]
+     },
+     {
+      "t": "Assertions & debugging",
+      "d": "Catch bad assumptions early in development builds.",
+      "sub": [
+       "assert()",
+       "print vs log",
+       "debugger()"
+      ],
+      "res": [
+       [
+        "assert",
+        "https://dart.dev/language/error-handling#assert"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Collections",
+    "time": "1 week",
+    "blurb": "Lists, sets and maps plus the modern syntax that makes data pleasant to shape.",
+    "build": "A to-do list CLI that adds, filters and groups tasks.",
+    "topics": [
+     {
+      "t": "Lists, sets & maps",
+      "d": "The three core collection types and their literals.",
+      "sub": [
+       "List",
+       "Set",
+       "Map",
+       "Literals"
+      ],
+      "res": [
+       [
+        "Collections",
+        "https://dart.dev/language/collections"
+       ]
+      ]
+     },
+     {
+      "t": "Iterables",
+      "d": "Transform data with lazy iterable methods.",
+      "sub": [
+       "map / where",
+       "fold & reduce",
+       "any / every",
+       "Lazy evaluation"
+      ],
+      "res": [
+       [
+        "Iterable collections",
+        "https://dart.dev/libraries/collections/iterables"
+       ]
+      ]
+     },
+     {
+      "t": "Collection if, for & spread",
+      "d": "Build collections declaratively.",
+      "sub": [
+       "Spread ...",
+       "Null-aware spread ...?",
+       "Collection if",
+       "Collection for"
+      ],
+      "res": [
+       [
+        "Control-flow operators",
+        "https://dart.dev/language/collections#control-flow-operators"
+       ]
+      ]
+     },
+     {
+      "t": "Records",
+      "d": "Anonymous, immutable aggregates for returning multiple values.",
+      "sub": [
+       "Positional fields",
+       "Named fields",
+       "Record types"
+      ],
+      "res": [
+       [
+        "Records",
+        "https://dart.dev/language/records"
+       ]
+      ]
+     },
+     {
+      "t": "Patterns",
+      "d": "Destructure and match data structurally.",
+      "sub": [
+       "Destructuring",
+       "Switch patterns",
+       "Guards",
+       "Exhaustiveness"
+      ],
+      "res": [
+       [
+        "Patterns",
+        "https://dart.dev/language/patterns"
+       ]
+      ]
+     },
+     {
+      "t": "Sorting & comparing",
+      "d": "Order data and define natural ordering.",
+      "sub": [
+       "sort()",
+       "Comparable",
+       "compareTo",
+       "package:collection"
+      ],
+      "res": [
+       [
+        "collection",
+        "https://pub.dev/packages/collection"
+       ]
+      ]
+     },
+     {
+      "t": "Immutable collections",
+      "d": "Prevent accidental mutation of shared data.",
+      "sub": [
+       "const collections",
+       "List.unmodifiable",
+       "UnmodifiableListView"
+      ],
+      "res": [
+       [
+        "dart:collection",
+        "https://api.dart.dev/dart-collection/dart-collection-library.html"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Null safety",
+    "time": "3 days",
+    "blurb": "Understand why the compiler stops you — and how to work with it, not against it.",
+    "build": "Refactor your to-do app to be fully null-safe without a single !.",
+    "topics": [
+     {
+      "t": "Nullable types",
+      "d": "Types are non-nullable by default; add ? to allow null.",
+      "sub": [
+       "T vs T?",
+       "Null as a type",
+       "Sound null safety"
+      ],
+      "res": [
+       [
+        "Understanding null safety",
+        "https://dart.dev/null-safety/understanding-null-safety"
+       ]
+      ]
+     },
+     {
+      "t": "Null-aware operators",
+      "d": "Safely read, default and assert values.",
+      "sub": [
+       "?.",
+       "??",
+       "! (bang)",
+       "?[]"
+      ],
+      "res": [
+       [
+        "Null safety",
+        "https://dart.dev/null-safety"
+       ]
+      ]
+     },
+     {
+      "t": "late variables",
+      "d": "Defer initialisation while keeping non-null types.",
+      "sub": [
+       "late",
+       "late final",
+       "Lazy init"
+      ],
+      "res": [
+       [
+        "Late variables",
+        "https://dart.dev/language/variables#late-variables"
+       ]
+      ]
+     },
+     {
+      "t": "Type promotion",
+      "d": "How flow analysis narrows types after checks.",
+      "sub": [
+       "Flow analysis",
+       "Promotion failures",
+       "Private field promotion"
+      ],
+      "res": [
+       [
+        "Type promotion",
+        "https://dart.dev/tools/non-promotion-reasons"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Core libraries",
+    "time": "1 week",
+    "blurb": "The standard library you will reach for every day: text, dates, maths, JSON and files.",
+    "build": "A CLI that reads a CSV file, aggregates it and writes JSON.",
+    "topics": [
+     {
+      "t": "Strings & RegExp",
+      "d": "Search, split and transform text.",
+      "sub": [
+       "StringBuffer",
+       "split / join",
+       "RegExp",
+       "Pattern matching"
+      ],
+      "res": [
+       [
+        "dart:core",
+        "https://dart.dev/libraries/dart-core"
+       ]
+      ]
+     },
+     {
+      "t": "Dates & durations",
+      "d": "Work with time without off-by-one surprises.",
+      "sub": [
+       "DateTime",
+       "Duration",
+       "UTC vs local",
+       "intl formatting"
+      ],
+      "res": [
+       [
+        "DateTime",
+        "https://api.dart.dev/dart-core/DateTime-class.html"
+       ]
+      ]
+     },
+     {
+      "t": "dart:math",
+      "d": "Random numbers, constants and geometry.",
+      "sub": [
+       "Random",
+       "min / max",
+       "Point & Rectangle"
+      ],
+      "res": [
+       [
+        "dart:math",
+        "https://dart.dev/libraries/dart-math"
+       ]
+      ]
+     },
+     {
+      "t": "dart:convert",
+      "d": "Encode and decode JSON, UTF-8 and Base64.",
+      "sub": [
+       "jsonEncode / jsonDecode",
+       "utf8",
+       "base64",
+       "Codecs"
+      ],
+      "res": [
+       [
+        "dart:convert",
+        "https://dart.dev/libraries/dart-convert"
+       ]
+      ]
+     },
+     {
+      "t": "dart:io",
+      "d": "Files, directories, processes and HTTP on native platforms.",
+      "sub": [
+       "File & Directory",
+       "Process",
+       "HttpClient",
+       "Platform"
+      ],
+      "res": [
+       [
+        "dart:io",
+        "https://dart.dev/libraries/dart-io"
+       ]
+      ]
+     },
+     {
+      "t": "Uri & URLs",
+      "d": "Build and parse URLs safely.",
+      "sub": [
+       "Uri.parse",
+       "Query parameters",
+       "Uri.https"
+      ],
+      "res": [
+       [
+        "Uri",
+        "https://api.dart.dev/dart-core/Uri-class.html"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Object-oriented Dart",
+    "time": "2 weeks",
+    "blurb": "Model your domain with classes, mixins, sealed hierarchies and generics.",
+    "build": "A bank-account library with sealed transaction types.",
+    "topics": [
+     {
+      "t": "Classes & constructors",
+      "d": "Fields, methods and the many kinds of constructors.",
+      "sub": [
+       "Generative",
+       "Named",
+       "Factory",
+       "const constructors",
+       "Initializer lists"
+      ],
+      "res": [
+       [
+        "Classes",
+        "https://dart.dev/language/classes"
+       ],
+       [
+        "Constructors",
+        "https://dart.dev/language/constructors"
+       ]
+      ]
+     },
+     {
+      "t": "Inheritance & interfaces",
+      "d": "Extend classes and implement implicit interfaces.",
+      "sub": [
+       "extends",
+       "implements",
+       "abstract",
+       "@override"
+      ],
+      "res": [
+       [
+        "Extend a class",
+        "https://dart.dev/language/extend"
+       ]
+      ]
+     },
+     {
+      "t": "Mixins",
+      "d": "Reuse behaviour across class hierarchies.",
+      "sub": [
+       "mixin",
+       "with",
+       "on clause",
+       "mixin class"
+      ],
+      "res": [
+       [
+        "Mixins",
+        "https://dart.dev/language/mixins"
+       ]
+      ]
+     },
+     {
+      "t": "Extension methods",
+      "d": "Add functionality to existing types.",
+      "sub": [
+       "extension",
+       "Extension types",
+       "Static resolution"
+      ],
+      "res": [
+       [
+        "Extension methods",
+        "https://dart.dev/language/extension-methods"
+       ]
+      ]
+     },
+     {
+      "t": "Class modifiers & sealed",
+      "d": "Control how classes can be used and get exhaustive switches.",
+      "sub": [
+       "sealed",
+       "final",
+       "base",
+       "interface"
+      ],
+      "res": [
+       [
+        "Class modifiers",
+        "https://dart.dev/language/class-modifiers"
+       ]
+      ]
+     },
+     {
+      "t": "Enhanced enums",
+      "d": "Enums with fields, methods and interfaces.",
+      "sub": [
+       "Enum fields",
+       "Enum methods",
+       "values"
+      ],
+      "res": [
+       [
+        "Enums",
+        "https://dart.dev/language/enums"
+       ]
+      ]
+     },
+     {
+      "t": "Generics",
+      "d": "Write type-safe, reusable code.",
+      "sub": [
+       "Type parameters",
+       "Bounds",
+       "Generic methods"
+      ],
+      "res": [
+       [
+        "Generics",
+        "https://dart.dev/language/generics"
+       ]
+      ]
+     },
+     {
+      "t": "Getters & setters",
+      "d": "Computed properties and controlled mutation.",
+      "sub": [
+       "get",
+       "set",
+       "Private members _"
+      ],
+      "res": [
+       [
+        "Methods",
+        "https://dart.dev/language/methods"
+       ]
+      ]
+     },
+     {
+      "t": "Equality & hashCode",
+      "d": "Value equality for models and collections.",
+      "sub": [
+       "operator ==",
+       "hashCode",
+       "identical()",
+       "equatable"
+      ],
+      "res": [
+       [
+        "Equality",
+        "https://dart.dev/effective-dart/design#equality"
+       ]
+      ]
+     },
+     {
+      "t": "Operator overloading",
+      "d": "Define +, [] and friends on your own types.",
+      "sub": [
+       "operator +",
+       "operator []",
+       "Callable classes"
+      ],
+      "res": [
+       [
+        "Operators",
+        "https://dart.dev/language/methods#operators"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Type system & generics",
+    "time": "1 week",
+    "blurb": "Go deeper into how Dart types work, so the analyzer becomes your ally.",
+    "build": "A generic, type-safe cache with expiry and typed keys.",
+    "topics": [
+     {
+      "t": "Generic classes & methods",
+      "d": "Reusable, type-safe building blocks.",
+      "sub": [
+       "class Box<T>",
+       "T extends Bound",
+       "Generic methods",
+       "Reified generics"
+      ],
+      "res": [
+       [
+        "Generics",
+        "https://dart.dev/language/generics"
+       ]
+      ]
+     },
+     {
+      "t": "Top & bottom types",
+      "d": "Where Object?, dynamic, void and Never fit.",
+      "sub": [
+       "Object?",
+       "dynamic",
+       "void",
+       "Never"
+      ],
+      "res": [
+       [
+        "Type system",
+        "https://dart.dev/language/type-system"
+       ]
+      ]
+     },
+     {
+      "t": "Function types & typedefs",
+      "d": "Describe callbacks precisely.",
+      "sub": [
+       "Function types",
+       "typedef",
+       "Tear-offs",
+       "Higher-order functions"
+      ],
+      "res": [
+       [
+        "Typedefs",
+        "https://dart.dev/language/typedefs"
+       ]
+      ]
+     },
+     {
+      "t": "Variance & covariant",
+      "d": "Why List<Cat> is a List<Animal>, and when that bites.",
+      "sub": [
+       "Covariant generics",
+       "covariant keyword",
+       "Runtime checks"
+      ],
+      "res": [
+       [
+        "Sound typing",
+        "https://dart.dev/language/type-system#soundness"
+       ]
+      ]
+     },
+     {
+      "t": "Extension types",
+      "d": "Zero-cost wrappers that give primitives a new API.",
+      "sub": [
+       "extension type",
+       "Representation type",
+       "Interop use cases"
+      ],
+      "res": [
+       [
+        "Extension types",
+        "https://dart.dev/language/extension-types"
+       ]
+      ]
+     },
+     {
+      "t": "Type inference",
+      "d": "What the compiler infers and how to guide it.",
+      "sub": [
+       "Local inference",
+       "Generic inference",
+       "strict-inference lints"
+      ],
+      "res": [
+       [
+        "Type inference",
+        "https://dart.dev/language/type-system#type-inference"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Async & concurrency",
+    "time": "1 week",
+    "blurb": "Futures, streams and real parallelism with isolates.",
+    "build": "A CLI that fetches several URLs concurrently and streams progress.",
+    "topics": [
+     {
+      "t": "Futures",
+      "d": "Represent a value that arrives later.",
+      "sub": [
+       "then / catchError",
+       "Future.wait",
+       "Timeouts"
+      ],
+      "res": [
+       [
+        "Asynchronous programming",
+        "https://dart.dev/libraries/async/async-await"
+       ]
+      ]
+     },
+     {
+      "t": "async & await",
+      "d": "Write asynchronous code that reads top to bottom.",
+      "sub": [
+       "async functions",
+       "await",
+       "Error handling"
+      ],
+      "res": [
+       [
+        "async & await",
+        "https://dart.dev/libraries/async/async-await"
+       ]
+      ]
+     },
+     {
+      "t": "Streams",
+      "d": "Sequences of async events.",
+      "sub": [
+       "await for",
+       "StreamController",
+       "Broadcast streams",
+       "Transformers"
+      ],
+      "res": [
+       [
+        "Using streams",
+        "https://dart.dev/libraries/async/using-streams"
+       ]
+      ]
+     },
+     {
+      "t": "Isolates",
+      "d": "Run CPU-heavy work in parallel without shared memory.",
+      "sub": [
+       "Isolate.run",
+       "Ports",
+       "Event loop"
+      ],
+      "res": [
+       [
+        "Concurrency",
+        "https://dart.dev/language/concurrency"
+       ]
+      ]
+     },
+     {
+      "t": "Zones",
+      "opt": true,
+      "d": "Advanced: intercept async errors and context.",
+      "sub": [
+       "runZonedGuarded",
+       "Zone values"
+      ],
+      "res": [
+       [
+        "Zones",
+        "https://dart.dev/libraries/async/zones"
+       ]
+      ]
+     },
+     {
+      "t": "Event loop",
+      "d": "How Dart schedules work on a single thread.",
+      "sub": [
+       "Event queue",
+       "Microtask queue",
+       "scheduleMicrotask"
+      ],
+      "res": [
+       [
+        "Event loop",
+        "https://dart.dev/language/concurrency#event-loop"
+       ]
+      ]
+     },
+     {
+      "t": "Completers & async errors",
+      "d": "Bridge callback APIs and handle failures properly.",
+      "sub": [
+       "Completer",
+       "Unhandled errors",
+       "Future.error",
+       "Stream error handling"
+      ],
+      "res": [
+       [
+        "Futures & errors",
+        "https://dart.dev/libraries/async/futures-error-handling"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Generators & streams in depth",
+    "time": "1 week",
+    "blurb": "Produce values lazily and build reactive pipelines with streams.",
+    "build": "A live log tailer that filters, debounces and batches lines.",
+    "topics": [
+     {
+      "t": "sync* generators",
+      "d": "Produce iterables lazily with yield.",
+      "sub": [
+       "sync*",
+       "yield",
+       "yield*",
+       "Lazy sequences"
+      ],
+      "res": [
+       [
+        "Generators",
+        "https://dart.dev/language/functions#generators"
+       ]
+      ]
+     },
+     {
+      "t": "async* generators",
+      "d": "Produce streams of values over time.",
+      "sub": [
+       "async*",
+       "yield in streams",
+       "await for"
+      ],
+      "res": [
+       [
+        "Generators",
+        "https://dart.dev/language/functions#generators"
+       ]
+      ]
+     },
+     {
+      "t": "Stream transformations",
+      "d": "Map, filter and combine streams.",
+      "sub": [
+       "map / where",
+       "asyncMap",
+       "expand",
+       "StreamTransformer"
+      ],
+      "res": [
+       [
+        "Stream",
+        "https://api.dart.dev/dart-async/Stream-class.html"
+       ]
+      ]
+     },
+     {
+      "t": "Single vs broadcast",
+      "d": "Choose the right subscription model.",
+      "sub": [
+       "Single-subscription",
+       "asBroadcastStream",
+       "StreamController.broadcast"
+      ],
+      "res": [
+       [
+        "Creating streams",
+        "https://dart.dev/libraries/async/creating-streams"
+       ]
+      ]
+     },
+     {
+      "t": "Backpressure & cancellation",
+      "d": "Pause, resume and clean up subscriptions.",
+      "sub": [
+       "StreamSubscription",
+       "pause / resume",
+       "cancel",
+       "onCancel"
+      ],
+      "res": [
+       [
+        "Creating streams",
+        "https://dart.dev/libraries/async/creating-streams"
+       ]
+      ]
+     },
+     {
+      "t": "rxdart",
+      "d": "Extra reactive operators for complex flows.",
+      "sub": [
+       "debounceTime",
+       "combineLatest",
+       "BehaviorSubject"
+      ],
+      "res": [
+       [
+        "rxdart",
+        "https://pub.dev/packages/rxdart"
+       ]
+      ],
+      "opt": true,
+      "pkg": "rxdart"
+     }
+    ]
+   },
+   {
+    "title": "Design patterns",
+    "time": "1 week",
+    "blurb": "Idiomatic ways to structure Dart code that stays readable as it grows.",
+    "build": "Restructure your CSV tool into repository, service and CLI layers.",
+    "topics": [
+     {
+      "t": "Immutability",
+      "d": "Prefer final fields and copyWith for predictable state.",
+      "sub": [
+       "final fields",
+       "copyWith",
+       "const constructors",
+       "freezed"
+      ],
+      "res": [
+       [
+        "Effective Dart: Design",
+        "https://dart.dev/effective-dart/design"
+       ]
+      ]
+     },
+     {
+      "t": "Factory & singleton",
+      "d": "Control instance creation.",
+      "sub": [
+       "factory constructors",
+       "Private constructors",
+       "Caching instances"
+      ],
+      "res": [
+       [
+        "Factory constructors",
+        "https://dart.dev/language/constructors#factory-constructors"
+       ]
+      ]
+     },
+     {
+      "t": "Repository & service layers",
+      "d": "Separate data access from business logic.",
+      "sub": [
+       "Interfaces",
+       "Implementations",
+       "Fakes for tests"
+      ],
+      "res": [
+       [
+        "App architecture",
+        "https://docs.flutter.dev/app-architecture"
+       ]
+      ]
+     },
+     {
+      "t": "Dependency injection",
+      "d": "Pass dependencies in instead of reaching for globals.",
+      "sub": [
+       "Constructor injection",
+       "get_it",
+       "Service locators"
+      ],
+      "res": [
+       [
+        "get_it",
+        "https://pub.dev/packages/get_it"
+       ]
+      ]
+     },
+     {
+      "t": "Result & error types",
+      "d": "Model failure explicitly with sealed classes.",
+      "sub": [
+       "sealed Result",
+       "Exhaustive switch",
+       "Either"
+      ],
+      "res": [
+       [
+        "Sealed classes",
+        "https://dart.dev/language/class-modifiers#sealed"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Tooling & quality",
+    "time": "1 week",
+    "blurb": "The everyday toolchain: packages, lints, style and tests.",
+    "build": "Add tests and lints to your bank-account library and hit zero warnings.",
+    "topics": [
+     {
+      "t": "pub & pubspec.yaml",
+      "d": "Declare dependencies and manage versions.",
+      "sub": [
+       "dependencies",
+       "dev_dependencies",
+       "Version constraints",
+       "pub get / upgrade"
+      ],
+      "res": [
+       [
+        "pubspec",
+        "https://dart.dev/tools/pub/pubspec"
+       ]
+      ]
+     },
+     {
+      "t": "Analyzer & lints",
+      "d": "Catch bugs and enforce style statically.",
+      "sub": [
+       "analysis_options.yaml",
+       "package:lints",
+       "dart fix"
+      ],
+      "res": [
+       [
+        "Static analysis",
+        "https://dart.dev/tools/analysis"
+       ]
+      ]
+     },
+     {
+      "t": "Effective Dart",
+      "d": "Community conventions for style, docs and API design.",
+      "sub": [
+       "Style",
+       "Documentation",
+       "Usage",
+       "Design"
+      ],
+      "res": [
+       [
+        "Effective Dart",
+        "https://dart.dev/effective-dart"
+       ]
+      ]
+     },
+     {
+      "t": "Testing",
+      "d": "Unit tests with package:test and mocks.",
+      "sub": [
+       "test()",
+       "group()",
+       "expect & matchers",
+       "mocktail"
+      ],
+      "res": [
+       [
+        "Testing",
+        "https://dart.dev/tools/testing"
+       ]
+      ]
+     },
+     {
+      "t": "Publishing to pub.dev",
+      "opt": true,
+      "d": "Share a package with the world.",
+      "sub": [
+       "Verified publishers",
+       "Pub points",
+       "Semantic versioning"
+      ],
+      "res": [
+       [
+        "Publishing packages",
+        "https://dart.dev/tools/pub/publishing"
+       ]
+      ]
+     },
+     {
+      "t": "Debugging",
+      "d": "Breakpoints, the observatory and DevTools for Dart apps.",
+      "sub": [
+       "Breakpoints",
+       "dart devtools",
+       "Logging"
+      ],
+      "res": [
+       [
+        "Debugging",
+        "https://dart.dev/tools/dart-devtools"
+       ]
+      ]
+     },
+     {
+      "t": "Documentation",
+      "d": "Write doc comments and generate API docs.",
+      "sub": [
+       "/// comments",
+       "dart doc",
+       "Doc references"
+      ],
+      "res": [
+       [
+        "dart doc",
+        "https://dart.dev/tools/dart-doc"
+       ]
+      ]
+     },
+     {
+      "t": "Benchmarking",
+      "d": "Measure before you optimise.",
+      "sub": [
+       "Stopwatch",
+       "benchmark_harness",
+       "AOT vs JIT"
+      ],
+      "res": [
+       [
+        "benchmark_harness",
+        "https://pub.dev/packages/benchmark_harness"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Testing in depth",
+    "time": "1 week",
+    "blurb": "Build a test suite you trust: structure, async, mocks and coverage.",
+    "build": "90% coverage on your generic cache including async expiry.",
+    "topics": [
+     {
+      "t": "Test structure",
+      "d": "Organise tests that read like documentation.",
+      "sub": [
+       "group()",
+       "setUp / tearDown",
+       "Test naming",
+       "Tags"
+      ],
+      "res": [
+       [
+        "package:test",
+        "https://pub.dev/packages/test"
+       ]
+      ]
+     },
+     {
+      "t": "Matchers",
+      "d": "Express expectations clearly.",
+      "sub": [
+       "equals / isA",
+       "throwsA",
+       "completion",
+       "emitsInOrder"
+      ],
+      "res": [
+       [
+        "matcher",
+        "https://pub.dev/packages/matcher"
+       ]
+      ]
+     },
+     {
+      "t": "Async tests",
+      "d": "Test futures, streams and timers deterministically.",
+      "sub": [
+       "async tests",
+       "expectLater",
+       "fake_async",
+       "Timeouts"
+      ],
+      "res": [
+       [
+        "fake_async",
+        "https://pub.dev/packages/fake_async"
+       ]
+      ]
+     },
+     {
+      "t": "Mocks & fakes",
+      "d": "Replace dependencies in tests.",
+      "sub": [
+       "mocktail",
+       "mockito",
+       "Hand-written fakes"
+      ],
+      "res": [
+       [
+        "mocktail",
+        "https://pub.dev/packages/mocktail"
+       ]
+      ]
+     },
+     {
+      "t": "Coverage",
+      "d": "Measure what your tests exercise.",
+      "sub": [
+       "dart test --coverage",
+       "coverage package",
+       "lcov reports"
+      ],
+      "res": [
+       [
+        "coverage",
+        "https://pub.dev/packages/coverage"
+       ]
+      ]
+     },
+     {
+      "t": "Test in CI",
+      "d": "Run tests on every push.",
+      "sub": [
+       "GitHub Actions",
+       "dart-lang/setup-dart",
+       "Matrix builds"
+      ],
+      "res": [
+       [
+        "setup-dart",
+        "https://github.com/dart-lang/setup-dart"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Packages & libraries",
+    "time": "4 days",
+    "blurb": "Organise code into libraries and packages others can depend on.",
+    "build": "Split your project into a reusable package plus an example app.",
+    "topics": [
+     {
+      "t": "Library structure",
+      "d": "Lay out a package the conventional way.",
+      "sub": [
+       "lib/ & lib/src/",
+       "export",
+       "show / hide",
+       "Library privacy"
+      ],
+      "res": [
+       [
+        "Creating packages",
+        "https://dart.dev/tools/pub/create-packages"
+       ]
+      ]
+     },
+     {
+      "t": "part & part of",
+      "d": "Split one library across files (mostly for codegen).",
+      "sub": [
+       "part",
+       "part of",
+       "Generated parts"
+      ],
+      "res": [
+       [
+        "Libraries",
+        "https://dart.dev/language/libraries"
+       ]
+      ]
+     },
+     {
+      "t": "Conditional imports",
+      "d": "Different implementations per platform.",
+      "sub": [
+       "dart.library.io",
+       "dart.library.js_interop",
+       "Stubs"
+      ],
+      "res": [
+       [
+        "Conditional imports",
+        "https://dart.dev/tools/pub/create-packages#conditionally-importing-and-exporting-library-files"
+       ]
+      ]
+     },
+     {
+      "t": "Versioning & dependencies",
+      "d": "Semantic versioning and dependency resolution.",
+      "sub": [
+       "Caret syntax",
+       "dependency_overrides",
+       "pub outdated",
+       "Lockfiles"
+      ],
+      "res": [
+       [
+        "Versioning",
+        "https://dart.dev/tools/pub/versioning"
+       ]
+      ]
+     },
+     {
+      "t": "Pub workspaces",
+      "d": "Manage monorepos with multiple packages.",
+      "sub": [
+       "workspace:",
+       "resolution: workspace",
+       "melos"
+      ],
+      "res": [
+       [
+        "Workspaces",
+        "https://dart.dev/tools/pub/workspaces"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Networking & data",
+    "time": "1 week",
+    "blurb": "Talk to the network and turn raw data into typed models.",
+    "build": "A typed client for a public REST API with retries and caching.",
+    "topics": [
+     {
+      "t": "package:http",
+      "d": "Make HTTP requests across platforms.",
+      "sub": [
+       "get / post",
+       "Headers",
+       "Client reuse",
+       "Status codes"
+      ],
+      "res": [
+       [
+        "http",
+        "https://pub.dev/packages/http"
+       ]
+      ]
+     },
+     {
+      "t": "JSON serialization",
+      "d": "Map JSON to models safely.",
+      "sub": [
+       "fromJson / toJson",
+       "json_serializable",
+       "Patterns on JSON"
+      ],
+      "res": [
+       [
+        "JSON",
+        "https://dart.dev/libraries/serialization/json"
+       ]
+      ]
+     },
+     {
+      "t": "dio & interceptors",
+      "d": "Advanced client features.",
+      "sub": [
+       "Interceptors",
+       "Retries",
+       "Cancellation",
+       "Timeouts"
+      ],
+      "res": [
+       [
+        "dio",
+        "https://pub.dev/packages/dio"
+       ]
+      ]
+     },
+     {
+      "t": "WebSockets",
+      "d": "Two-way realtime connections.",
+      "sub": [
+       "web_socket_channel",
+       "Reconnect logic",
+       "Heartbeats"
+      ],
+      "res": [
+       [
+        "web_socket_channel",
+        "https://pub.dev/packages/web_socket_channel"
+       ]
+      ]
+     },
+     {
+      "t": "Files & streams I/O",
+      "d": "Read and write large data efficiently.",
+      "sub": [
+       "File.openRead",
+       "LineSplitter",
+       "IOSink"
+      ],
+      "res": [
+       [
+        "dart:io",
+        "https://dart.dev/libraries/dart-io"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Performance",
+    "time": "4 days",
+    "blurb": "Make Dart code fast and lean — and prove it with measurements.",
+    "build": "Profile your API client and cut its parse time in half.",
+    "topics": [
+     {
+      "t": "JIT vs AOT",
+      "d": "Why dev builds and release builds behave differently.",
+      "sub": [
+       "dart run vs compile exe",
+       "Startup time",
+       "Tree shaking"
+      ],
+      "res": [
+       [
+        "dart compile",
+        "https://dart.dev/tools/dart-compile"
+       ]
+      ]
+     },
+     {
+      "t": "const & canonicalisation",
+      "d": "Free speed and memory from compile-time constants.",
+      "sub": [
+       "const objects",
+       "identical()",
+       "prefer_const lints"
+      ],
+      "res": [
+       [
+        "const",
+        "https://dart.dev/language/variables#final-and-const"
+       ]
+      ]
+     },
+     {
+      "t": "Profiling",
+      "d": "Find hot spots with DevTools.",
+      "sub": [
+       "CPU profiler",
+       "Memory view",
+       "Timeline events"
+      ],
+      "res": [
+       [
+        "DevTools",
+        "https://dart.dev/tools/dart-devtools"
+       ]
+      ]
+     },
+     {
+      "t": "Memory & GC",
+      "d": "Understand allocation and avoid leaks.",
+      "sub": [
+       "Generational GC",
+       "Retaining paths",
+       "WeakReference & Finalizer"
+      ],
+      "res": [
+       [
+        "Finalizer",
+        "https://api.dart.dev/dart-core/Finalizer-class.html"
+       ]
+      ]
+     },
+     {
+      "t": "Offloading work",
+      "d": "Keep the main isolate responsive.",
+      "sub": [
+       "Isolate.run",
+       "compute",
+       "Worker pools"
+      ],
+      "res": [
+       [
+        "Concurrency",
+        "https://dart.dev/language/concurrency"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Going further",
+    "time": "Ongoing",
+    "blurb": "Pick a direction: servers, CLIs, the web, code generation or native interop.",
+    "build": "A small REST API with shelf, or a CLI published to pub.dev.",
+    "topics": [
+     {
+      "t": "Command-line apps",
+      "d": "Parse arguments and build real tools.",
+      "sub": [
+       "package:args",
+       "stdin / stdout",
+       "Exit codes"
+      ],
+      "res": [
+       [
+        "Command-line tutorial",
+        "https://dart.dev/tutorials/server/cmdline"
+       ]
+      ]
+     },
+     {
+      "t": "Code generation",
+      "d": "Generate boilerplate with build_runner.",
+      "sub": [
+       "build_runner",
+       "json_serializable",
+       "Annotations"
+      ],
+      "res": [
+       [
+        "build_runner",
+        "https://pub.dev/packages/build_runner"
+       ]
+      ]
+     },
+     {
+      "t": "Server-side with shelf",
+      "opt": true,
+      "d": "Build HTTP servers and APIs.",
+      "sub": [
+       "Handlers",
+       "Middleware",
+       "Routing"
+      ],
+      "res": [
+       [
+        "shelf",
+        "https://pub.dev/packages/shelf"
+       ]
+      ]
+     },
+     {
+      "t": "JS interop",
+      "opt": true,
+      "d": "Call JavaScript from Dart compiled to the web.",
+      "sub": [
+       "dart:js_interop",
+       "package:web",
+       "Wasm"
+      ],
+      "res": [
+       [
+        "JS interop",
+        "https://dart.dev/interop/js-interop"
+       ]
+      ]
+     },
+     {
+      "t": "FFI",
+      "opt": true,
+      "d": "Call native C libraries directly.",
+      "sub": [
+       "dart:ffi",
+       "Pointers",
+       "ffigen"
+      ],
+      "res": [
+       [
+        "C interop",
+        "https://dart.dev/interop/c-interop"
+       ]
+      ]
+     },
+     {
+      "t": "Full-stack Dart",
+      "d": "Share models between a Dart backend and a Flutter app.",
+      "sub": [
+       "Serverpod",
+       "Dart Frog",
+       "Shared packages"
+      ],
+      "res": [
+       [
+        "Serverpod",
+        "https://serverpod.dev"
+       ],
+       [
+        "Dart Frog",
+        "https://dartfrog.vgv.dev"
+       ]
+      ],
+      "opt": true,
+      "pkg": "serverpod"
+     },
+     {
+      "t": "gRPC & protobuf",
+      "d": "Typed, efficient service APIs.",
+      "sub": [
+       "protoc_plugin",
+       "Streams",
+       "Code generation"
+      ],
+      "res": [
+       [
+        "grpc",
+        "https://pub.dev/packages/grpc"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "WebAssembly",
+      "d": "Compile Dart to Wasm for the web.",
+      "sub": [
+       "dart compile wasm",
+       "WasmGC",
+       "Browser support"
+      ],
+      "res": [
+       [
+        "Wasm",
+        "https://dart.dev/web/wasm"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   }
+  ]
+ },
+ "flutter": {
+  "name": "Flutter",
+  "intro": "From hot reload to shipping on every store. Open a stop to see what to learn, key concepts and official resources.",
+  "stages": [
+   {
+    "title": "Dart essentials",
+    "time": "1 week",
+    "blurb": "Flutter is written in Dart. Get comfortable with these before building UI — or take the Dart track first.",
+    "build": "Solve five small exercises in DartPad.",
+    "topics": [
+     {
+      "t": "Syntax & types",
+      "d": "Variables, functions, classes and collections.",
+      "sub": [
+       "final / const",
+       "Classes",
+       "Lists & maps"
+      ],
+      "res": [
+       [
+        "Dart language tour",
+        "https://dart.dev/language"
+       ]
+      ]
+     },
+     {
+      "t": "Null safety",
+      "d": "Why ?, ! and late matter in every widget.",
+      "sub": [
+       "T?",
+       "??",
+       "late"
+      ],
+      "res": [
+       [
+        "Null safety",
+        "https://dart.dev/null-safety"
+       ]
+      ]
+     },
+     {
+      "t": "async & await",
+      "d": "Load data without freezing the UI.",
+      "sub": [
+       "Future",
+       "await",
+       "Stream"
+      ],
+      "res": [
+       [
+        "Async",
+        "https://dart.dev/libraries/async/async-await"
+       ]
+      ]
+     },
+     {
+      "t": "Records & patterns",
+      "opt": true,
+      "d": "Modern Dart you will see in newer codebases.",
+      "sub": [
+       "Records",
+       "switch patterns"
+      ],
+      "res": [
+       [
+        "Patterns",
+        "https://dart.dev/language/patterns"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Setup & tooling",
+    "time": "2 days",
+    "blurb": "Install Flutter, pick an editor and meet hot reload and DevTools.",
+    "build": "Run the counter app on a device and an emulator.",
+    "topics": [
+     {
+      "t": "Install Flutter",
+      "d": "Install the SDK and platform toolchains, then run flutter doctor.",
+      "sub": [
+       "flutter doctor",
+       "Android Studio / Xcode",
+       "Emulators"
+      ],
+      "res": [
+       [
+        "Install",
+        "https://docs.flutter.dev/get-started/install"
+       ]
+      ]
+     },
+     {
+      "t": "Editor setup",
+      "d": "VS Code or Android Studio with the Flutter plugin.",
+      "sub": [
+       "Extensions",
+       "Debugging",
+       "Widget inspector"
+      ],
+      "res": [
+       [
+        "Editor setup",
+        "https://docs.flutter.dev/tools/vs-code"
+       ]
+      ]
+     },
+     {
+      "t": "Project structure",
+      "d": "What lives in lib/, test/, platform folders and pubspec.yaml.",
+      "sub": [
+       "lib/main.dart",
+       "pubspec.yaml",
+       "Platform folders"
+      ],
+      "res": [
+       [
+        "Create a project",
+        "https://docs.flutter.dev/reference/create-new-app"
+       ]
+      ]
+     },
+     {
+      "t": "Hot reload & restart",
+      "d": "Iterate in sub-second loops while keeping state.",
+      "sub": [
+       "Hot reload",
+       "Hot restart",
+       "Limitations"
+      ],
+      "res": [
+       [
+        "Hot reload",
+        "https://docs.flutter.dev/tools/hot-reload"
+       ]
+      ]
+     },
+     {
+      "t": "DevTools",
+      "d": "Inspect layouts, profile performance and debug memory.",
+      "sub": [
+       "Inspector",
+       "Performance",
+       "Network",
+       "Memory"
+      ],
+      "res": [
+       [
+        "DevTools",
+        "https://docs.flutter.dev/tools/devtools"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Widget fundamentals",
+    "time": "1 week",
+    "blurb": "Everything is a widget. Learn how they compose, rebuild and hold state.",
+    "build": "A profile card screen built from scratch.",
+    "topics": [
+     {
+      "t": "Stateless vs stateful",
+      "d": "When a widget needs state, and how setState triggers rebuilds.",
+      "sub": [
+       "StatelessWidget",
+       "StatefulWidget",
+       "setState",
+       "Lifecycle"
+      ],
+      "res": [
+       [
+        "Widgets intro",
+        "https://docs.flutter.dev/ui/widgets-intro"
+       ]
+      ]
+     },
+     {
+      "t": "BuildContext & the tree",
+      "d": "How widgets, elements and render objects relate.",
+      "sub": [
+       "Widget tree",
+       "Element tree",
+       "BuildContext",
+       "Keys"
+      ],
+      "res": [
+       [
+        "Architectural overview",
+        "https://docs.flutter.dev/resources/architectural-overview"
+       ]
+      ]
+     },
+     {
+      "t": "Core widgets",
+      "d": "The building blocks you use every day.",
+      "sub": [
+       "Text",
+       "Image",
+       "Icon",
+       "Container",
+       "Padding"
+      ],
+      "res": [
+       [
+        "Widget catalog",
+        "https://docs.flutter.dev/ui/widgets"
+       ]
+      ]
+     },
+     {
+      "t": "Lists & grids",
+      "d": "Render long scrolling content efficiently.",
+      "sub": [
+       "ListView.builder",
+       "GridView",
+       "Slivers"
+      ],
+      "res": [
+       [
+        "Lists",
+        "https://docs.flutter.dev/cookbook/lists/long-lists"
+       ]
+      ]
+     },
+     {
+      "t": "App scaffolding",
+      "d": "The standard skeleton of a Material app.",
+      "sub": [
+       "MaterialApp",
+       "Scaffold",
+       "AppBar",
+       "NavigationBar",
+       "Drawer"
+      ],
+      "res": [
+       [
+        "Material widgets",
+        "https://docs.flutter.dev/ui/widgets/material"
+       ]
+      ]
+     },
+     {
+      "t": "Widget lifecycle",
+      "d": "When widgets are created, updated and disposed.",
+      "sub": [
+       "initState",
+       "didUpdateWidget",
+       "dispose",
+       "didChangeDependencies"
+      ],
+      "res": [
+       [
+        "StatefulWidget",
+        "https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Layout & responsive",
+    "time": "1 week",
+    "blurb": "Understand constraints and build UIs that adapt from phones to desktops.",
+    "build": "A responsive dashboard that reflows from 1 to 3 columns.",
+    "topics": [
+     {
+      "t": "Row, Column & Stack",
+      "d": "The three workhorses of layout.",
+      "sub": [
+       "MainAxis / CrossAxis",
+       "Expanded & Flexible",
+       "Stack & Positioned"
+      ],
+      "res": [
+       [
+        "Layout",
+        "https://docs.flutter.dev/ui/layout"
+       ]
+      ]
+     },
+     {
+      "t": "Constraints",
+      "d": "“Constraints go down, sizes go up, parent sets position.”",
+      "sub": [
+       "BoxConstraints",
+       "Unbounded errors",
+       "SizedBox"
+      ],
+      "res": [
+       [
+        "Understanding constraints",
+        "https://docs.flutter.dev/ui/layout/constraints"
+       ]
+      ]
+     },
+     {
+      "t": "Adaptive & responsive",
+      "d": "Adjust layouts for screen size and input type.",
+      "sub": [
+       "MediaQuery",
+       "LayoutBuilder",
+       "Breakpoints"
+      ],
+      "res": [
+       [
+        "Adaptive design",
+        "https://docs.flutter.dev/ui/adaptive-responsive"
+       ]
+      ]
+     },
+     {
+      "t": "Scrolling & slivers",
+      "opt": true,
+      "d": "Custom scroll effects with CustomScrollView.",
+      "sub": [
+       "SliverAppBar",
+       "SliverList",
+       "NestedScrollView"
+      ],
+      "res": [
+       [
+        "Slivers",
+        "https://docs.flutter.dev/ui/layout/scrolling/slivers"
+       ]
+      ]
+     },
+     {
+      "t": "Overlays & dialogs",
+      "d": "Dialogs, sheets, snackbars and menus.",
+      "sub": [
+       "showDialog",
+       "showModalBottomSheet",
+       "SnackBar",
+       "MenuAnchor"
+      ],
+      "res": [
+       [
+        "Material widgets",
+        "https://docs.flutter.dev/ui/widgets/material"
+       ]
+      ]
+     },
+     {
+      "t": "Safe areas & insets",
+      "d": "Respect notches, keyboards and system bars.",
+      "sub": [
+       "SafeArea",
+       "MediaQuery.viewInsets",
+       "resizeToAvoidBottomInset"
+      ],
+      "res": [
+       [
+        "SafeArea",
+        "https://api.flutter.dev/flutter/widgets/SafeArea-class.html"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Styling & assets",
+    "time": "4 days",
+    "blurb": "Make it look right: Material 3, themes, fonts and images.",
+    "build": "Light and dark themes for your dashboard.",
+    "topics": [
+     {
+      "t": "Material 3 & Cupertino",
+      "d": "Use the design systems built into Flutter.",
+      "sub": [
+       "Material 3",
+       "ColorScheme",
+       "Cupertino widgets"
+      ],
+      "res": [
+       [
+        "Material",
+        "https://docs.flutter.dev/ui/design/material"
+       ]
+      ]
+     },
+     {
+      "t": "Theming",
+      "d": "Centralise colours and type with ThemeData.",
+      "sub": [
+       "ThemeData",
+       "Theme.of",
+       "Dark mode",
+       "ThemeExtension"
+      ],
+      "res": [
+       [
+        "Themes",
+        "https://docs.flutter.dev/cookbook/design/themes"
+       ]
+      ]
+     },
+     {
+      "t": "Assets & images",
+      "d": "Bundle images and load them at the right resolution.",
+      "sub": [
+       "pubspec assets",
+       "Resolution variants",
+       "Image.network"
+      ],
+      "res": [
+       [
+        "Assets & images",
+        "https://docs.flutter.dev/ui/assets/assets-and-images"
+       ]
+      ]
+     },
+     {
+      "t": "Custom fonts",
+      "d": "Ship your own typefaces.",
+      "sub": [
+       "Font assets",
+       "google_fonts"
+      ],
+      "res": [
+       [
+        "Fonts",
+        "https://docs.flutter.dev/cookbook/design/fonts"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Custom UI & graphics",
+    "time": "1 week",
+    "blurb": "Go beyond stock widgets: paint, clip and render your own UI.",
+    "build": "A custom animated progress ring and a hand-drawn chart.",
+    "topics": [
+     {
+      "t": "CustomPainter",
+      "d": "Draw directly onto a canvas.",
+      "sub": [
+       "Canvas",
+       "Paint",
+       "Path",
+       "shouldRepaint"
+      ],
+      "res": [
+       [
+        "CustomPaint",
+        "https://api.flutter.dev/flutter/widgets/CustomPaint-class.html"
+       ]
+      ]
+     },
+     {
+      "t": "Clipping & effects",
+      "d": "Shape and filter widgets.",
+      "sub": [
+       "ClipPath",
+       "BackdropFilter",
+       "ShaderMask",
+       "Opacity cost"
+      ],
+      "res": [
+       [
+        "Effects",
+        "https://docs.flutter.dev/ui/widgets/painting"
+       ]
+      ]
+     },
+     {
+      "t": "Composing custom widgets",
+      "d": "Build reusable widgets with clean APIs.",
+      "sub": [
+       "Composition over inheritance",
+       "Slots via builders",
+       "const constructors"
+      ],
+      "res": [
+       [
+        "Widgets intro",
+        "https://docs.flutter.dev/ui/widgets-intro"
+       ]
+      ]
+     },
+     {
+      "t": "Fragment shaders",
+      "d": "GPU effects written in GLSL.",
+      "sub": [
+       "FragmentProgram",
+       "Uniforms",
+       "Impeller"
+      ],
+      "res": [
+       [
+        "Shaders",
+        "https://docs.flutter.dev/ui/design/graphics/fragment-shaders"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "RenderObjects",
+      "d": "Custom layout and painting at the lowest level.",
+      "sub": [
+       "RenderBox",
+       "performLayout",
+       "paint"
+      ],
+      "res": [
+       [
+        "RenderObject",
+        "https://api.flutter.dev/flutter/rendering/RenderObject-class.html"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Interaction & motion",
+    "time": "1 week",
+    "blurb": "Respond to touch, keyboard and time.",
+    "build": "An animated onboarding flow with a validated sign-up form.",
+    "topics": [
+     {
+      "t": "Gestures",
+      "d": "Taps, drags and swipes.",
+      "sub": [
+       "GestureDetector",
+       "InkWell",
+       "Dismissible"
+      ],
+      "res": [
+       [
+        "Gestures",
+        "https://docs.flutter.dev/ui/interactivity/gestures"
+       ]
+      ]
+     },
+     {
+      "t": "Forms & input",
+      "d": "Collect and validate user input.",
+      "sub": [
+       "TextField",
+       "Form",
+       "Validators",
+       "FocusNode"
+      ],
+      "res": [
+       [
+        "Forms",
+        "https://docs.flutter.dev/cookbook/forms/validation"
+       ]
+      ]
+     },
+     {
+      "t": "Implicit animations",
+      "d": "Animate by changing a value.",
+      "sub": [
+       "AnimatedContainer",
+       "AnimatedOpacity",
+       "TweenAnimationBuilder"
+      ],
+      "res": [
+       [
+        "Implicit animations",
+        "https://docs.flutter.dev/codelabs/implicit-animations"
+       ]
+      ]
+     },
+     {
+      "t": "Explicit animations",
+      "d": "Full control with controllers and tweens.",
+      "sub": [
+       "AnimationController",
+       "Tween",
+       "Curves",
+       "Hero"
+      ],
+      "res": [
+       [
+        "Animations",
+        "https://docs.flutter.dev/ui/animations"
+       ]
+      ]
+     },
+     {
+      "t": "Rive",
+      "pkg": "rive",
+      "opt": true,
+      "d": "Interactive vector animations from a design tool.",
+      "sub": [
+       "State machines",
+       "Inputs"
+      ],
+      "res": [
+       [
+        "Rive docs",
+        "https://rive.app/docs"
+       ]
+      ]
+     },
+     {
+      "t": "Keyboard & focus",
+      "d": "Shortcuts, focus traversal and desktop-grade input.",
+      "sub": [
+       "FocusNode",
+       "Shortcuts & Actions",
+       "FocusTraversalGroup"
+      ],
+      "res": [
+       [
+        "Focus",
+        "https://docs.flutter.dev/ui/interactivity/focus"
+       ]
+      ]
+     },
+     {
+      "t": "Hero & page transitions",
+      "d": "Animate between screens.",
+      "sub": [
+       "Hero",
+       "PageRouteBuilder",
+       "Animations package"
+      ],
+      "res": [
+       [
+        "Hero animations",
+        "https://docs.flutter.dev/ui/animations/hero-animations"
+       ]
+      ]
+     },
+     {
+      "t": "Physics & staggered motion",
+      "d": "Springs, flings and choreographed sequences.",
+      "sub": [
+       "SpringSimulation",
+       "Interval",
+       "Staggered animations"
+      ],
+      "res": [
+       [
+        "Staggered animations",
+        "https://docs.flutter.dev/ui/animations/staggered-animations"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Navigation",
+    "time": "4 days",
+    "blurb": "Move between screens, pass data and handle deep links.",
+    "build": "A multi-screen shop with tabs and deep links to products.",
+    "topics": [
+     {
+      "t": "Navigator basics",
+      "d": "Push and pop routes imperatively.",
+      "sub": [
+       "push / pop",
+       "Returning data",
+       "MaterialPageRoute"
+      ],
+      "res": [
+       [
+        "Navigation",
+        "https://docs.flutter.dev/ui/navigation"
+       ]
+      ]
+     },
+     {
+      "t": "go_router",
+      "pkg": "go_router",
+      "d": "Declarative, URL-based routing.",
+      "sub": [
+       "Routes",
+       "Path params",
+       "ShellRoute",
+       "Redirects"
+      ],
+      "res": [
+       [
+        "go_router",
+        "https://pub.dev/packages/go_router"
+       ]
+      ]
+     },
+     {
+      "t": "Deep linking",
+      "d": "Open specific screens from URLs.",
+      "sub": [
+       "App Links",
+       "Universal Links",
+       "Web URLs"
+      ],
+      "res": [
+       [
+        "Deep linking",
+        "https://docs.flutter.dev/ui/navigation/deep-linking"
+       ]
+      ]
+     },
+     {
+      "t": "Tabs & nested navigation",
+      "d": "Bottom tabs with independent back stacks.",
+      "sub": [
+       "StatefulShellRoute",
+       "IndexedStack",
+       "TabBar"
+      ],
+      "res": [
+       [
+        "go_router",
+        "https://pub.dev/packages/go_router"
+       ]
+      ]
+     },
+     {
+      "t": "Route guards",
+      "d": "Redirect based on auth or onboarding state.",
+      "sub": [
+       "redirect",
+       "refreshListenable",
+       "Auth flows"
+      ],
+      "res": [
+       [
+        "Redirection",
+        "https://pub.dev/packages/go_router"
+       ]
+      ]
+     },
+     {
+      "t": "Router API",
+      "d": "The declarative Navigator 2.0 primitives underneath.",
+      "sub": [
+       "RouterDelegate",
+       "RouteInformationParser",
+       "Pages API"
+      ],
+      "res": [
+       [
+        "Router",
+        "https://api.flutter.dev/flutter/widgets/Router-class.html"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "State management",
+    "time": "2 weeks",
+    "blurb": "Start with setState, understand InheritedWidget, then choose a pattern that scales.",
+    "build": "Refactor the shop’s cart to shared state with tests.",
+    "topics": [
+     {
+      "t": "setState & lifting state",
+      "d": "Local state and passing it down.",
+      "sub": [
+       "Ephemeral vs app state",
+       "Lifting state up",
+       "Callbacks"
+      ],
+      "res": [
+       [
+        "Simple app state",
+        "https://docs.flutter.dev/data-and-backend/state-mgmt/simple"
+       ]
+      ]
+     },
+     {
+      "t": "InheritedWidget",
+      "d": "The primitive most state libraries build on.",
+      "sub": [
+       "InheritedWidget",
+       "ChangeNotifier",
+       "ValueNotifier"
+      ],
+      "res": [
+       [
+        "Options",
+        "https://docs.flutter.dev/data-and-backend/state-mgmt/options"
+       ]
+      ]
+     },
+     {
+      "t": "Provider",
+      "pkg": "provider",
+      "d": "A simple, widely used wrapper around InheritedWidget.",
+      "sub": [
+       "ChangeNotifierProvider",
+       "context.watch",
+       "Consumer"
+      ],
+      "res": [
+       [
+        "provider",
+        "https://pub.dev/packages/provider"
+       ]
+      ]
+     },
+     {
+      "t": "Riverpod",
+      "pkg": "riverpod",
+      "d": "Compile-safe providers that work outside the widget tree.",
+      "sub": [
+       "Providers",
+       "Notifier",
+       "AsyncValue",
+       "ref.watch"
+      ],
+      "res": [
+       [
+        "riverpod.dev",
+        "https://riverpod.dev"
+       ]
+      ]
+     },
+     {
+      "t": "Bloc",
+      "pkg": "flutter_bloc",
+      "opt": true,
+      "d": "Event-driven state with clear separation.",
+      "sub": [
+       "Cubit",
+       "Bloc",
+       "BlocBuilder",
+       "Events & states"
+      ],
+      "res": [
+       [
+        "bloclibrary.dev",
+        "https://bloclibrary.dev"
+       ]
+      ]
+     },
+     {
+      "t": "Reactive builders",
+      "d": "Rebuild only what changes.",
+      "sub": [
+       "StreamBuilder",
+       "FutureBuilder",
+       "ValueListenableBuilder",
+       "ListenableBuilder"
+      ],
+      "res": [
+       [
+        "StreamBuilder",
+        "https://api.flutter.dev/flutter/widgets/StreamBuilder-class.html"
+       ]
+      ]
+     },
+     {
+      "t": "Choosing an approach",
+      "d": "Trade-offs for team size, testability and scale.",
+      "sub": [
+       "App vs ephemeral state",
+       "Boilerplate",
+       "Testability",
+       "Ecosystem"
+      ],
+      "res": [
+       [
+        "Options",
+        "https://docs.flutter.dev/data-and-backend/state-mgmt/options"
+       ]
+      ]
+     },
+     {
+      "t": "signals & MobX",
+      "d": "Fine-grained reactive alternatives.",
+      "sub": [
+       "signals",
+       "mobx",
+       "Computed values"
+      ],
+      "res": [
+       [
+        "signals",
+        "https://pub.dev/packages/signals"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Data & storage",
+    "time": "2 weeks",
+    "blurb": "Talk to APIs, model JSON and keep data on the device.",
+    "build": "A news reader that caches articles for offline use.",
+    "topics": [
+     {
+      "t": "HTTP & REST",
+      "d": "Fetch and send data over the network.",
+      "sub": [
+       "package:http",
+       "dio",
+       "Error states",
+       "FutureBuilder"
+      ],
+      "res": [
+       [
+        "Fetch data",
+        "https://docs.flutter.dev/cookbook/networking/fetch-data"
+       ]
+      ]
+     },
+     {
+      "t": "JSON & models",
+      "d": "Serialise data safely.",
+      "sub": [
+       "fromJson / toJson",
+       "json_serializable",
+       "freezed"
+      ],
+      "pkg": "freezed",
+      "res": [
+       [
+        "JSON",
+        "https://docs.flutter.dev/data-and-backend/serialization/json"
+       ]
+      ]
+     },
+     {
+      "t": "Key-value storage",
+      "d": "Persist small settings.",
+      "sub": [
+       "shared_preferences",
+       "secure storage"
+      ],
+      "res": [
+       [
+        "Key-value data",
+        "https://docs.flutter.dev/cookbook/persistence/key-value"
+       ]
+      ]
+     },
+     {
+      "t": "Local databases",
+      "pkg": "drift",
+      "d": "Structured offline data with SQL.",
+      "sub": [
+       "sqflite",
+       "drift",
+       "Migrations"
+      ],
+      "res": [
+       [
+        "SQLite",
+        "https://docs.flutter.dev/cookbook/persistence/sqlite"
+       ]
+      ]
+     },
+     {
+      "t": "Firebase",
+      "opt": true,
+      "d": "Auth, Firestore and push notifications with little backend work.",
+      "sub": [
+       "FlutterFire CLI",
+       "Auth",
+       "Firestore",
+       "FCM"
+      ],
+      "res": [
+       [
+        "Firebase for Flutter",
+        "https://firebase.google.com/docs/flutter/setup"
+       ]
+      ]
+     },
+     {
+      "t": "Realtime & WebSockets",
+      "d": "Push data live from server to app.",
+      "sub": [
+       "web_socket_channel",
+       "Reconnection",
+       "Server-sent events"
+      ],
+      "res": [
+       [
+        "WebSockets",
+        "https://docs.flutter.dev/cookbook/networking/web-sockets"
+       ]
+      ]
+     },
+     {
+      "t": "Offline-first & caching",
+      "d": "Keep the app useful with no connection.",
+      "sub": [
+       "Cache invalidation",
+       "Sync queues",
+       "connectivity_plus"
+      ],
+      "res": [
+       [
+        "Offline-first",
+        "https://docs.flutter.dev/app-architecture/design-patterns/offline-first"
+       ]
+      ]
+     },
+     {
+      "t": "Supabase",
+      "d": "Postgres, auth and storage as a service.",
+      "sub": [
+       "supabase_flutter",
+       "Row-level security",
+       "Realtime"
+      ],
+      "res": [
+       [
+        "Supabase Flutter",
+        "https://supabase.com/docs/reference/dart/introduction"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "GraphQL",
+      "d": "Query exactly the data you need.",
+      "sub": [
+       "graphql_flutter",
+       "ferry",
+       "Code generation"
+      ],
+      "res": [
+       [
+        "graphql",
+        "https://pub.dev/packages/graphql_flutter"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Device features",
+    "time": "1 week",
+    "blurb": "Reach the hardware: camera, location, notifications and background work.",
+    "build": "A photo journal with location tags and daily reminders.",
+    "topics": [
+     {
+      "t": "Permissions",
+      "d": "Ask for access the right way on each platform.",
+      "sub": [
+       "permission_handler",
+       "Info.plist",
+       "AndroidManifest",
+       "Rationale UX"
+      ],
+      "res": [
+       [
+        "permission_handler",
+        "https://pub.dev/packages/permission_handler"
+       ]
+      ]
+     },
+     {
+      "t": "Camera & media",
+      "d": "Capture and pick photos and video.",
+      "sub": [
+       "camera",
+       "image_picker",
+       "video_player"
+      ],
+      "res": [
+       [
+        "Camera",
+        "https://docs.flutter.dev/cookbook/plugins/picture-using-camera"
+       ]
+      ]
+     },
+     {
+      "t": "Location & maps",
+      "d": "Get position and show maps.",
+      "sub": [
+       "geolocator",
+       "google_maps_flutter",
+       "flutter_map"
+      ],
+      "res": [
+       [
+        "google_maps_flutter",
+        "https://pub.dev/packages/google_maps_flutter"
+       ]
+      ]
+     },
+     {
+      "t": "Notifications",
+      "d": "Local and push notifications.",
+      "sub": [
+       "flutter_local_notifications",
+       "FCM",
+       "Channels"
+      ],
+      "res": [
+       [
+        "FCM",
+        "https://firebase.google.com/docs/cloud-messaging/flutter/client"
+       ]
+      ]
+     },
+     {
+      "t": "Background work",
+      "d": "Run tasks when the app is not in the foreground.",
+      "sub": [
+       "workmanager",
+       "Background fetch",
+       "Isolates"
+      ],
+      "res": [
+       [
+        "Background processes",
+        "https://docs.flutter.dev/packages-and-plugins/background-processes"
+       ]
+      ]
+     },
+     {
+      "t": "Sensors & biometrics",
+      "d": "Accelerometer, gyroscope and Face ID / fingerprint.",
+      "sub": [
+       "sensors_plus",
+       "local_auth"
+      ],
+      "res": [
+       [
+        "local_auth",
+        "https://pub.dev/packages/local_auth"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Architecture & platform",
+    "time": "1 week",
+    "blurb": "Structure apps that grow, reach native APIs and speak every language.",
+    "build": "Split the news reader into layers and add a second language.",
+    "topics": [
+     {
+      "t": "App architecture",
+      "d": "Separate UI, logic and data into clear layers.",
+      "sub": [
+       "MVVM",
+       "Repositories",
+       "Dependency injection"
+      ],
+      "res": [
+       [
+        "Architecture guide",
+        "https://docs.flutter.dev/app-architecture"
+       ]
+      ]
+     },
+     {
+      "t": "Platform channels",
+      "d": "Call native Kotlin/Swift code.",
+      "sub": [
+       "MethodChannel",
+       "Pigeon",
+       "Plugins"
+      ],
+      "res": [
+       [
+        "Platform channels",
+        "https://docs.flutter.dev/platform-integration/platform-channels"
+       ]
+      ]
+     },
+     {
+      "t": "Internationalization",
+      "d": "Translate and localise your app.",
+      "sub": [
+       "intl",
+       "ARB files",
+       "Locale"
+      ],
+      "res": [
+       [
+        "i18n",
+        "https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization"
+       ]
+      ]
+     },
+     {
+      "t": "Accessibility",
+      "d": "Make your app usable by everyone.",
+      "sub": [
+       "Semantics",
+       "Contrast",
+       "Screen readers",
+       "Text scaling"
+      ],
+      "res": [
+       [
+        "Accessibility",
+        "https://docs.flutter.dev/ui/accessibility-and-internationalization/accessibility"
+       ]
+      ]
+     },
+     {
+      "t": "Dependency injection",
+      "d": "Wire services without globals.",
+      "sub": [
+       "get_it",
+       "Riverpod as DI",
+       "Scopes"
+      ],
+      "res": [
+       [
+        "get_it",
+        "https://pub.dev/packages/get_it"
+       ]
+      ]
+     },
+     {
+      "t": "Error handling & logging",
+      "d": "Catch, report and diagnose failures in production.",
+      "sub": [
+       "FlutterError.onError",
+       "PlatformDispatcher.onError",
+       "Crashlytics",
+       "Sentry"
+      ],
+      "res": [
+       [
+        "Handling errors",
+        "https://docs.flutter.dev/testing/errors"
+       ]
+      ]
+     },
+     {
+      "t": "Writing plugins",
+      "d": "Package native code for reuse.",
+      "sub": [
+       "Federated plugins",
+       "Pigeon",
+       "FFI plugins"
+      ],
+      "res": [
+       [
+        "Developing packages",
+        "https://docs.flutter.dev/packages-and-plugins/developing-packages"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Security",
+    "time": "4 days",
+    "blurb": "Protect user data, credentials and your app binary.",
+    "build": "Add secure login with token refresh to the photo journal.",
+    "topics": [
+     {
+      "t": "Authentication",
+      "d": "Sign users in with OAuth, OIDC or email.",
+      "sub": [
+       "OAuth 2 / PKCE",
+       "JWT refresh",
+       "Firebase Auth",
+       "Sign in with Apple"
+      ],
+      "res": [
+       [
+        "Firebase Auth",
+        "https://firebase.google.com/docs/auth/flutter/start"
+       ]
+      ]
+     },
+     {
+      "t": "Secure storage",
+      "d": "Keep tokens and secrets out of plain text.",
+      "sub": [
+       "flutter_secure_storage",
+       "Keychain",
+       "Keystore"
+      ],
+      "res": [
+       [
+        "flutter_secure_storage",
+        "https://pub.dev/packages/flutter_secure_storage"
+       ]
+      ]
+     },
+     {
+      "t": "Secrets & config",
+      "d": "Never ship API keys in source control.",
+      "sub": [
+       "--dart-define-from-file",
+       "Backend proxies",
+       "envied"
+      ],
+      "res": [
+       [
+        "Flavors",
+        "https://docs.flutter.dev/deployment/flavors"
+       ]
+      ]
+     },
+     {
+      "t": "Obfuscation",
+      "d": "Make reverse engineering harder.",
+      "sub": [
+       "--obfuscate",
+       "--split-debug-info",
+       "Symbolication"
+      ],
+      "res": [
+       [
+        "Obfuscate Dart",
+        "https://docs.flutter.dev/deployment/obfuscate"
+       ]
+      ]
+     },
+     {
+      "t": "Certificate pinning",
+      "d": "Defend against man-in-the-middle attacks.",
+      "sub": [
+       "SecurityContext",
+       "http_certificate_pinning"
+      ],
+      "res": [
+       [
+        "SecurityContext",
+        "https://api.dart.dev/dart-io/SecurityContext-class.html"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Testing & performance",
+    "time": "1 week",
+    "blurb": "Prove it works and keep it at 60fps before you ship.",
+    "build": "Reach 70% coverage on the news reader and fix one jank issue.",
+    "topics": [
+     {
+      "t": "Unit tests",
+      "d": "Test logic in isolation.",
+      "sub": [
+       "package:test",
+       "Mocks",
+       "Coverage"
+      ],
+      "res": [
+       [
+        "Unit testing",
+        "https://docs.flutter.dev/cookbook/testing/unit/introduction"
+       ]
+      ]
+     },
+     {
+      "t": "Widget tests",
+      "d": "Pump widgets and interact with them headlessly.",
+      "sub": [
+       "WidgetTester",
+       "Finders",
+       "pumpAndSettle"
+      ],
+      "res": [
+       [
+        "Widget testing",
+        "https://docs.flutter.dev/cookbook/testing/widget/introduction"
+       ]
+      ]
+     },
+     {
+      "t": "Integration tests",
+      "d": "Drive the full app on a device.",
+      "sub": [
+       "integration_test",
+       "Patrol",
+       "Golden tests"
+      ],
+      "res": [
+       [
+        "Integration tests",
+        "https://docs.flutter.dev/testing/integration-tests"
+       ]
+      ]
+     },
+     {
+      "t": "Performance",
+      "d": "Find and fix jank, rebuilds and memory leaks.",
+      "sub": [
+       "Profile mode",
+       "const widgets",
+       "RepaintBoundary",
+       "Impeller"
+      ],
+      "res": [
+       [
+        "Performance",
+        "https://docs.flutter.dev/perf"
+       ]
+      ]
+     },
+     {
+      "t": "Mocking & fakes",
+      "d": "Isolate units from their dependencies.",
+      "sub": [
+       "mocktail",
+       "Fakes",
+       "Test doubles"
+      ],
+      "res": [
+       [
+        "mocktail",
+        "https://pub.dev/packages/mocktail"
+       ]
+      ]
+     },
+     {
+      "t": "Golden tests",
+      "d": "Catch visual regressions pixel by pixel.",
+      "sub": [
+       "matchesGoldenFile",
+       "alchemist",
+       "CI goldens"
+      ],
+      "res": [
+       [
+        "matchesGoldenFile",
+        "https://api.flutter.dev/flutter/flutter_test/matchesGoldenFile.html"
+       ]
+      ]
+     },
+     {
+      "t": "App size",
+      "d": "Measure and shrink your binary.",
+      "sub": [
+       "--analyze-size",
+       "Tree shaking",
+       "Deferred components"
+      ],
+      "res": [
+       [
+        "App size",
+        "https://docs.flutter.dev/perf/app-size"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "title": "Ship it",
+    "time": "1 week",
+    "blurb": "Package, automate and release to the world.",
+    "build": "Publish a beta to TestFlight and Play internal testing.",
+    "topics": [
+     {
+      "t": "Flavors & environments",
+      "d": "Separate dev, staging and production builds.",
+      "sub": [
+       "Flavors",
+       "--dart-define",
+       "Config files"
+      ],
+      "res": [
+       [
+        "Flavors",
+        "https://docs.flutter.dev/deployment/flavors"
+       ]
+      ]
+     },
+     {
+      "t": "Icons & splash",
+      "d": "Brand your app on every platform.",
+      "sub": [
+       "flutter_launcher_icons",
+       "flutter_native_splash"
+      ],
+      "res": [
+       [
+        "Android release",
+        "https://docs.flutter.dev/deployment/android"
+       ]
+      ]
+     },
+     {
+      "t": "CI/CD",
+      "d": "Build, test and deploy automatically.",
+      "sub": [
+       "GitHub Actions",
+       "Codemagic",
+       "fastlane"
+      ],
+      "res": [
+       [
+        "Continuous delivery",
+        "https://docs.flutter.dev/deployment/cd"
+       ]
+      ]
+     },
+     {
+      "t": "Store release",
+      "d": "Sign, upload and pass review.",
+      "sub": [
+       "App signing",
+       "App Store Connect",
+       "Play Console"
+      ],
+      "res": [
+       [
+        "iOS release",
+        "https://docs.flutter.dev/deployment/ios"
+       ],
+       [
+        "Android release",
+        "https://docs.flutter.dev/deployment/android"
+       ]
+      ]
+     },
+     {
+      "t": "Web & desktop",
+      "opt": true,
+      "d": "Ship the same codebase beyond mobile.",
+      "sub": [
+       "Web renderers",
+       "Windows / macOS / Linux"
+      ],
+      "res": [
+       [
+        "Web",
+        "https://docs.flutter.dev/platform-integration/web"
+       ],
+       [
+        "Desktop",
+        "https://docs.flutter.dev/platform-integration/desktop"
+       ]
+      ]
+     },
+     {
+      "t": "Versioning",
+      "d": "Version and build numbers that stores accept.",
+      "sub": [
+       "pubspec version",
+       "Build numbers",
+       "Changelogs"
+      ],
+      "res": [
+       [
+        "Versioning",
+        "https://docs.flutter.dev/deployment/android#update-the-apps-version-number"
+       ]
+      ]
+     },
+     {
+      "t": "Code push",
+      "d": "Ship Dart fixes without a store review.",
+      "sub": [
+       "Shorebird",
+       "Patches",
+       "Release tracks"
+      ],
+      "res": [
+       [
+        "Shorebird",
+        "https://shorebird.dev"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Grow & maintain",
+    "time": "Ongoing",
+    "blurb": "After launch: measure, monetise and keep the codebase healthy.",
+    "build": "Add analytics events and a paywall to one feature.",
+    "topics": [
+     {
+      "t": "Analytics",
+      "d": "Understand how people use your app.",
+      "sub": [
+       "Firebase Analytics",
+       "Events",
+       "Funnels",
+       "Privacy"
+      ],
+      "res": [
+       [
+        "Analytics",
+        "https://firebase.google.com/docs/analytics/get-started?platform=flutter"
+       ]
+      ]
+     },
+     {
+      "t": "In-app purchases",
+      "d": "Sell subscriptions and unlocks.",
+      "sub": [
+       "in_app_purchase",
+       "RevenueCat",
+       "Receipt validation"
+      ],
+      "res": [
+       [
+        "in_app_purchase",
+        "https://pub.dev/packages/in_app_purchase"
+       ]
+      ]
+     },
+     {
+      "t": "Crash & performance monitoring",
+      "d": "Know about problems before reviews do.",
+      "sub": [
+       "Crashlytics",
+       "Sentry",
+       "Performance traces"
+      ],
+      "res": [
+       [
+        "Crashlytics",
+        "https://firebase.google.com/docs/crashlytics/get-started?platform=flutter"
+       ]
+      ]
+     },
+     {
+      "t": "Upgrading Flutter",
+      "d": "Stay current without breaking things.",
+      "sub": [
+       "flutter upgrade",
+       "Breaking changes",
+       "dart fix",
+       "Dependency updates"
+      ],
+      "res": [
+       [
+        "Upgrading",
+        "https://docs.flutter.dev/release/upgrade"
+       ]
+      ]
+     },
+     {
+      "t": "Ads",
+      "d": "Monetise with mobile ads.",
+      "sub": [
+       "google_mobile_ads",
+       "Ad formats",
+       "Consent"
+      ],
+      "res": [
+       [
+        "google_mobile_ads",
+        "https://pub.dev/packages/google_mobile_ads"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   },
+   {
+    "title": "Specialise",
+    "time": "Ongoing",
+    "blurb": "Pick a frontier. These are optional deep dives once the core is solid.",
+    "build": "A small game, an AI-assisted feature or a desktop companion app.",
+    "topics": [
+     {
+      "t": "Games with Flame",
+      "d": "A 2D game engine built on Flutter.",
+      "sub": [
+       "FlameGame",
+       "Components",
+       "Collision",
+       "Forge2D"
+      ],
+      "res": [
+       [
+        "Flame docs",
+        "https://docs.flame-engine.org"
+       ]
+      ],
+      "opt": true,
+      "pkg": "flame"
+     },
+     {
+      "t": "AI & ML",
+      "d": "On-device ML and generative AI features.",
+      "sub": [
+       "google_mlkit",
+       "tflite_flutter",
+       "Firebase AI Logic",
+       "Gemini"
+      ],
+      "res": [
+       [
+        "AI in Flutter",
+        "https://docs.flutter.dev/ai"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "Flutter web",
+      "d": "Build for the browser: renderers, SEO and PWAs.",
+      "sub": [
+       "CanvasKit & skwasm",
+       "URL strategy",
+       "PWA"
+      ],
+      "res": [
+       [
+        "Web",
+        "https://docs.flutter.dev/platform-integration/web"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "Desktop",
+      "d": "Windows, macOS and Linux apps.",
+      "sub": [
+       "Menus & windows",
+       "Platform channels",
+       "Packaging"
+      ],
+      "res": [
+       [
+        "Desktop",
+        "https://docs.flutter.dev/platform-integration/desktop"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "Embedded",
+      "d": "Run Flutter on custom hardware.",
+      "sub": [
+       "Custom embedders",
+       "flutter-pi",
+       "Raspberry Pi"
+      ],
+      "res": [
+       [
+        "Custom embedders",
+        "https://docs.flutter.dev/embedded"
+       ]
+      ],
+      "opt": true
+     },
+     {
+      "t": "Add-to-app",
+      "d": "Embed Flutter in an existing native app.",
+      "sub": [
+       "FlutterEngine",
+       "Module projects",
+       "Multiple engines"
+      ],
+      "res": [
+       [
+        "Add to app",
+        "https://docs.flutter.dev/add-to-app"
+       ]
+      ],
+      "opt": true
+     }
+    ]
+   }
+  ]
+ }
+}

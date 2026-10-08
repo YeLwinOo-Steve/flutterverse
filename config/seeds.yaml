@@ -1,0 +1,100 @@
+# Projects tracked by Flutterverse. Edit this file with a pull request to add
+# or change a project; see CONTRIBUTING.md.
+#
+# Each project needs an `id` (lowercase, URL-safe; use the pub package name
+# for packages), at least one category, and a `pub` package name and/or a
+# GitHub `repo` (owner/name). When `repo` is omitted it's derived from the
+# package's pubspec. `kind` is `package` (default) or `project`. `sdk` and
+# `platforms` come from pub.dev tags; set them only for unpublished projects.
+# `related` lists project ids that are commonly used together.
+#
+# The learning roadmap lives in config/roadmap.json.
+
+categories:
+  state-management: State management
+  architecture: Architecture
+  navigation: Navigation
+  networking: Networking
+  database: Database
+  serialization: Serialization
+  code-generation: Code generation
+  dependency-injection: Dependency injection
+  ui: UI
+  theming: Theming
+  animation: Animation
+  charts: Charts
+  games: Games
+  testing: Testing
+  backend: Backend
+  cli: CLI
+  developer-tooling: Developer tooling
+  open-source-app: Open source app
+  firebase: Firebase
+  authentication: Authentication
+  maps: Maps
+  ai: AI
+
+# Groups shown on the Explore page.
+category_groups:
+  Architecture: [state-management, architecture, navigation, dependency-injection]
+  Data & backend: [networking, database, serialization, firebase, backend, authentication]
+  UI & motion: [ui, animation, charts, maps, games]
+  Tooling: [testing, cli, developer-tooling, ai]
+
+projects:
+  - { id: flutter_bloc, pub: flutter_bloc, repo: felangel/bloc, categories: [state-management, architecture], related: [freezed, get_it, go_router] }
+  - { id: riverpod, pub: riverpod, repo: rrousselGit/riverpod, categories: [state-management, dependency-injection], related: [freezed, go_router, drift] }
+  - { id: provider, pub: provider, repo: rrousselGit/provider, categories: [state-management, dependency-injection], related: [get_it, flutter_bloc, dio] }
+  - { id: go_router, pub: go_router, repo: flutter/packages, categories: [navigation], related: [riverpod, flutter_bloc, freezed] }
+  - { id: freezed, pub: freezed, repo: rrousselGit/freezed, categories: [serialization, code-generation], related: [riverpod, drift, dio] }
+  - { id: dio, pub: dio, repo: cfug/dio, categories: [networking], related: [freezed, riverpod, get_it] }
+  - { id: get_it, pub: get_it, repo: flutter-it/get_it, categories: [dependency-injection, architecture], related: [provider, flutter_bloc, dio] }
+  - { id: drift, pub: drift, repo: simolus3/drift, categories: [database], related: [riverpod, freezed, isar] }
+  - { id: isar, pub: isar, repo: isar/isar, categories: [database], related: [drift, riverpod, get_it] }
+  - { id: flutter_animate, pub: flutter_animate, repo: gskinner/flutter_animate, categories: [animation, ui], related: [rive, wonderous, mix] }
+  - { id: rive, pub: rive, repo: rive-app/rive-flutter, categories: [animation], related: [flutter_animate, flame, wonderous] }
+  - { id: flame, pub: flame, repo: flame-engine/flame, categories: [games], related: [rive, flutter_animate, drift] }
+  - { id: fl_chart, pub: fl_chart, repo: imaNNeo/fl_chart, categories: [charts, ui], related: [flutter_animate, mix, drift] }
+  - { id: melos, pub: melos, repo: invertase/melos, categories: [cli, developer-tooling], related: [very_good_cli, shorebird, freezed] }
+  - { id: very_good_cli, pub: very_good_cli, repo: VeryGoodOpenSource/very_good_cli, categories: [cli, developer-tooling, testing], related: [melos, flutter_bloc, shorebird] }
+  - { id: signals, pub: signals, repo: rodydavis/signals.dart, categories: [state-management], related: [riverpod, flutter_bloc, mix] }
+  - { id: forui, pub: forui, repo: forus-labs/forui, categories: [ui], related: [mix, flutter_animate, go_router] }
+  - { id: mix, pub: mix, repo: btwld/mix, categories: [ui, theming], related: [forui, flutter_animate, fl_chart] }
+  - { id: get, pub: get, repo: jonataslaw/getx, categories: [state-management, navigation, dependency-injection], related: [provider, dio, get_it] }
+  - { id: http, pub: http, repo: dart-lang/http, categories: [networking], related: [dio, freezed, json_serializable] }
+  - { id: retrofit, pub: retrofit, repo: trevorwang/retrofit.dart, categories: [networking, code-generation], related: [dio, json_serializable, freezed] }
+  - { id: sqflite, pub: sqflite, repo: tekartik/sqflite, categories: [database], related: [drift, shared_preferences, provider] }
+  - { id: hive_ce, pub: hive_ce, repo: IO-Design-Team/hive_ce, categories: [database], related: [isar, drift, shared_preferences] }
+  - { id: shared_preferences, pub: shared_preferences, repo: flutter/packages, categories: [database], related: [sqflite, provider, go_router] }
+  - { id: auto_route, pub: auto_route, repo: Milad-Akarie/auto_route_library, categories: [navigation, code-generation], related: [get_it, flutter_bloc, freezed] }
+  - { id: flutter_svg, pub: flutter_svg, repo: flutter/packages, categories: [ui], related: [google_fonts, flutter_animate, rive] }
+  - { id: google_fonts, pub: google_fonts, repo: flutter/packages, categories: [ui, theming], related: [flutter_svg, mix, forui] }
+  - { id: json_serializable, pub: json_serializable, repo: google/json_serializable.dart, categories: [serialization, code-generation], related: [freezed, retrofit, http] }
+  - { id: mocktail, pub: mocktail, repo: felangel/mocktail, categories: [testing], related: [flutter_bloc, very_good_cli, patrol] }
+  - { id: patrol, pub: patrol, repo: leancodepl/patrol, categories: [testing], related: [mocktail, very_good_cli, melos] }
+  - { id: jaspr, pub: jaspr, repo: schultek/jaspr, categories: [ui], related: [serverpod, freezed, dio] }
+  - { id: serverpod, kind: project, pub: serverpod, repo: serverpod/serverpod, categories: [backend, database], related: [drift, riverpod, melos] }
+  - { id: shorebird, kind: project, repo: shorebirdtech/shorebird, sdk: Dart, platforms: [iOS, Android, macOS, Windows, Linux], categories: [developer-tooling, cli], related: [melos, very_good_cli, flutter_bloc] }
+  - { id: wonderous, kind: project, repo: gskinnerTeam/flutter-wonderous-app, sdk: Flutter, platforms: [iOS, Android, Web, macOS, Windows], categories: [ui, animation, open-source-app], related: [flutter_animate, rive, go_router] }
+
+# The current Hall of Fame edition. Reasons are editorial; keep them factual.
+hall_of_fame:
+  year: 2026
+  projects:
+    - { id: flutter_bloc, category: Most Influential, reason: "Set the vocabulary for structured state in Flutter; its patterns shaped how a generation of production apps are architected." }
+    - { id: riverpod, category: Community Favorite, reason: "Widely recommended for compile-safe, testable state — and a frequent reference point in community architecture discussions." }
+    - { id: provider, category: The Original, reason: "The first recommended approach to app state, and the foundation many later libraries built on." }
+    - { id: dio, category: Most Starred, reason: "The most-starred Dart networking library, and the default HTTP layer in countless apps." }
+    - { id: forui, category: Fastest Growing, reason: "From first release to a top UI kit in under two years, with steady releases." }
+    - { id: wonderous, category: Best UI, reason: "A public reference for what high-craft, motion-rich Flutter UI can look like." }
+    - { id: melos, category: Best Developer Tool, reason: "Made multi-package Dart repositories practical, and is now standard in large monorepos." }
+    - { id: flutter_animate, category: Best Animation Project, reason: "Turned complex effect choreography into a readable, chainable API." }
+    - { id: shorebird, category: Most Innovative, reason: "Brought over-the-air code push to compiled Flutter apps — previously thought impractical." }
+    - { id: flame, category: Longest Running, reason: "Actively developed since 2017 — older than Flutter 1.0 itself." }
+  developers:
+    - { handle: felangel, name: Felix Angelov, category: Most Influential, tagline: "Creator of the bloc state management library.", projects: [flutter_bloc, mocktail] }
+    - { handle: rrousselGit, name: Remi Rousselet, category: Most Prolific Author, tagline: "Author of Provider, Riverpod and Freezed.", projects: [riverpod, freezed, provider] }
+    - { handle: simolus3, name: Simon Binder, category: Best Data Tooling, tagline: "Maintainer of drift, reactive SQLite for Dart.", projects: [drift] }
+    - { handle: gskinner, name: Grant Skinner, category: Motion & UI Craft, tagline: "Behind flutter_animate and the Wonderous app.", projects: [flutter_animate, wonderous] }
+    - { handle: imaNNeo, name: Iman Khoshabi, category: Best Visualization, tagline: "Creator of fl_chart, the go-to charting library.", projects: [fl_chart] }
+    - { handle: spydon, name: Lukas Klingsbo, category: Games Pioneer, tagline: "Core maintainer of the Flame game engine.", projects: [flame] }

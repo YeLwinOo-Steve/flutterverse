@@ -1,0 +1,22 @@
+name: fv_ingest
+description: Fetches pub.dev and GitHub data, scores it and writes the static JSON the site serves.
+publish_to: none
+resolution: workspace
+environment:
+  sdk: ^3.10.0
+
+executables:
+  ingest:
+  validate_seeds:
+  triage_nomination:
+
+dependencies:
+  args: ^2.7.0
+  fv_core:
+    path: ../fv_core
+  http: ^1.6.0
+  path: ^1.9.0
+  yaml: ^3.1.0
+
+dev_dependencies:
+  test: ^1.26.0

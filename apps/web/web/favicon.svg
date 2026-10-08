@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 34 34">
+  <style>
+    .orbit { stroke: #042B59; }
+    @media (prefers-color-scheme: dark) { .orbit { stroke: #E8F4FF; } }
+  </style>
+  <ellipse class="orbit" cx="16" cy="16.5" rx="15.5" ry="5.4" transform="rotate(-24 16 16.5)" fill="none" stroke-width="1.8" opacity="0.4"/>
+  <g transform="translate(6.3 4.5) scale(0.0646)">
+    <path d="M300 171.43H185.72L85.73 271.44l57.12 57.13z" fill="#47C5FB"/>
+    <path d="M57.15 242.87L0 185.72 185.72 0H300z" fill="#47C5FB"/>
+    <path d="M142.85 328.57L185.72 371.44H300L200.01 271.44z" fill="#00569E"/>
+    <path d="M85.71 271.44L142.85 214.3 200 271.44 142.85 328.57z" fill="#00B5F8"/>
+  </g>
+  <path class="orbit" d="M.5 16.5A15.5 5.4 0 0 0 31.5 16.5" transform="rotate(-24 16 16.5)" fill="none" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="28.4" cy="8.9" r="2.3" fill="#FFC83D"/>
+</svg>

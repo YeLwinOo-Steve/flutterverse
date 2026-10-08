@@ -1,0 +1,14 @@
+name: flutterverse_workspace
+publish_to: none
+environment:
+  sdk: ^3.10.0
+
+# Add apps/server/flutterverse_server and apps/server/flutterverse_client
+# here once the Serverpod server exists (see PLAN.md §4.4).
+workspace:
+  - packages/fv_core
+  - packages/fv_ingest
+  - apps/web
+
+dev_dependencies:
+  lints: ^6.0.0

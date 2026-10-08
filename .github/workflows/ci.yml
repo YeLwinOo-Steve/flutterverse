@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  pull_request:
+    paths: ['packages/**', 'apps/**', 'config/**', 'tool/**', 'pubspec.yaml', 'analysis_options.yaml', '.github/workflows/ci.yml']
+  push:
+    branches: [main]
+    paths: ['packages/**', 'apps/**', 'config/**', 'tool/**', 'pubspec.yaml', 'analysis_options.yaml', '.github/workflows/ci.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - run: dart pub get
+      - run: dart analyze --fatal-infos
+      - run: dart run tool/check_imports.dart
+      - run: dart test
+        working-directory: packages/fv_core
+      - run: dart test
+        working-directory: packages/fv_ingest
+      - run: dart test
+        working-directory: apps/web
+      # Checks that every package exists on pub.dev and every repo resolves.
+      - run: dart run fv_ingest:validate_seeds --remote
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - run: dart pub get && dart pub global activate jaspr_cli
+      # Builds without data: proves the site compiles and handles a fresh repo.
+      - run: jaspr build
+        working-directory: apps/web

@@ -1,0 +1,27 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-raw-types: true
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.options.dart"
+
+linter:
+  rules:
+    - prefer_final_locals
+    - prefer_single_quotes
+    - unawaited_futures
+
+# Jaspr's analyzer plugin; plugins must be declared at the workspace root.
+plugins:
+  jaspr_lints:
+    version: ^0.7.2
+    diagnostics:
+      prefer_html_components: true
+      sort_children_last: true
+
+formatter:
+  page_width: 120
+  trailing_commas: preserve

@@ -1,0 +1,82 @@
+name: nominations
+
+# Hall of Fame nominations arrive as issues from the forms in
+# .github/ISSUE_TEMPLATE. `triage` checks each new one automatically;
+# `command` lets maintainers act on it with `/shortlist` or `/decline <reason>`.
+
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  triage:
+    if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'nomination')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NUMBER: ${{ github.event.issue.number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - run: dart pub get
+      # The issue body is untrusted: it's read from the event file by the
+      # script, never interpolated into a shell command.
+      - id: triage
+        run: dart run fv_ingest:triage_nomination --comment-out "$RUNNER_TEMP/comment.md"
+      - name: Apply the result
+        env:
+          OUTCOME: ${{ steps.triage.outputs.outcome }}
+          LABEL: ${{ steps.triage.outputs.label }}
+        run: |
+          gh label create "$LABEL" --color ededed --force >/dev/null
+          gh issue edit "$NUMBER" --add-label "$LABEL"
+          gh issue comment "$NUMBER" --body-file "$RUNNER_TEMP/comment.md"
+          if [ "$OUTCOME" != accept ]; then gh issue close "$NUMBER" --reason "not planned"; fi
+
+  command:
+    if: >-
+      github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
+      contains(github.event.issue.labels.*.name, 'nomination') &&
+      (startsWith(github.event.comment.body, '/shortlist') || startsWith(github.event.comment.body, '/decline'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NUMBER: ${{ github.event.issue.number }}
+      ACTOR: ${{ github.event.comment.user.login }}
+      BODY: ${{ github.event.comment.body }}
+      COMMENT_ID: ${{ github.event.comment.id }}
+    steps:
+      - name: Check the commenter can triage
+        run: |
+          perm=$(gh api "repos/$GITHUB_REPOSITORY/collaborators/$ACTOR/permission" --jq .permission || echo none)
+          case "$perm" in admin|maintain|write) ;; *) echo "::notice::@$ACTOR ($perm) can't run commands"; exit 1 ;; esac
+      - name: Run the command
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$COMMENT_ID/reactions" -f content=+1 >/dev/null
+          case "$BODY" in
+            /shortlist*)
+              gh label create shortlisted --color 0e8a16 --force >/dev/null
+              gh issue edit "$NUMBER" --add-label shortlisted
+              gh issue edit "$NUMBER" --remove-label needs-review || true
+              ;;
+            /decline*)
+              reason=$(printf '%s' "$BODY" | head -n1 | sed 's|^/decline[[:space:]]*||')
+              gh label create declined --color b60205 --force >/dev/null
+              gh issue edit "$NUMBER" --add-label declined
+              gh issue edit "$NUMBER" --remove-label needs-review || true
+              {
+                echo "Thanks for the nomination. The editorial team has decided not to include it this time."
+                if [ -n "$reason" ]; then echo; echo "> $reason"; fi
+              } > "$RUNNER_TEMP/comment.md"
+              gh issue comment "$NUMBER" --body-file "$RUNNER_TEMP/comment.md"
+              gh issue close "$NUMBER" --reason "not planned"
+              ;;
+          esac

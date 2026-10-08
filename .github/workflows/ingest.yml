@@ -1,0 +1,41 @@
+name: ingest
+
+on:
+  schedule: [{ cron: '17 3 * * *' }]   # daily, at an off-peak minute
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: ingest
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4   # main: the code
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - run: dart pub get
+
+      # The `data` branch holds data/ and history/; create it on the first run.
+      - name: Check out data branch
+        run: |
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            git fetch --depth=1 origin data
+            git worktree add -B data out FETCH_HEAD
+          else
+            git worktree add --orphan -b data out
+          fi
+
+      - run: dart run fv_ingest:ingest --out out/data --history out/history
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+
+      - name: Commit and push
+        working-directory: out
+        run: |
+          git config user.name fv-bot
+          git config user.email fv-bot@users.noreply.github.com
+          git add data history
+          git commit -m "data: $(date -u +%F)" || { echo "No changes"; exit 0; }
+          git push origin data

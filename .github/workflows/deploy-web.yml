@@ -1,0 +1,43 @@
+name: deploy-web
+
+on:
+  push:
+    branches: [main]
+    paths: ['apps/web/**', 'packages/fv_core/**', 'pubspec.yaml']
+  workflow_run:
+    workflows: [ingest]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-web
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch data
+        run: |
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            git fetch --depth=1 origin data
+            mkdir -p apps/web/web/data
+            git archive FETCH_HEAD data | tar -x --strip-components=1 -C apps/web/web/data
+          else
+            echo "No data branch yet; building without data."
+          fi
+      - uses: dart-lang/setup-dart@v1
+        with: { sdk: stable }
+      - run: dart pub get && dart pub global activate jaspr_cli
+      - run: jaspr build
+        working-directory: apps/web
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy apps/web/build/jaspr --project-name=flutterverse --branch=main
