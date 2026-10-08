@@ -1,8 +1,9 @@
 name: ci
 
 on:
+  # Every PR, unfiltered: `check` and `web` are required status checks on
+  # `main`, and a filtered-out PR would wait for them forever.
   pull_request:
-    paths: ['packages/**', 'apps/**', 'config/**', 'tool/**', 'pubspec.yaml', 'analysis_options.yaml', '.github/workflows/ci.yml']
   push:
     branches: [main]
     paths: ['packages/**', 'apps/**', 'config/**', 'tool/**', 'pubspec.yaml', 'analysis_options.yaml', '.github/workflows/ci.yml']
