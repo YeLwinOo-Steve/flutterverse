@@ -1,11 +1,3 @@
-# Replace the placeholder teams below with real GitHub users or teams, then
-# uncomment. Owners are requested for review automatically.
-#
-# Curators review what gets tracked:
-# /config/              @flutterverse/curators
-#
-# Maintainers review code and infrastructure:
-# /packages/            @flutterverse/maintainers
-# /apps/                @flutterverse/maintainers
-# /tool/                @flutterverse/maintainers
-# /.github/             @flutterverse/maintainers
+# Owners are requested for review automatically. Add co-maintainers or
+# teams next to the owner as the project grows.
+*    @YeLwinOo-Steve
