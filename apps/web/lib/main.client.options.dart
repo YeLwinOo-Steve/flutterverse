@@ -12,8 +12,8 @@ import 'package:fv_web/components/layout/command_palette.dart'
     deferred as _command_palette;
 import 'package:fv_web/components/layout/footer_watermark.dart'
     deferred as _footer_watermark;
-import 'package:fv_web/components/layout/intro_splash.dart'
-    deferred as _intro_splash;
+import 'package:fv_web/components/layout/intro_controller.dart'
+    deferred as _intro_controller;
 import 'package:fv_web/components/layout/lamp.dart' deferred as _lamp;
 import 'package:fv_web/components/nominate/nominations.dart'
     deferred as _nominations;
@@ -63,9 +63,9 @@ ClientOptions get defaultClientOptions => ClientOptions(
       (p) => _footer_watermark.FooterWatermark(),
       loader: _footer_watermark.loadLibrary,
     ),
-    'intro_splash': ClientLoader(
-      (p) => _intro_splash.IntroSplash(),
-      loader: _intro_splash.loadLibrary,
+    'intro_controller': ClientLoader(
+      (p) => _intro_controller.IntroController(),
+      loader: _intro_controller.loadLibrary,
     ),
     'lamp': ClientLoader((p) => _lamp.Lamp(), loader: _lamp.loadLibrary),
     'nominations': ClientLoader(

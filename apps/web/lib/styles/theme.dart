@@ -135,6 +135,16 @@ final _keyframes = <StyleRule>[
     '0%,100%': _frames({'opacity': '.12'}),
     '50%': _frames({'opacity': '.7'}),
   }),
+  // One lap of the splash's sun, starting and ending at its resting place
+  // (-20.7° on the untilted orbit; see IntroLogo).
+  css.keyframes('fvOrbit', {
+    'from': _frames({'transform': 'rotate(-20.7deg)'}),
+    'to': _frames({'transform': 'rotate(339.3deg)'}),
+  }),
+  css.keyframes('fvOrbitBack', {
+    'from': _frames({'transform': 'rotate(20.7deg)'}),
+    'to': _frames({'transform': 'rotate(-339.3deg)'}),
+  }),
   css.keyframes('fvFloat', {
     '0%,100%': _frames({'transform': 'translateY(0)'}),
     '50%': _frames({'transform': 'translateY(-6px)'}),

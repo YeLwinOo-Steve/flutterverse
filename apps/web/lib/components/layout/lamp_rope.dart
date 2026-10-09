@@ -7,6 +7,12 @@ class LampRope {
 
   double x = restX, y = restY, vx = 0, vy = 0;
 
+  /// Which way a slack cord bows: -1 or 1. Follows the swing direction, but
+  /// only once the swing is clear; a near-zero `vx` flickers in sign (e.g.
+  /// when the bead is pushed straight up), which would flip the bow every
+  /// frame.
+  double side = -1;
+
   /// A quick downward tug with a random sideways swing.
   void tug(math.Random random) {
     vy += 7;
@@ -21,6 +27,7 @@ class LampRope {
     vy = (vy + (ty - y) * k) * damp;
     x += vx;
     y += vy;
+    if (vx.abs() > 0.15) side = vx > 0 ? -1 : 1;
 
     // Keep the bead within the cord's reach.
     final ex = x, ey = y - 6;
@@ -47,7 +54,6 @@ class LampRope {
     final dx = ex - anchorX, dy = ey - anchorY;
     final d = math.max(1e-6, math.sqrt(dx * dx + dy * dy));
     final slack = d < length ? math.sqrt(length * length - d * d) * 0.6 : 0.0;
-    final side = vx >= 0 ? -1 : 1;
     final cx = (anchorX + ex) / 2 + (-dy / d) * slack * side;
     final cy = (anchorY + ey) / 2 + (dx / d) * slack * side + slack * 0.3;
     return 'M$anchorX,$anchorY Q${cx.toStringAsFixed(2)},${cy.toStringAsFixed(2)} '

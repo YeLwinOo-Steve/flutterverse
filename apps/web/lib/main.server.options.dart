@@ -10,6 +10,8 @@ import 'package:fv_web/components/layout/command_palette.dart'
     as _command_palette;
 import 'package:fv_web/components/layout/footer_watermark.dart'
     as _footer_watermark;
+import 'package:fv_web/components/layout/intro_controller.dart'
+    as _intro_controller;
 import 'package:fv_web/components/layout/intro_splash.dart' as _intro_splash;
 import 'package:fv_web/components/layout/lamp.dart' as _lamp;
 import 'package:fv_web/components/layout/palette_row.dart' as _palette_row;
@@ -88,9 +90,8 @@ ServerOptions get defaultServerOptions => ServerOptions(
         ClientTarget<_command_palette.CommandPalette>('command_palette'),
     _footer_watermark.FooterWatermark:
         ClientTarget<_footer_watermark.FooterWatermark>('footer_watermark'),
-    _intro_splash.IntroSplash: ClientTarget<_intro_splash.IntroSplash>(
-      'intro_splash',
-    ),
+    _intro_controller.IntroController:
+        ClientTarget<_intro_controller.IntroController>('intro_controller'),
     _lamp.Lamp: ClientTarget<_lamp.Lamp>('lamp'),
     _nominations.Nominations: ClientTarget<_nominations.Nominations>(
       'nominations',

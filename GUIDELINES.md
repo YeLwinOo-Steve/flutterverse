@@ -68,6 +68,7 @@ These build on [Effective Dart](https://dart.dev/effective-dart). Where this fil
 - Static buttons open shared dialogs through data attributes (`data-open-palette`, `data-open-modal="…"`) rather than becoming islands themselves.
 - Lazy client data goes through `DataRepo`, which caches it. Never call `http.get` from a component.
 - **Styling.** Port the design's CSS 1:1 with `rule(selector, {...})` in a `@css static List<StyleRule> get styles` on the component class (not its `State`). Use `var(--token)` for every color; tokens and dark-mode values live in `styles/theme.dart`. Classes reused across pages belong in `styles/shared.dart`. Inline `styles:` are only for per-instance values such as a logo color or a computed position.
+- Keep CSS-animated markup (such as the intro splash) out of islands. Hydration re-inserts nodes it can't line up with the pretty-printed server HTML, which restarts their animations. Render the markup statically and drive it from a small island that renders nothing (`IntroController`).
 - Never use `href="#"`: the document's `<base href="/">` turns it into a link to the home page.
 - Read pointer positions with `event.x` / `event.y`, never `clientX` / `clientY`. `package:web` types those as `int`, browsers report fractional pixels, and debug builds throw on every move.
 - Every interactive element needs an accessible name (`aria-label` when it has no text label).
