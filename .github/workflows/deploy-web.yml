@@ -34,7 +34,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with: { sdk: stable }
       - run: dart pub get && dart pub global activate jaspr_cli
-      - run: jaspr build
+      - run: jaspr build --sitemap-domain=https://flutterverse.pages.dev --sitemap-exclude=/404
         working-directory: apps/web
       - uses: cloudflare/wrangler-action@v3
         with:
