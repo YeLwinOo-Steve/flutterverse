@@ -4,6 +4,7 @@
   <p>
     The Flutter &amp; Dart ecosystem, measured daily: stars, pub.dev scores, momentum and a community Hall of Fame.
   </p>
+  <p><a href="https://flutterverse.org"><b>flutterverse.org</b></a></p>
 </div>
 
 <p align="center">

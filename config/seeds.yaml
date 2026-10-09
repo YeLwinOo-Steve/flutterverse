@@ -98,3 +98,7 @@ hall_of_fame:
     - { handle: gskinner, name: Grant Skinner, category: Motion & UI Craft, tagline: "Behind flutter_animate and the Wonderous app.", projects: [flutter_animate, wonderous] }
     - { handle: imaNNeo, name: Iman Khoshabi, category: Best Visualization, tagline: "Creator of fl_chart, the go-to charting library.", projects: [fl_chart] }
     - { handle: spydon, name: Lukas Klingsbo, category: Games Pioneer, tagline: "Core maintainer of the Flame game engine.", projects: [flame] }
+    - { handle: eseidel, name: Eric Seidel, category: Flutter Pioneer, tagline: "Founded Flutter at Google; now leads Shorebird.", projects: [shorebird] }
+    - { handle: schultek, name: Kilian Schulte, category: Dart Beyond Mobile, tagline: "Creator of Jaspr, the Dart web framework behind this site.", projects: [jaspr] }
+    - { handle: vlidholt, name: Viktor Lidholt, category: Full-Stack Dart, tagline: "Creator of Serverpod, the app server written in Dart.", projects: [serverpod] }
+    - { handle: leoafarias, name: Leo Farias, category: Developer Experience, tagline: "Creator of FVM and the Mix styling system.", projects: [mix] }

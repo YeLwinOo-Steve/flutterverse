@@ -24,7 +24,9 @@ class _IntroControllerState extends State<IntroController> {
     if (!kIsWeb) return;
     final intro = web.document.querySelector('.intro');
     if (intro == null || web.document.documentElement?.getAttribute('data-intro-seen') != null) {
-      intro?.remove();
+      // Already hidden by CSS. Remove it only after hydration: this island
+      // lives inside it, and detaching it mid-mount aborts every island.
+      if (intro != null) Timer.run(() => intro.remove());
       return;
     }
     _intro = intro;

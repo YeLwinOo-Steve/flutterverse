@@ -76,6 +76,11 @@ class PubView extends StatefulComponent {
       'color': 'var(--accent)',
       'box-shadow': 'inset 0 -2px 0 var(--accent)',
     }),
+    // Flutter Favorites is special, so it wears Flutter's blue.
+    rule('.pub-tabs > button.ff', {'background': '#0175C2', 'color': '#FFFFFF'}),
+    rule('.pub-tabs > button.ff:hover', {'background': '#0168AE'}),
+    rule('.pub-tabs > button.ff.on', {'box-shadow': 'inset 0 -2px 0 #FFFFFF'}),
+    rule('.pub-tabs > button.ff .pub-tab-desc', {'color': 'rgba(255,255,255,.82)'}),
     rule('.pub-tab-title', {
       'display': 'flex',
       'align-items': 'center',
@@ -159,7 +164,7 @@ class _PubViewState extends State<PubView> {
         [
           for (final t in _Tab.values)
             button(
-              classes: t == _tab ? 'on' : null,
+              classes: [if (t == _tab) 'on', if (t == _Tab.favorites) 'ff'].join(' '),
               type: ButtonType.button,
               attributes: {'role': 'tab', 'aria-selected': '${t == _tab}'},
               onClick: () => setState(() {

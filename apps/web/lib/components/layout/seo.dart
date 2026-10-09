@@ -6,7 +6,7 @@ import 'package:jaspr/jaspr.dart';
 /// Where the site is served. Canonical links, share cards and structured data
 /// are built from it; `web/robots.txt` and `deploy-web.yml`'s
 /// `--sitemap-domain` name it too (a test keeps the three in step).
-const siteUrl = 'https://flutterverse.pages.dev';
+const siteUrl = 'https://flutterverse.org';
 
 const siteName = 'Flutterverse';
 

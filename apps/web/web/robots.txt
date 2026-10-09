@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /data/
 
-Sitemap: https://flutterverse.pages.dev/sitemap.xml
+Sitemap: https://flutterverse.org/sitemap.xml
