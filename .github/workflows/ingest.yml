@@ -5,6 +5,11 @@ name: ingest
 
 on:
   schedule: [{ cron: '17 3 * * *' }]   # daily, at an off-peak minute
+  # Seed edits (new projects, Hall of Fame entries) go live without waiting
+  # for the schedule. A repeat run replaces the day's history line.
+  push:
+    branches: [main]
+    paths: [config/**]
   workflow_dispatch:
 
 permissions:
