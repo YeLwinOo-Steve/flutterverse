@@ -10,10 +10,19 @@ class Catalog {
     this.categoryGroups = const {},
     this.hallOfFame,
     this.roadmap = const {},
+    this.discovery = const Discovery(),
+    this.topicCategories = const {},
   });
 
   /// Category slug → display label.
   final Map<String, String> categories;
+
+  /// How far ingest looks beyond the curated [projects].
+  final Discovery discovery;
+
+  /// Category slug → pub.dev/GitHub topics that put a discovered project in
+  /// it, such as `networking: [http, rest, graphql]`.
+  final Map<String, List<String>> topicCategories;
 
   /// Explore-page group name → category slugs.
   final Map<String, List<String>> categoryGroups;
@@ -22,6 +31,26 @@ class Catalog {
 
   /// Track id (`flutter`, `dart`) → track.
   final Map<String, RoadmapTrack> roadmap;
+}
+
+/// Which projects ingest adds on top of the curated ones. The defaults
+/// discover nothing, so a catalog without a `discovery:` section only tracks
+/// its seeds.
+class Discovery {
+  const Discovery({this.pubTop = 0, this.githubMinStars});
+
+  /// How many of pub.dev's most popular packages to track. Every Flutter
+  /// Favorite is tracked whenever discovery is on.
+  final int pubTop;
+
+  /// Track public, non-fork, non-archived Dart repos with at least this
+  /// many stars; null skips GitHub discovery.
+  final int? githubMinStars;
+
+  bool get enabled => pubTop > 0 || githubMinStars != null;
+
+  factory Discovery.fromJson(Json json) =>
+      Discovery(pubTop: asInt(json['pub_top']) ?? 0, githubMinStars: asInt(json['github_min_stars']));
 }
 
 /// One yearly Hall of Fame edition.

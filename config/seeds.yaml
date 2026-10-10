@@ -8,7 +8,17 @@
 # `platforms` come from pub.dev tags; set them only for unpublished projects.
 # `related` lists project ids that are commonly used together.
 #
+# Beyond these, ingest discovers projects on its own (see `discovery:`).
+# Listing a discovered project here overrides its name and categories.
+#
 # The learning roadmap lives in config/roadmap.json.
+
+# Tracked automatically, on top of `projects:` below: every Flutter Favorite,
+# pub.dev's `pub_top` most popular packages, and public Dart repos on GitHub
+# with at least `github_min_stars` stars.
+discovery:
+  pub_top: 3000
+  github_min_stars: 100
 
 categories:
   state-management: State management
@@ -33,13 +43,54 @@ categories:
   authentication: Authentication
   maps: Maps
   ai: AI
+  device: Device & sensors
+  media: Media
+  localization: Localization
+  payments: Payments
+  utilities: Utilities
+  other: Other
+
+# Discovered projects get the categories (up to three, in this order) whose
+# keywords match their pub.dev or GitHub topics, a word of their name, or
+# their description; see `categorize` in packages/fv_ingest. Packages never
+# go under open-source-app, and unpublished Flutter repos that match nothing
+# do; anything else unmatched goes under `other`.
+topic_categories:
+  state-management: [state-management, state, bloc, cubit, riverpod, provider, redux, mobx, getx, signals, state-machine]
+  architecture: [architecture, clean-architecture, mvvm, mvc, ddd, domain-driven-design, modular]
+  navigation: [navigation, router, routing, routes, deep-linking, deeplink]
+  networking: [http, network, networking, api, rest, rest-api, graphql, websocket, websockets, grpc, dio, socket]
+  database: [database, sqlite, sql, orm, nosql, storage, local-storage, persistence, cache, caching, key-value, hive, isar, drift, realm]
+  serialization: [json, serialization, json-serialization, protobuf, yaml, xml, csv, codec]
+  code-generation: [code-generation, codegen, build-runner, build_runner, generator, source-gen, macros]
+  dependency-injection: [dependency-injection, di, service-locator, injection]
+  ui: [ui, widget, widgets, components, design-system, ui-kit, ui-components, material, material-design, cupertino, layout, responsive]
+  theming: [theme, theming, themes, colors, color, dark-mode, fonts, typography]
+  animation: [animation, animations, animated, motion, lottie, rive, transitions, transition]
+  charts: [chart, charts, graph, graphs, visualization, data-visualization, plot]
+  games: [game, games, game-engine, game-development, gamedev, flame, 2d, physics]
+  testing: [testing, test, tests, mock, mocks, mocking, integration-test, unit-testing, widget-testing, golden]
+  backend: [backend, server, server-side, shelf, serverpod, dart-frog, fullstack, full-stack, microservices]
+  cli: [cli, command-line, terminal, console, command-line-tool]
+  developer-tooling: [developer-tools, devtools, tooling, tools, lint, linter, lints, analyzer, build-tool, ide, vscode]
+  open-source-app: [app, apps, flutter-app, open-source-app, mobile-app, application, flutter-apps, android-app, ios-app]
+  firebase: [firebase, firestore, cloud-firestore, firebase-auth, supabase, appwrite]
+  authentication: [auth, authentication, oauth, oauth2, login, sign-in, signin, biometrics, jwt]
+  maps: [map, maps, location, geolocation, gps, google-maps, mapbox, geofencing]
+  ai: [ai, llm, machine-learning, ml, gemini, openai, chatgpt, tflite, tensorflow, generative-ai, genai]
+  device: [camera, bluetooth, ble, nfc, sensors, sensor, permissions, permission, device-info, battery, vibration, haptics, notifications, notification, push-notifications, barcode, qr, qrcode, scanner, background, connectivity, platform-channel, plugin, wifi, usb, contacts, share, sms, webview, in-app-review]
+  media: [image, images, video, audio, media, player, music, pdf, svg, photo, gallery, recording, streaming, cropper, picker, file-picker]
+  localization: [i18n, l10n, localization, localisation, internationalization, translation, translations, intl, locale]
+  payments: [payment, payments, stripe, in-app-purchase, iap, billing, subscriptions, paypal, razorpay, purchase]
+  utilities: [utils, utilities, utility, extensions, helpers, collection, collections, string, strings, date, datetime, time, math, uuid, logging, logger, log, crypto, encryption, validation, validator, regex, async, stream, streams, events, event-bus, config, env, dotenv]
 
 # Groups shown on the Explore page.
 category_groups:
   Architecture: [state-management, architecture, navigation, dependency-injection]
   Data & backend: [networking, database, serialization, firebase, backend, authentication]
   UI & motion: [ui, animation, charts, maps, games]
-  Tooling: [testing, cli, developer-tooling, ai]
+  Platform & media: [device, media, localization, payments]
+  Tooling: [testing, cli, developer-tooling, utilities, ai]
 
 projects:
   - { id: flutter_bloc, pub: flutter_bloc, repo: felangel/bloc, categories: [state-management, architecture], related: [freezed, get_it, go_router] }

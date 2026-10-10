@@ -2,6 +2,12 @@ import 'package:fv_core/fv_core.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('groupedNumber', () {
+    expect(groupedNumber(7), '7');
+    expect(groupedNumber(3002), '3,002');
+    expect(groupedNumber(1234567), '1,234,567');
+  });
+
   test('compactNumber', () {
     expect(compactNumber(null), 'N/A');
     expect(compactNumber(999), '999');

@@ -25,11 +25,16 @@ enum _Tab {
 class CategoryTabs extends StatefulComponent {
   const CategoryTabs({required this.index, super.key});
 
-  /// Only this category's projects.
+  /// Only this category's projects that some tab shows (see [previewRows]).
   final IndexFile index;
 
   @override
   State<CategoryTabs> createState() => _CategoryTabsState();
+
+  /// The rows any tab shows, out of a category's [rows].
+  static List<ProjectRow> previewRows(List<ProjectRow> rows) => {
+    for (final t in _Tab.values) ..._ranked(rows, t).$1.take(_shown),
+  }.toList();
 
   @css
   static List<StyleRule> get styles => [
@@ -81,27 +86,26 @@ class CategoryTabs extends StatefulComponent {
   ];
 }
 
+const _shown = 8;
+
+(List<ProjectRow>, String Function(ProjectRow)) _ranked(List<ProjectRow> rows, _Tab tab) => switch (tab) {
+  _Tab.lead => (sortedBy(rows, (r) => r.stars), (r) => compactNumber(r.stars)),
+  _Tab.fast => (
+    sortedBy(rows.where((r) => r.growth30 != null), (r) => r.growth30),
+    (r) => '+${percent(r.growth30)}',
+  ),
+  _Tab.emerging => (
+    sortedBy(rows.where((r) => r.stars != null && r.stars! < 3000 && r.momentum != null), (r) => r.momentum),
+    (r) => '${r.momentum}',
+  ),
+};
+
 class _CategoryTabsState extends State<CategoryTabs> {
   _Tab _tab = _Tab.lead;
 
-  (List<ProjectRow>, String Function(ProjectRow)) _ranked() {
-    final rows = component.index.projects;
-    return switch (_tab) {
-      _Tab.lead => (sortedBy(rows, (r) => r.stars), (r) => compactNumber(r.stars)),
-      _Tab.fast => (
-        sortedBy(rows.where((r) => r.growth30 != null), (r) => r.growth30),
-        (r) => '+${percent(r.growth30)}',
-      ),
-      _Tab.emerging => (
-        sortedBy(rows.where((r) => r.stars != null && r.stars! < 3000 && r.momentum != null), (r) => r.momentum),
-        (r) => '${r.momentum}',
-      ),
-    };
-  }
-
   @override
   Component build(BuildContext context) {
-    final (rows, value) = _ranked();
+    final (rows, value) = _ranked(component.index.projects, _tab);
     return div(classes: 'panel', [
       div(classes: 'cat-tabs-head', [
         SegControl<_Tab>(
@@ -111,7 +115,7 @@ class _CategoryTabsState extends State<CategoryTabs> {
         ),
         span([.text(_tab.description)]),
       ]),
-      for (final (i, r) in rows.take(8).indexed)
+      for (final (i, r) in rows.take(_shown).indexed)
         a(href: r.path, classes: 'cat-row hover-row', [
           span(classes: 'trend-rank', styles: Styles(raw: {'padding-top': '0'}), [.text('${i + 1}')]),
           ProjectLogo(initials: r.initials, color: r.logoColor, imageUrl: r.avatarUrl),

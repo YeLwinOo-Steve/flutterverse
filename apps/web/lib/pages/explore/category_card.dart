@@ -3,42 +3,53 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../../components/ui/project_logo.dart';
-import '../../data/ranking.dart';
 import '../../data/view.dart';
 import '../../styles/css.dart';
 
 /// An Explore card: category size, leading logos, growth and leader.
 class CategoryCard extends StatelessComponent {
-  const CategoryCard({required this.slug, required this.label, required this.rows, super.key});
+  const CategoryCard({
+    required this.slug,
+    required this.label,
+    required this.count,
+    required this.leaders,
+    this.growth,
+    super.key,
+  });
 
   final String slug;
   final String label;
 
-  /// Projects in this category.
-  final List<ProjectRow> rows;
+  /// How many projects are in this category.
+  final int count;
+
+  /// Its most-starred projects, most first (up to [shownLeaders]).
+  final List<ProjectRow> leaders;
+
+  /// Stars gained over 30 days across the category, or null without history.
+  final int? growth;
+
+  static const shownLeaders = 4;
 
   @override
   Component build(BuildContext context) {
-    final byStars = sortedBy(rows, (r) => r.stars);
-    final growth = rows.any((r) => r.stars30d != null)
-        ? compactNumber(rows.fold<int>(0, (sum, r) => sum + (r.stars30d ?? 0)))
-        : notAvailable;
+    final growth = this.growth == null ? notAvailable : compactNumber(this.growth);
     return a(href: '/categories/$slug', classes: 'cat-card hover-border', [
       div(classes: 'cat-card-top', [
         div(classes: 'cat-card-title', [
           span([.text(label)]),
           span(classes: 'muted', [
-            .text(rows.isEmpty ? 'No projects yet' : '${rows.length} ${rows.length == 1 ? 'project' : 'projects'}'),
+            .text(count == 0 ? 'No projects yet' : '${groupedNumber(count)} ${count == 1 ? 'project' : 'projects'}'),
           ]),
         ]),
         span(classes: 'cat-arrow', [.text('→')]),
       ]),
-      if (rows.isEmpty)
+      if (leaders.isEmpty)
         span(classes: 'cat-none', [.text('Tracked — no projects indexed yet.')])
       else ...[
         div(classes: 'cat-card-mid', [
           div(classes: 'cat-logos', [
-            for (final (i, r) in byStars.take(4).indexed)
+            for (final (i, r) in leaders.take(shownLeaders).indexed)
               ProjectLogo(
                 initials: r.initials,
                 color: r.logoColor,
@@ -52,7 +63,7 @@ class CategoryCard extends StatelessComponent {
         ]),
         div(classes: 'cat-leader', [
           span(classes: 'muted', [.text('Leader')]),
-          b([.text(byStars.first.name)]),
+          b([.text(leaders.first.name)]),
         ]),
       ],
     ]);

@@ -30,6 +30,7 @@ const _sorts = ['Trending', 'Stars', 'Star growth', 'Downloads', 'Likes', 'Recen
 class TrendingCard extends StatefulComponent {
   const TrendingCard({required this.index, required this.now, super.key});
 
+  /// Only the rows some window and sort can show (see [previewRows]).
   final IndexFile index;
 
   /// ISO timestamp of the data snapshot.
@@ -37,6 +38,13 @@ class TrendingCard extends StatefulComponent {
 
   @override
   State<TrendingCard> createState() => _TrendingCardState();
+
+  /// Every row any window and sort shows: their top 8s, which keeps the
+  /// card's props small however many projects there are.
+  static List<ProjectRow> previewRows(IndexFile index, DateTime now) => {
+    for (final w in _Window.values)
+      for (final s in _sorts) ..._top(index.projects, w, s, now),
+  }.toList();
 
   @css
   static List<StyleRule> get styles => [
@@ -64,27 +72,27 @@ class TrendingCard extends StatefulComponent {
   ];
 }
 
+List<ProjectRow> _top(List<ProjectRow> all, _Window window, String sort, DateTime now) {
+  final withStars = all.where((r) => r.stars != null);
+  final sorted = switch (sort) {
+    'Stars' => sortedBy(withStars, (r) => r.stars),
+    'Star growth' => sortedBy(withStars, (r) => r.growth30),
+    'Downloads' => sortedBy(all, (r) => r.downloads),
+    'Likes' => sortedBy(all, (r) => r.likes),
+    'Recently updated' => sortedBy(all, (r) => -(daysSince(r.lastCommit ?? r.released, now) ?? 1 << 30)),
+    'Recently released' => sortedBy(all, (r) => -(daysSince(r.released, now) ?? 1 << 30)),
+    // Until growth history exists, fall back to total stars so the list
+    // isn't alphabetical.
+    _ => sortedBy(withStars, (r) => window.of(r) ?? (r.stars! / 1e9)),
+  };
+  return sorted.take(8).toList();
+}
+
 class _TrendingCardState extends State<TrendingCard> {
   _Window _window = _Window.day;
   String _sort = 'Trending';
 
-  List<ProjectRow> _rows() {
-    final now = DateTime.parse(component.now);
-    final all = component.index.projects;
-    final withStars = all.where((r) => r.stars != null);
-    final sorted = switch (_sort) {
-      'Stars' => sortedBy(withStars, (r) => r.stars),
-      'Star growth' => sortedBy(withStars, (r) => r.growth30),
-      'Downloads' => sortedBy(all, (r) => r.downloads),
-      'Likes' => sortedBy(all, (r) => r.likes),
-      'Recently updated' => sortedBy(all, (r) => -(daysSince(r.lastCommit ?? r.released, now) ?? 1 << 30)),
-      'Recently released' => sortedBy(all, (r) => -(daysSince(r.released, now) ?? 1 << 30)),
-      // Until growth history exists, fall back to total stars so the list
-      // isn't alphabetical.
-      _ => sortedBy(withStars, (r) => _window.of(r) ?? (r.stars! / 1e9)),
-    };
-    return sorted.take(8).toList();
-  }
+  List<ProjectRow> _rows() => _top(component.index.projects, _window, _sort, DateTime.parse(component.now));
 
   @override
   Component build(BuildContext context) {

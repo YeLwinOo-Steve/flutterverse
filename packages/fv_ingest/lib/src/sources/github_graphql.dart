@@ -35,6 +35,64 @@ class GithubClient {
   Future<Map<String, (int?, int?)>> fetchUsers(Iterable<String> logins, {void Function(String message)? onError}) =>
       _batched(logins.toSet().toList(), _userQuery, _parseUser, onError);
 
+  /// Public, non-fork, non-archived Dart repos with at least [minStars]
+  /// stars, with their stats, keyed by `owner/name`. One search returns at
+  /// most 1,000 results, so the star range is split until each slice fits.
+  /// Slices run one at a time by default: these queries are heavy, and
+  /// GitHub's secondary rate limit trips on parallel ones.
+  Future<Map<String, GhStats>> searchDartRepos(
+    int minStars, {
+    int concurrency = 1,
+    void Function(String message)? onError,
+  }) async {
+    final slices = <String>[];
+    Future<void> split(int lo, int? hi) async {
+      final query = 'language:Dart fork:false archived:false stars:${hi == null ? '>=$lo' : '$lo..$hi'}';
+      final data = await _post(_countQuery, {'q': query}, onError);
+      final count = ((data['search'] as Map<String, Object?>?)?['repositoryCount'] as num?)?.toInt() ?? 0;
+      if (count > searchCap && hi != lo) {
+        final mid = hi == null ? lo * 2 : (lo + hi) ~/ 2;
+        await split(lo, mid);
+        await split(mid + 1, hi);
+        return;
+      }
+      if (count > searchCap) onError?.call('GitHub: $count repos have $lo stars; tracking the first $searchCap');
+      if (count > 0) slices.add(query);
+    }
+
+    await split(minStars, null);
+    final out = <String, GhStats>{};
+    await mapPool(slices, concurrency, (query) async {
+      try {
+        String? after;
+        do {
+          final data = await _post(_searchQuery, {'q': query, 'after': after}, onError);
+          final search = data['search'] as Map<String, Object?>?;
+          if (search == null) throw StateError('no search results');
+          for (final node in (search['nodes'] as List<Object?>).cast<Map<String, Object?>?>()) {
+            if (node?['nameWithOwner'] case final String repo) out[repo] = _parseRepo(node!);
+          }
+          final page = search['pageInfo'] as Map<String, Object?>;
+          after = page['hasNextPage'] == true ? page['endCursor'] as String? : null;
+        } while (after != null);
+      } on Object catch (e) {
+        onError?.call('GitHub: search "$query" failed: $e');
+      }
+    });
+    return out;
+  }
+
+  /// The most results one GitHub search returns.
+  static const searchCap = 1000;
+
+  static const _countQuery = r'query($q: String!) { search(type: REPOSITORY, query: $q, first: 1) { repositoryCount } }';
+
+  // 50 per page: 100 with the full fragment times out.
+  static const _searchQuery =
+      r'query($q: String!, $after: String) { search(type: REPOSITORY, query: $q, first: 50, after: $after) '
+      r'{ pageInfo { hasNextPage endCursor } nodes { ... on Repository { nameWithOwner ...F } } } }'
+      '\n$_fragment';
+
   /// Contributor count from the REST API's pagination (GraphQL doesn't
   /// expose it). Null on failure.
   Future<int?> contributors(String repo) async {
@@ -129,15 +187,18 @@ class GithubClient {
     return out;
   }
 
-  Future<Map<String, Object?>> _query(List<String> fields, void Function(String)? onError) async {
+  Future<Map<String, Object?>> _query(List<String> fields, void Function(String)? onError) {
     // GraphQL rejects unused fragments, so only append it when referenced.
     final fragment = fields.any((f) => f.contains('...F')) ? _fragment : '';
-    final query = 'query {\n${fields.join('\n')}\n}\n$fragment';
+    return _post('query {\n${fields.join('\n')}\n}\n$fragment', const {}, onError);
+  }
+
+  Future<Map<String, Object?>> _post(String query, Map<String, Object?> variables, void Function(String)? onError) async {
     final res = await withRetry(
       () => _http.post(
         Uri.parse(endpoint),
         headers: {..._headers, 'content-type': 'application/json'},
-        body: jsonEncode({'query': query}),
+        body: jsonEncode({'query': query, 'variables': variables}),
       ),
       baseDelay: retryDelay,
     );

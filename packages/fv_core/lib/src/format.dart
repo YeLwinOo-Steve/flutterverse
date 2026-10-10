@@ -23,6 +23,9 @@ String compactNumber(num? n) {
   return '$sign${abs.round()}';
 }
 
+/// `3002` → `3,002`: an exact count, for totals and page ranges.
+String groupedNumber(int n) => n.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+$)'), (_) => ',');
+
 /// `+12`, `-3`, `+0`; null → `N/A`.
 String signedNumber(int? n) {
   if (n == null) return notAvailable;

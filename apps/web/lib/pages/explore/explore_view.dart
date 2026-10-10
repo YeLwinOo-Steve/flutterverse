@@ -3,18 +3,48 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../../components/ui/seg_control.dart';
+import '../../data/ranking.dart';
 import '../../styles/css.dart';
 import 'category_card.dart';
 
 /// `/categories`: every category as a card, filterable by group.
 @client
 class ExploreView extends StatefulComponent {
-  const ExploreView({required this.index, super.key});
+  const ExploreView({required this.index, required this.counts, required this.growth, super.key});
 
+  /// Only each category's leaders (see [summarize]).
   final IndexFile index;
+
+  /// Category slug → how many projects it has.
+  final Map<String, int> counts;
+
+  /// Category slug → stars gained over 30 days; missing without history.
+  final Map<String, int> growth;
 
   @override
   State<ExploreView> createState() => _ExploreViewState();
+
+  /// The cards' data out of the full [index]: each category's leaders (as an
+  /// index preview), counts and 30-day growth.
+  static ExploreView summarize(IndexFile index) {
+    final leaders = <ProjectRow>{};
+    final counts = <String, int>{};
+    final growth = <String, int>{};
+    for (final slug in index.categories.keys) {
+      final rows = [
+        for (final r in index.projects)
+          if (r.categories.contains(slug)) r,
+      ];
+      counts[slug] = rows.length;
+      leaders.addAll(sortedBy(rows, (r) => r.stars).take(CategoryCard.shownLeaders));
+      if (rows.any((r) => r.stars30d != null)) growth[slug] = rows.fold(0, (sum, r) => sum + (r.stars30d ?? 0));
+    }
+    return ExploreView(
+      index: IndexFile(categories: index.categories, categoryGroups: index.categoryGroups, projects: leaders.toList()),
+      counts: counts,
+      growth: growth,
+    );
+  }
 
   @css
   static List<StyleRule> get styles => [
@@ -45,12 +75,12 @@ class _ExploreViewState extends State<ExploreView> {
     final index = component.index;
     final groups = {'All': index.categories.keys.toList(), ...index.categoryGroups};
     final slugs = groups[_group] ?? groups['All']!;
-    List<ProjectRow> inCat(String slug) => [
-      for (final r in index.projects)
-        if (r.categories.contains(slug)) r,
-    ];
-    final cards = [for (final s in slugs) (s, inCat(s))]
-      ..sort((x, y) => (y.$2.isNotEmpty ? 1 : 0) - (x.$2.isNotEmpty ? 1 : 0));
+    final counts = component.counts;
+    List<ProjectRow> leaders(String slug) => sortedBy(
+      index.projects.where((r) => r.categories.contains(slug)),
+      (r) => r.stars,
+    ).take(CategoryCard.shownLeaders).toList();
+    final cards = slugs.toList()..sort((x, y) => ((counts[y] ?? 0) > 0 ? 1 : 0) - ((counts[x] ?? 0) > 0 ? 1 : 0));
 
     return div(classes: 'explore', [
       div(classes: 'explore-head', [
@@ -67,7 +97,14 @@ class _ExploreViewState extends State<ExploreView> {
         trailing: (g) => '${groups[g]!.length}',
       ),
       div(classes: 'explore-grid', [
-        for (final (slug, rows) in cards) CategoryCard(slug: slug, label: index.categories[slug] ?? slug, rows: rows),
+        for (final slug in cards)
+          CategoryCard(
+            slug: slug,
+            label: index.categories[slug] ?? slug,
+            count: counts[slug] ?? 0,
+            leaders: leaders(slug),
+            growth: component.growth[slug],
+          ),
       ]),
     ]);
   }

@@ -1,3 +1,6 @@
 # Cloudflare Pages response headers.
 /data/*
   Cache-Control: public, max-age=600
+# Not content-hashed, so cache briefly; serve stale while revalidating.
+/main.css
+  Cache-Control: public, max-age=600, stale-while-revalidate=86400

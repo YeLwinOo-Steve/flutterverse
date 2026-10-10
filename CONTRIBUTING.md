@@ -2,7 +2,15 @@
 
 ## Add or change a tracked project
 
-Most contributions are a one-file pull request to [`config/seeds.yaml`](config/seeds.yaml):
+Most projects are found automatically: every day ingest tracks every Flutter
+Favorite, pub.dev's most popular packages and public Dart repos on GitHub with
+enough stars (the `discovery:` section of
+[`config/seeds.yaml`](config/seeds.yaml)). Discovered projects are sorted into
+categories by their topics, name and description, using `topic_categories:`.
+
+To track something discovery misses, or to give a discovered project a better
+name, categories or related projects, add it under `projects:` in the same
+file with a one-file pull request:
 
 ```yaml
 projects:

@@ -35,6 +35,7 @@ class PubStats {
     this.flutterSdk,
     this.sdks = const [],
     this.platforms = const [],
+    this.topics = const [],
     this.flutterFavorite = false,
   });
 
@@ -81,6 +82,8 @@ class PubStats {
 
   /// Display names: `iOS`, `Android`, `Web`, `WASM`, `macOS`, `Windows`, `Linux`.
   final List<String> platforms;
+  /// The pubspec's `topics`, such as `state-management`.
+  final List<String> topics;
   final bool flutterFavorite;
 
   /// Relative change in weekly downloads over the last quarter (13 weeks).
@@ -111,6 +114,7 @@ class PubStats {
     flutterSdk: flutterSdk,
     sdks: sdks,
     platforms: platforms,
+    topics: topics,
     flutterFavorite: flutterFavorite ?? this.flutterFavorite,
   );
 
@@ -134,6 +138,7 @@ class PubStats {
     flutterSdk: json['flutterSdk'] as String?,
     sdks: asStrings(json['sdks']),
     platforms: asStrings(json['platforms']),
+    topics: asStrings(json['topics']),
     flutterFavorite: json['flutterFavorite'] as bool? ?? false,
   );
 
@@ -157,6 +162,7 @@ class PubStats {
     'flutterSdk': flutterSdk,
     'sdks': sdks,
     'platforms': platforms,
+    'topics': topics.isEmpty ? null : topics,
     'flutterFavorite': flutterFavorite ? true : null,
   });
 }

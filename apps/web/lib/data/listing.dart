@@ -23,7 +23,14 @@ class ListSort {
 String _pubOnly(ProjectRow r, String Function() f) => r.isPublished ? f() : notApplicable;
 
 final listSorts = <ListSort>[
-  ListSort('Momentum', 'Momentum', (r, _) => r.momentum, (r, _) => '${r.momentum ?? notAvailable}'),
+  // Until a week of history gives projects a Momentum, rank by stars rather
+  // than alphabetically (a fraction, so any Momentum still comes first).
+  ListSort(
+    'Momentum',
+    'Momentum',
+    (r, _) => r.momentum ?? (r.stars == null ? null : r.stars! / 1e9),
+    (r, _) => '${r.momentum ?? notAvailable}',
+  ),
   ListSort('Stars', 'Stars', (r, _) => r.stars, (r, _) => compactNumber(r.stars)),
   ListSort('Star growth', '30 days', (r, _) => r.stars30d, (r, _) => signedNumber(r.stars30d)),
   ListSort(
@@ -62,6 +69,18 @@ int? _negDays(DateTime? t, DateTime now) {
   final d = daysSince(t, now);
   return d == null ? null : -d;
 }
+
+/// The Projects listing's rows: [filters] applied, sorted by [sort].
+List<ProjectRow> listRows(IndexFile index, ListFilters filters, ListSort sort, DateTime now) => [
+  for (final r in index.projects)
+    if (filters.matches(r, index.categories)) r,
+]..sort((x, y) {
+    final c = (sort.score(y, now) ?? -1 << 40).compareTo(sort.score(x, now) ?? -1 << 40);
+    return c != 0 ? c : byName(x, y);
+  });
+
+/// Rows per page in the long listings.
+const listPageSize = 50;
 
 ListSort listSortNamed(String label) => listSorts.firstWhere((s) => s.label == label, orElse: () => listSorts.first);
 

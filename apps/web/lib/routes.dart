@@ -4,6 +4,7 @@ import 'package:jaspr_router/jaspr_router.dart';
 
 import 'app.dart';
 import 'components/layout/seo.dart';
+import 'data/full_index.dart';
 import 'data/site_data.dart';
 import 'pages/about/about_page.dart';
 import 'pages/detail/detail_page.dart';
@@ -69,7 +70,7 @@ List<RouteBase> siteRoutes(SiteData data) {
       description:
           'The top Flutter and Dart packages and projects, ranked by GitHub stars, star growth, '
           'momentum, pub.dev likes and downloads. Refreshed every day.',
-      builder: () => RankingsView(index: index),
+      builder: () => RankingsView(index: previewOf(index, RankingsView.previewRows(index))),
     ),
     _page(
       '/projects',
@@ -77,7 +78,11 @@ List<RouteBase> siteRoutes(SiteData data) {
       description:
           'Browse $count Flutter and Dart packages, open source apps and tools. Filter by category, '
           'SDK and platform, and sort by stars, pub points or momentum.',
-      builder: () => ProjectsView(index: index, now: now),
+      builder: () => ProjectsView(
+        index: previewOf(index, ProjectsView.previewRows(index, data.now)),
+        total: index.projects.length,
+        now: now,
+      ),
     ),
     _page(
       '/pub',
@@ -85,7 +90,11 @@ List<RouteBase> siteRoutes(SiteData data) {
       description:
           'Likes, pub points and downloads for every tracked Dart and Flutter package on pub.dev, '
           'including every Flutter Favorite.',
-      builder: () => PubView(index: index, now: now),
+      builder: () => PubView(
+        index: previewOf(index, PubView.previewRows(index, data.now)),
+        total: index.projects.where((r) => r.isPublished).length,
+        now: now,
+      ),
     ),
     _page(
       '/hall-of-fame',
@@ -123,7 +132,7 @@ List<RouteBase> siteRoutes(SiteData data) {
       description:
           'Find the best Flutter and Dart packages for state management, navigation, networking, '
           'databases, UI, animation, testing and more.',
-      builder: () => ExploreView(index: index),
+      builder: () => ExploreView.summarize(index),
     ),
     for (final MapEntry(key: slug, value: label) in index.categories.entries)
       _category(data, slug, label),

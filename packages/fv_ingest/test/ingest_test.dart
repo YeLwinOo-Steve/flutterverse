@@ -165,4 +165,108 @@ projects:
     expect(result.written, isFalse);
     expect(Directory(p.join(tmp.path, 'out')).existsSync(), isFalse);
   });
+
+  test('discovers popular packages and GitHub repos beyond the seeds', () async {
+    final seeds = parseSeeds('''
+categories: {networking: Networking, open-source-app: Open source app, other: Other}
+discovery: {pub_top: 3, github_min_stars: 100}
+topic_categories: {networking: [http], open-source-app: [app]}
+projects:
+  - {id: dio, pub: dio, categories: [networking]}
+''');
+    final scraped = <String>[];
+    final pub = MockClient((req) async {
+      if (req.url.path.startsWith('/packages/')) scraped.add(req.url.path);
+      return switch (req.url.path) {
+        '/api/package-name-completion-data' => http.Response(
+          jsonEncode({
+            'packages': ['dio', 'http_x', 'dio_extra', 'fourth'],
+          }),
+          200,
+        ),
+        '/api/search' => http.Response(
+          jsonEncode({
+            'packages': [
+              {'package': 'dio'},
+            ],
+          }),
+          200,
+        ),
+        '/api/packages/dio' || '/api/packages/http_x' || '/api/packages/dio_extra' => http.Response(
+          jsonEncode({
+            'latest': {
+              'version': '1.0.0',
+              'pubspec': {
+                'repository': req.url.path.contains('dio') ? 'https://github.com/cfug/dio' : null,
+                'topics': ['HTTP'],
+              },
+            },
+          }),
+          200,
+        ),
+        '/api/packages/dio/score' ||
+        '/api/packages/dio_extra/score' ||
+        '/api/packages/http_x/score' => http.Response(jsonEncode({'tags': <String>[]}), 200),
+        _ => http.Response('<html></html>', 200),
+      };
+    });
+    final gh = GithubClient(
+      MockClient((req) async {
+        final query = (jsonDecode(req.body) as Map)['query'] as String;
+        if (query.contains('repositoryCount')) {
+          return http.Response(
+            jsonEncode({
+              'data': {
+                'search': {'repositoryCount': 2},
+              },
+            }),
+            200,
+          );
+        }
+        if (query.contains('search(')) {
+          return http.Response(
+            jsonEncode({
+              'data': {
+                'search': {
+                  'pageInfo': {'hasNextPage': false},
+                  'nodes': [
+                    {'nameWithOwner': 'CFUG/dio', 'stargazerCount': 9000},
+                    {'nameWithOwner': 'acme/flutter_wallet', 'stargazerCount': 300},
+                  ],
+                },
+              },
+            }),
+            200,
+          );
+        }
+        return http.Response(jsonEncode({'data': <String, Object?>{}}), 200);
+      }),
+      token: 't',
+      retryDelay: Duration.zero,
+    );
+    final result = await runIngest(
+      catalog: seeds,
+      pub: PubDevClient(pub, retryDelay: Duration.zero),
+      github: gh,
+      history: HistoryStore(p.join(tmp.path, 'history')),
+      writer: JsonWriter(p.join(tmp.path, 'out')),
+      now: DateTime.utc(2026, 10, 1),
+    );
+    expect(result.written, isTrue);
+
+    final rows = {for (final r in IndexFile.fromJson(readJson('index.json')).projects) r.id: r};
+    expect(
+      rows.keys,
+      unorderedEquals(['dio', 'http_x', 'dio_extra', 'acme-flutter_wallet']),
+      reason: 'pub_top caps packages',
+    );
+    expect(rows['dio']!.stars, 9000, reason: 'search results match tracked repos case-insensitively');
+    expect(rows['dio']!.sharedRepo, isFalse, reason: 'the curated project owns a shared repo');
+    expect((rows['dio_extra']!.stars, rows['dio_extra']!.sharedRepo), (null, true));
+    expect(rows['http_x']!.categories, ['networking']);
+    expect(rows['acme-flutter_wallet']!.kind, ProjectKind.project);
+    expect(rows['acme-flutter_wallet']!.sdk, 'Flutter');
+    expect(rows['acme-flutter_wallet']!.categories, ['open-source-app']);
+    expect(scraped, ['/packages/dio/score'], reason: 'only curated packages and favorites get the weekly series');
+  });
 }

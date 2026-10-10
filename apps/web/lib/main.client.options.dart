@@ -89,6 +89,8 @@ ClientOptions get defaultClientOptions => ClientOptions(
     'explore_view': ClientLoader(
       (p) => _explore_view.ExploreView(
         index: _codecs.IndexData.decode(p['index'] as Map<String, Object?>),
+        counts: (p['counts'] as Map<String, Object?>).cast<String, int>(),
+        growth: (p['growth'] as Map<String, Object?>).cast<String, int>(),
       ),
       loader: _explore_view.loadLibrary,
     ),
@@ -102,6 +104,7 @@ ClientOptions get defaultClientOptions => ClientOptions(
     'projects_view': ClientLoader(
       (p) => _projects_view.ProjectsView(
         index: _codecs.IndexData.decode(p['index'] as Map<String, Object?>),
+        total: p['total'] as int,
         now: p['now'] as String,
       ),
       loader: _projects_view.loadLibrary,
@@ -109,6 +112,7 @@ ClientOptions get defaultClientOptions => ClientOptions(
     'pub_view': ClientLoader(
       (p) => _pub_view.PubView(
         index: _codecs.IndexData.decode(p['index'] as Map<String, Object?>),
+        total: p['total'] as int,
         now: p['now'] as String,
       ),
       loader: _pub_view.loadLibrary,

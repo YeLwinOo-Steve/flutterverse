@@ -25,7 +25,7 @@
 
 ## Overview
 
-- **Curated catalog**: hand-picked packages, apps and tools across 22 categories, in [`config/seeds.yaml`](config/seeds.yaml)
+- **Thousands of projects**: every Flutter Favorite, pub.dev's 3,000 most popular packages and every public Dart repo on GitHub with 100+ stars, discovered daily and sorted into categories by their topics; hand-picked entries in [`config/seeds.yaml`](config/seeds.yaml) refine them
 - **Rankings and listings**: filter and sort by SDK, category, platform, stars, pub points and momentum
 - **Project pages**: trend charts, release timeline, maintenance status and related projects
 - **Flutter Favorites**: every package in pub.dev's Flutter Favorite program
@@ -44,7 +44,7 @@ flowchart LR
   W --> C[Cloudflare Pages]
 ```
 
-1. A scheduled workflow runs **`fv_ingest`**, which reads `config/seeds.yaml`, fetches pub.dev and GitHub, and scores every project.
+1. A scheduled workflow runs **`fv_ingest`**, which discovers projects on pub.dev and GitHub (see `discovery:` in `config/seeds.yaml`), fetches their stats and scores every project.
 2. It writes per-screen JSON plus a daily history line per project, and commits them to the **`data`** branch.
 3. **`deploy-web`** pre-renders the [Jaspr](https://jaspr.site) site against that data and deploys it. Only the interactive pieces (tables, charts, the lamp) hydrate in the browser.
 
@@ -117,7 +117,7 @@ Star growth needs history, because GitHub only reports current counts (and no lo
 
 ```
 config/
-  seeds.yaml          tracked projects, categories, Hall of Fame (hand-edited)
+  seeds.yaml          discovery settings, curated projects, categories, Hall of Fame (hand-edited)
   roadmap.json        learning roadmap content (hand-edited)
 packages/
   fv_core/            models, metrics, formatters (pure Dart, compiles to the web)
@@ -149,7 +149,7 @@ tool/                 check_imports.dart enforces the package dependency rules
 
 ## Contributing
 
-- **Add a project:** a one-file PR to [`config/seeds.yaml`](config/seeds.yaml). CI checks the package and repo exist.
+- **Add a project:** popular ones are found automatically. For anything else, or to fix a name or category, send a one-file PR to [`config/seeds.yaml`](config/seeds.yaml). CI checks the package and repo exist.
 - **Nominate for the Hall of Fame:** use the **Propose** buttons on the site, or the issue forms. Nominations are checked automatically, then reviewed by the editorial team.
 - **Work on the code:** follow [GUIDELINES.md](GUIDELINES.md). Small components, `fv_core` for shared logic, `null` for missing data.
 

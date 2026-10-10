@@ -9,10 +9,11 @@ List<ProjectRow> sortedBy(Iterable<ProjectRow> rows, num? Function(ProjectRow) s
   return rows.toList()..sort((a, b) {
     final sa = score(a), sb = score(b);
     if (sa == null || sb == null) {
-      if (sa == null && sb == null) return a.name.compareTo(b.name);
+      if (sa == null && sb == null) return byName(a, b);
       return sa == null ? 1 : -1;
     }
-    return sb.compareTo(sa);
+    final c = sb.compareTo(sa);
+    return c != 0 ? c : byName(a, b);
   });
 }
 
@@ -136,3 +137,10 @@ bool isHiddenGem(ProjectRow r) =>
     r.stars! < 2500 &&
     r.maintenance == Maintenance.active &&
     (!r.isPublished || (r.points ?? 0) >= 150);
+
+/// A total order for ties: by name, then id. Sorting is unstable, and a
+/// server-rendered first page must come out the same as the browser's.
+int byName(ProjectRow a, ProjectRow b) {
+  final c = a.name.compareTo(b.name);
+  return c != 0 ? c : a.id.compareTo(b.id);
+}

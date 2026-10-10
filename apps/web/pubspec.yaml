@@ -23,3 +23,6 @@ dev_dependencies:
 
 jaspr:
   mode: static
+  # Component styles go to one cached main.css instead of every page; the
+  # theme in main.server.dart stays inline so first paint has its tokens.
+  styles: standalone

@@ -18,11 +18,20 @@ typedef RankedRow = ({ProjectRow row, String signal});
 /// The shared Rankings/Listing table: a wide grid on desktop, cards on
 /// narrow screens (both rendered; CSS picks one).
 class ProjectTable extends StatelessComponent {
-  const ProjectTable({required this.rows, required this.categories, required this.signalHead, super.key});
+  const ProjectTable({
+    required this.rows,
+    required this.categories,
+    required this.signalHead,
+    this.rankFrom = 1,
+    super.key,
+  });
 
   final List<RankedRow> rows;
   final Map<String, String> categories;
   final String signalHead;
+
+  /// The first row's rank, for later pages.
+  final int rankFrom;
 
   @override
   Component build(BuildContext context) {
@@ -38,11 +47,11 @@ class ProjectTable extends StatelessComponent {
             span([.text('Momentum')]),
             span(classes: 'r', [.text('30-day trend')]),
           ]),
-          for (final (i, ranked) in rows.indexed) _WideRow(ranked, i + 1, categories),
+          for (final (i, ranked) in rows.indexed) _WideRow(ranked, rankFrom + i, categories),
         ]),
       ]),
       div(classes: 'pcards', [
-        for (final (i, ranked) in rows.indexed) ProjectCard(ranked: ranked, rank: i + 1),
+        for (final (i, ranked) in rows.indexed) ProjectCard(ranked: ranked, rank: rankFrom + i),
       ]),
     ]);
   }

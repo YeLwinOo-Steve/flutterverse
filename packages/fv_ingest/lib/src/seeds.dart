@@ -23,9 +23,17 @@ Catalog parseSeeds(String source, {String? roadmapJson}) {
         Project.fromJson(p),
     ],
     hallOfFame: hof == null ? null : HallOfFameEdition.fromJson(hof),
+    discovery: Discovery.fromJson(json['discovery'] as Map<String, Object?>? ?? const {}),
+    topicCategories: {
+      for (final e in (json['topic_categories'] as Map<String, Object?>? ?? {}).entries)
+        e.key: [for (final t in (e.value as List<Object?>).cast<String>()) t.toLowerCase()],
+    },
     roadmap: roadmapJson == null ? const {} : RoadmapFile.fromJson(jsonDecode(roadmapJson) as Json).tracks,
   );
 }
+
+/// Where discovered projects that match no topic go.
+const otherCategory = 'other';
 
 final _idPattern = RegExp(r'^[a-z0-9][a-z0-9_-]*$');
 final _repoPattern = RegExp(r'^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$');
@@ -60,6 +68,12 @@ List<String> validateCatalog(Catalog c) {
     for (final cat in cats) {
       if (!c.categories.containsKey(cat)) errors.add('category_groups "$group": unknown category "$cat"');
     }
+  }
+  for (final cat in c.topicCategories.keys) {
+    if (!c.categories.containsKey(cat)) errors.add('topic_categories: unknown category "$cat"');
+  }
+  if (c.discovery.enabled && !c.categories.containsKey(otherCategory)) {
+    errors.add('categories: discovery needs an "$otherCategory" category for unmatched projects');
   }
   for (final h in c.hallOfFame?.projects ?? const <HallOfFameProject>[]) {
     if (!ids.contains(h.id)) errors.add('hall_of_fame: unknown project "${h.id}"');

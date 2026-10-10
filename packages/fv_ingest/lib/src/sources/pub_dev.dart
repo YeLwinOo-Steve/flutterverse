@@ -12,22 +12,34 @@ class PubDevClient {
   final String baseUrl;
   final Duration retryDelay;
 
-  static const _headers = {'user-agent': 'flutterverse-ingest (+https://github.com/flutterverse)'};
+  static const _headers = {'user-agent': 'flutterverse-ingest (+https://flutterverse.org)'};
 
   /// Package info, score and download history, or null if the package
   /// doesn't exist. Throws on any other failure, except for the weekly
-  /// downloads, which are best effort and become null.
-  Future<PubStats?> fetch(String name, {required DateTime now}) async {
+  /// downloads, which are best effort and become null. The weekly series
+  /// costs a page scrape, so [weekly] lets bulk discovery skip it.
+  Future<PubStats?> fetch(String name, {required DateTime now, bool weekly = true}) async {
     final info = await _getJson('/api/packages/$name');
     if (info == null) return null;
     final score = await _getJson('/api/packages/$name/score') ?? const {};
-    WeeklyDownloads? weekly;
-    try {
-      weekly = await _weeklyDownloads(name);
-    } on Object {
-      weekly = null;
+    WeeklyDownloads? series;
+    if (weekly) {
+      try {
+        series = await _weeklyDownloads(name);
+      } on Object {
+        series = null;
+      }
     }
-    return parsePackage(info, score, weekly: weekly, now: now);
+    return parsePackage(info, score, weekly: series, now: now);
+  }
+
+  /// The [limit] most popular package names, most popular first. Search only
+  /// pages through 100 results, but the list pub.dev serves IDEs for name
+  /// completion holds the top 20,000 in popularity order.
+  Future<List<String>> popularPackages(int limit) async {
+    final json = await _getJson('/api/package-name-completion-data');
+    final names = ((json?['packages'] as List<Object?>?) ?? const []).cast<String>();
+    return names.take(limit).toList();
   }
 
   /// All Flutter Favorite package names, following pagination.
@@ -124,6 +136,10 @@ PubStats parsePackage(
       for (final e in _platformNames.entries)
         if (platformTags.contains(e.key)) e.value,
       if (tags.contains('is:wasm-ready')) 'WASM',
+    ],
+    topics: [
+      for (final t in (pubspec['topics'] as List<Object?>?) ?? const [])
+        if (t is String) t.toLowerCase(),
     ],
     flutterFavorite: tags.contains('is:flutter-favorite'),
   );

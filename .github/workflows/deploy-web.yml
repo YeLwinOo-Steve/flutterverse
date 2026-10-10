@@ -18,6 +18,7 @@ concurrency:
 
 jobs:
   deploy:
+    timeout-minutes: 60
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
@@ -36,6 +37,9 @@ jobs:
       - run: dart pub get && dart pub global activate jaspr_cli
       - run: jaspr build --sitemap-domain=https://flutterverse.org --sitemap-exclude=/404
         working-directory: apps/web
+      # Per-project JSON only feeds the build; leaving it out keeps the
+      # deploy well under Cloudflare Pages' 20,000-file limit.
+      - run: rm -rf apps/web/build/jaspr/data/p
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}

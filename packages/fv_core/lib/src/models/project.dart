@@ -53,13 +53,13 @@ class Project {
   /// The GitHub owner, which the site uses as the author.
   String? get owner => repo?.split('/').first;
 
-  Project copyWith({String? repo}) => Project(
+  Project copyWith({String? repo, List<String>? categories}) => Project(
     id: id,
     name: name,
     kind: kind,
     pub: pub,
     repo: repo ?? this.repo,
-    categories: categories,
+    categories: categories ?? this.categories,
     description: description,
     sdk: sdk,
     platforms: platforms,

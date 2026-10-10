@@ -4,8 +4,9 @@ import 'dart:math' as math;
 
 import 'package:http/http.dart' as http;
 
-/// Sends [request] (re-created per attempt), retrying 429/5xx and network
-/// errors with exponential backoff. Honors `Retry-After` when present.
+/// Sends [request] (re-created per attempt), retrying 429/5xx, GitHub's
+/// secondary rate limit (a 403) and network errors with exponential backoff.
+/// Honors `Retry-After` when present.
 Future<http.Response> withRetry(
   Future<http.Response> Function() request, {
   int attempts = 4,
@@ -14,7 +15,7 @@ Future<http.Response> withRetry(
   for (var attempt = 1; ; attempt++) {
     try {
       final res = await request();
-      final retryable = res.statusCode == 429 || res.statusCode >= 500;
+      final retryable = res.statusCode == 429 || res.statusCode >= 500 || _secondaryLimit(res);
       if (!retryable || attempt >= attempts) return res;
       await Future<void>.delayed(_delay(res, attempt, baseDelay));
     } on Object catch (e) {
@@ -25,9 +26,13 @@ Future<http.Response> withRetry(
   }
 }
 
+bool _secondaryLimit(http.Response res) => res.statusCode == 403 && res.body.contains('secondary rate limit');
+
 Duration _delay(http.Response? res, int attempt, Duration base) {
   final retryAfter = int.tryParse(res?.headers['retry-after'] ?? '');
   if (retryAfter != null) return Duration(seconds: math.min(retryAfter, 120));
+  // GitHub asks for at least a minute before retrying a secondary limit.
+  if (res != null && _secondaryLimit(res) && base > Duration.zero) return const Duration(seconds: 60) * attempt;
   return base * math.pow(2, attempt - 1).toInt();
 }
 

@@ -2,6 +2,7 @@ import 'package:fv_core/fv_core.dart';
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../data/full_index.dart';
 import '../../data/ranking.dart';
 import '../../data/site_data.dart';
 import '../../data/view.dart';
@@ -35,7 +36,10 @@ class HomePage extends StatelessComponent {
     return div(classes: 'home', [
       const HomeHero(),
       section(classes: 'home-main', [
-        TrendingCard(index: data.index, now: now.toIso8601String()),
+        TrendingCard(
+          index: previewOf(data.index, TrendingCard.previewRows(data.index, now)),
+          now: now.toIso8601String(),
+        ),
         div(classes: 'home-side', [
           SideList(
             title: 'Rising',

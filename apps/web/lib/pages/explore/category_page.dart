@@ -62,7 +62,7 @@ class CategoryPage extends StatelessComponent {
         ])
       else
         CategoryTabs(
-          index: IndexFile(categories: cats, projects: rows),
+          index: IndexFile(categories: cats, projects: CategoryTabs.previewRows(rows)),
         ),
       div(classes: 'category-related', [
         span(classes: 'eyebrow', [.text('Related categories')]),
