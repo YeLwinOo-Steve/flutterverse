@@ -38,4 +38,10 @@ void main() {
     expect(fullDate(now), 'Oct 6, 2026');
     expect(monthYear(now), 'Oct 2026');
   });
+
+  test('momentumLabel marks early estimates', () {
+    expect(momentumLabel(null), 'N/A');
+    expect(momentumLabel(42), '42');
+    expect(momentumLabel(42, early: true), '~42');
+  });
 }

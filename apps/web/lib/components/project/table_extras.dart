@@ -33,7 +33,8 @@ class TableLegend extends StatelessComponent {
     return div(classes: 'table-legend', [
       .text(
         '“N/A” = metric unavailable from source · “—” = not applicable (e.g. not published to pub.dev). Momentum is a '
-        'Flutterverse calculated score (0–100) weighting recent growth over lifetime stars.',
+        'Flutterverse calculated score (0–100) weighting recent growth over lifetime stars; “~” marks an early '
+        'estimate from under a week of history.',
       ),
     ]);
   }

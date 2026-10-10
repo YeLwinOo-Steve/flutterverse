@@ -24,7 +24,7 @@ class KpiGrid extends StatelessComponent {
     return section(classes: 'cell-grid kpis', [
       _StarsCell(r),
       _GainedCell(r),
-      _MomentumCell(r.momentum),
+      _MomentumCell(r),
       _PubCell(r),
       _MaintenanceCell(detail, now),
     ]);
@@ -73,9 +73,16 @@ class KpiGrid extends StatelessComponent {
     rule('.kpi-score', {'display': 'flex', 'align-items': 'baseline', 'gap': '6px'}),
     rule('.kpi-score span', {'font-size': '15px', 'color': 'var(--muted)'}),
     rule('.kpi-note', {'font-size': '13px', 'line-height': '1.5', 'color': 'var(--muted)'}),
-    rule('.kpi-pair', {'display': 'grid', 'grid-template-columns': '1fr 1fr', 'gap': '16px'}),
+    // Columns sized to their content so labels like "Downloads / 30d" stay on
+    // one line in the narrowest cell.
+    rule('.kpi-pair', {
+      'display': 'grid',
+      'grid-template-columns': 'repeat(2,max-content)',
+      'justify-content': 'space-between',
+      'gap': '16px',
+    }),
     rule('.kpi-fact', {'display': 'flex', 'flex-direction': 'column', 'gap': '4px'}),
-    rule('.kpi-fact > span', {'font-size': '13px', 'color': 'var(--muted)'}),
+    rule('.kpi-fact > span', {'font-size': '13px', 'color': 'var(--muted)', 'white-space': 'nowrap'}),
     rule('.kpi-fact > b', {'font-size': '24px', 'font-weight': '600', 'letter-spacing': '-0.02em'}),
     rule('.kpi-line', {'display': 'flex', 'justify-content': 'space-between', 'font-size': '13px'}),
     rule('.kpi-line span', {'color': 'var(--muted)'}),
@@ -103,12 +110,15 @@ class _StarsCell extends StatelessComponent {
   Component build(BuildContext context) => div(classes: 'kpi', [
     _label('GitHub stars'),
     div(classes: 'kpi-stack', [
-      span(classes: 'kpi-big', [.text(compactNumber(r.stars))]),
-      span(classes: 'growth', styles: Styles(raw: {'padding': '3px 8px'}), [
-        .text('↑ ${signedNumber(r.stars30d)} this month'),
-      ]),
+      span(classes: 'kpi-big', [.text(compactNumber(r.shownStars))]),
+      if (r.sharedRepo)
+        span(classes: 'kpi-note', [.text(_sharedRepoNote(r.repo))])
+      else
+        span(classes: 'growth', styles: Styles(raw: {'padding': '3px 8px'}), [
+          .text('↑ ${signedNumber(r.stars30d)} this month'),
+        ]),
     ]),
-    div(classes: 'kpi-spark', [Sparkline(r.spark, height: 44, area: true, fill: true)]),
+    if (!r.sharedRepo) div(classes: 'kpi-spark', [Sparkline(r.spark, height: 44, area: true, fill: true)]),
   ]);
 }
 
@@ -118,6 +128,14 @@ class _GainedCell extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
+    if (r.sharedRepo) {
+      return div(classes: 'kpi', [
+        _label('Stars gained'),
+        span(classes: 'kpi-note', [
+          .text('GitHub counts stars per repository, so there is no star growth to track for one package.'),
+        ]),
+      ]);
+    }
     final values = [
       ('Today', r.stars1d),
       ('This week', r.stars7d),
@@ -147,30 +165,40 @@ class _GainedCell extends StatelessComponent {
 }
 
 class _MomentumCell extends StatelessComponent {
-  const _MomentumCell(this.score);
-  final int? score;
+  const _MomentumCell(this.r);
+  final ProjectRow r;
 
   @override
   Component build(BuildContext context) {
-    final s = score;
-    final verdict = s == null ? notAvailable : (s >= 70 ? 'Hot' : (s >= 45 ? 'Steady' : 'Cooling'));
+    final s = r.momentum;
+    if (s == null) {
+      return div(classes: 'kpi', [
+        _label('Momentum'),
+        span(classes: 'kpi-big', [.text(notAvailable)]),
+        span(classes: 'kpi-note', [.text(_noMomentumNote(r))]),
+      ]);
+    }
+    final verdict = s >= 70 ? 'Hot' : (s >= 45 ? 'Steady' : 'Cooling');
     return div(classes: 'kpi', [
       div(classes: 'kpi-row', [
         _label('Momentum'),
         span(classes: verdict == 'Hot' ? 'verdict hot' : 'verdict', [
           if (verdict == 'Hot') const Icon(Icons.fire, size: 14, filled: true),
-          .text(verdict),
+          .text(r.momentumEarly ? '$verdict · early' : verdict),
         ]),
       ]),
       div(classes: 'kpi-score', [
         span(classes: 'kpi-big', styles: Styles(raw: {'font-size': '44px', 'color': 'var(--ink)'}), [
-          .text('${s ?? notAvailable}'),
+          .text(momentumLabel(s, early: r.momentumEarly)),
         ]),
         span([.text('/ 100')]),
       ]),
       MomentumMeter(s, cellHeight: 20, gap: 3, radius: 2),
       span(classes: 'kpi-note', [
-        .text('Recent star growth, downloads and release activity, weighted over lifetime size.'),
+        if (r.momentumEarly)
+          .text('Early estimate: under a week of star history so far, scaled up. It settles once a full week is in.')
+        else
+          .text('Recent star growth, downloads and release activity, weighted over lifetime size.'),
       ]),
     ]);
   }
@@ -241,3 +269,14 @@ class _MaintenanceCell extends StatelessComponent {
     ]);
   }
 }
+
+/// What the star count of a package in a shared monorepo stands for.
+String _sharedRepoNote(String? repo) => 'Stars for the whole $repo repository, which it shares with other packages.';
+
+/// Why a project has no momentum score yet, or can't have one.
+String _noMomentumNote(ProjectRow r) => switch (r) {
+  ProjectRow(sharedRepo: true) =>
+    'Momentum is built on star growth, which a package sharing its repository doesn’t have.',
+  ProjectRow(repo: null) => 'Momentum is built on star growth, and this package has no GitHub repository.',
+  _ => 'Momentum is built on a week of daily star counts. It appears once that history exists.',
+};

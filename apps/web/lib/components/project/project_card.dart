@@ -31,13 +31,13 @@ class ProjectCard extends StatelessComponent {
       if (r.description != null) span(classes: 'pcard-desc', [.text(r.description!)]),
       div(classes: 'pcard-facts', [
         span([
-          b([.text(compactNumber(r.stars))]),
-          .text(' stars'),
+          b([.text(compactNumber(r.shownStars))]),
+          .text(r.repoWideStars ? ' repo stars' : ' stars'),
         ]),
         span([.text('${signedNumber(r.stars30d)} / 30d')]),
         span([
           .text('MOM '),
-          b([.text('${r.momentum ?? notAvailable}')]),
+          b([.text(momentumLabel(r.momentum, early: r.momentumEarly))]),
         ]),
         span([.text('${r.isPublished ? compactNumber(r.likes) : notApplicable} likes')]),
         span([.text('${r.isPublished ? compactNumber(r.downloads) : notApplicable} dl')]),

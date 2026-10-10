@@ -263,10 +263,16 @@ projects:
     expect(rows['dio']!.stars, 9000, reason: 'search results match tracked repos case-insensitively');
     expect(rows['dio']!.sharedRepo, isFalse, reason: 'the curated project owns a shared repo');
     expect((rows['dio_extra']!.stars, rows['dio_extra']!.sharedRepo), (null, true));
+    expect(rows['dio_extra']!.repoStars, 9000, reason: 'shown as the repo\'s, never ranked');
+    expect(rows['dio']!.repoStars, isNull);
     expect(rows['http_x']!.categories, ['networking']);
     expect(rows['acme-flutter_wallet']!.kind, ProjectKind.project);
     expect(rows['acme-flutter_wallet']!.sdk, 'Flutter');
     expect(rows['acme-flutter_wallet']!.categories, ['open-source-app']);
-    expect(scraped, ['/packages/dio/score'], reason: 'only curated packages and favorites get the weekly series');
+    expect(
+      scraped,
+      unorderedEquals(['/packages/dio/score', '/packages/http_x/score', '/packages/dio_extra/score']),
+      reason: 'every package gets the weekly series',
+    );
   });
 }

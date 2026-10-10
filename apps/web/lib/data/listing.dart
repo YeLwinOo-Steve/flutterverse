@@ -29,7 +29,7 @@ final listSorts = <ListSort>[
     'Momentum',
     'Momentum',
     (r, _) => r.momentum ?? (r.stars == null ? null : r.stars! / 1e9),
-    (r, _) => '${r.momentum ?? notAvailable}',
+    (r, _) => momentumLabel(r.momentum, early: r.momentumEarly),
   ),
   ListSort('Stars', 'Stars', (r, _) => r.stars, (r, _) => compactNumber(r.stars)),
   ListSort('Star growth', '30 days', (r, _) => r.stars30d, (r, _) => signedNumber(r.stars30d)),

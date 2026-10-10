@@ -48,8 +48,8 @@ class TrendRow extends StatelessComponent {
       ]),
       div(classes: 'trend-stats', [
         div(classes: 'trend-stars', [
-          span(classes: 'trend-stars-label', [.text('GitHub stars')]),
-          span(classes: 'trend-stars-value', [.text(compactNumber(r.stars))]),
+          span(classes: 'trend-stars-label', [.text(r.repoWideStars ? 'Repo stars' : 'GitHub stars')]),
+          span(classes: 'trend-stars-value', [.text(compactNumber(r.shownStars))]),
           growthChip('${signedNumber(growth)} $growthLabel'),
         ]),
         Sparkline(r.spark),

@@ -96,7 +96,7 @@ const _shown = 8;
   ),
   _Tab.emerging => (
     sortedBy(rows.where((r) => r.stars != null && r.stars! < 3000 && r.momentum != null), (r) => r.momentum),
-    (r) => '${r.momentum}',
+    (r) => momentumLabel(r.momentum, early: r.momentumEarly),
   ),
 };
 

@@ -74,14 +74,14 @@ List<PaletteGroup> paletteResults(IndexFile index, String query) {
       title: 'Packages',
       items: [
         for (final r in rows.where((r) => r.kind == ProjectKind.package && hit(r)).take(6))
-          project(r, '${compactNumber(r.stars)} ★'),
+          project(r, '${compactNumber(r.shownStars)} ★${r.repoWideStars ? ' repo' : ''}'),
       ],
     ),
     (
       title: 'Projects & repositories',
       items: [
         for (final r in rows.where((r) => r.kind == ProjectKind.project && hit(r)).take(4))
-          project(r, '${compactNumber(r.stars)} ★'),
+          project(r, '${compactNumber(r.shownStars)} ★${r.repoWideStars ? ' repo' : ''}'),
       ],
     ),
     (

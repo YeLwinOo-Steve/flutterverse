@@ -49,9 +49,9 @@ SourcePanel? githubPanel(ProjectDetail d, DateTime now) {
       note: r.sharedRepo
           ? 'Lives in the ${r.repo} monorepo — per-package star history is not available.'
           : 'GitHub data is unavailable right now.',
-      rows: const [
-        (icon: Icons.star, label: 'Stars', value: notAvailable),
-        (icon: Icons.issue, label: 'Open issues', value: notAvailable),
+      rows: [
+        (icon: Icons.star, label: r.repoWideStars ? 'Repo stars' : 'Stars', value: compactNumber(r.shownStars)),
+        const (icon: Icons.issue, label: 'Open issues', value: notAvailable),
       ],
     );
   }

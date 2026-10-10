@@ -97,7 +97,7 @@ A weighted sum of six signals, each scaled to 0–1 and compared against the oth
 | 12% | Recency of the last commit |
 | 10% | Recency of the last release |
 
-The exact definition is in [`momentum.dart`](packages/fv_core/lib/src/metrics/momentum.dart).
+For a project with under a week of history, the week is estimated from the days there are and the score is shown as an early estimate, `~42`, until the week is complete. The exact definition is in [`momentum.dart`](packages/fv_core/lib/src/metrics/momentum.dart).
 
 </details>
 
