@@ -31,7 +31,7 @@ class _ProposeDeveloperState extends State<ProposeDeveloper> {
       nominationIssueUrl(
         sourceUrl,
         template: 'nominate-developer.yml',
-        title: 'Hall of Fame nomination: @$_user',
+        title: 'Hall of Fame nomination: $_user',
         fields: {'username': _user, 'reason': _why},
       ),
       '_blank',

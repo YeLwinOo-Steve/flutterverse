@@ -30,6 +30,8 @@ void main() {
         script(content: themeBootScript),
         link(rel: 'preconnect', href: 'https://fonts.googleapis.com'),
         link(rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml'),
+        // Google's search results need a raster icon at a multiple of 48px.
+        link(rel: 'icon', href: '/favicon-192.png', type: 'image/png', attributes: {'sizes': '192x192'}),
         link(rel: 'icon', href: '/favicon.ico', attributes: {'sizes': '48x48'}),
         link(rel: 'apple-touch-icon', href: '/apple-touch-icon.png'),
       ],

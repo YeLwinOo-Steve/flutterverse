@@ -2,7 +2,7 @@
 # (NominationField). Rename them in both places.
 name: Nominate a developer
 description: Propose a developer for the Flutterverse Hall of Fame.
-title: 'Hall of Fame nomination: @'
+title: 'Hall of Fame nomination: '
 labels: [nomination]
 body:
   - type: markdown

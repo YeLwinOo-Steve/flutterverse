@@ -110,6 +110,7 @@ class ProjectTable extends StatelessComponent {
       'color': 'var(--ink)',
     }),
     rule('.pt-value .icon', {'color': 'var(--muted)'}),
+    rule('.pt-repo', {'font-size': '11px', 'color': 'var(--muted)'}),
     rule('.pt-mom', {'display': 'flex', 'align-items': 'center', 'gap': '10px'}),
     rule('.pt-mom b', {
       'font-size': '15px',
@@ -155,7 +156,14 @@ class _WideRow extends StatelessComponent {
         span(classes: 'pt-signal', [.text(ranked.signal)]),
       ]),
       div(classes: 'pt-metric', [
-        span(classes: 'pt-value', [.text(compactNumber(r.stars))]),
+        span(
+          classes: 'pt-value',
+          attributes: {if (r.repoWideStars) 'title': 'Stars for the whole ${r.repo} repo'},
+          [
+            .text(compactNumber(r.shownStars)),
+            if (r.repoWideStars) span(classes: 'pt-repo', [.text('repo')]),
+          ],
+        ),
         StarPips(r.stars),
       ]),
       div(classes: 'pt-metric', [
@@ -166,7 +174,10 @@ class _WideRow extends StatelessComponent {
         DownloadPips(r.downloads, published: r.isPublished),
       ]),
       div(classes: 'pt-mom', [
-        b([.text('${r.momentum ?? notAvailable}')]),
+        b(
+          attributes: {if (r.momentumEarly) 'title': 'Early estimate: under a week of star history'},
+          [.text(momentumLabel(r.momentum, early: r.momentumEarly))],
+        ),
         MomentumMeter(r.momentum),
       ]),
       div(classes: 'pt-trend', [Sparkline(r.spark, width: 104, height: 32)]),

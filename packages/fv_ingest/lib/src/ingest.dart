@@ -67,8 +67,10 @@ Future<IngestResult> runIngest({
     log?.call('pub.dev: discovered ${projects.length - before} packages');
   }
 
-  // 2. pub.dev stats. The weekly download series costs a page scrape, so
-  // only curated packages and Flutter Favorites get one.
+  // 2. pub.dev stats, with the weekly download series (a page scrape) for
+  // every package, so download growth is known for all of them. It's best
+  // effort: only a missing series for a curated package or Flutter Favorite
+  // is worth a warning.
   final pubStats = await _fetchPub(
     projects,
     pub,
@@ -76,7 +78,7 @@ Future<IngestResult> runIngest({
     concurrency,
     log,
     warn,
-    weekly: (p) => curated.contains(p.id) || favoriteSet.contains(p.pub),
+    expectWeekly: (p) => curated.contains(p.id) || favoriteSet.contains(p.pub),
   );
 
   // 3. Resolve repos from the pubspec when the seed doesn't name one.
@@ -171,12 +173,14 @@ Future<IngestResult> runIngest({
     built[project.id] = _Built(project, ps, ghs, snaps);
   }
 
-  // 8. Momentum is relative to the whole population.
+  // 8. Momentum is relative to the whole population. Under a week of
+  // history, it runs on an estimated week, flagged as early.
+  final week = {for (final b in built.values) b.project.id: starGrowthEstimate(b.history, 7)};
   final scores = momentumScores({
     for (final b in built.values)
       b.project.id: MomentumInput(
         stars: b.gh?.stars,
-        stars7d: starGrowth(b.history, 7),
+        stars7d: week[b.project.id]?.gain,
         stars30d: starGrowth(b.history, 30),
         daysSinceCommit: _days(b.gh?.lastCommit ?? b.gh?.pushedAt, now),
         daysSinceRelease: _days(b.pub?.published, now),
@@ -192,11 +196,13 @@ Future<IngestResult> runIngest({
       pub: b.pub,
       gh: b.gh,
       sharedRepo: omitted.contains(b.project.id),
+      repoStars: omitted.contains(b.project.id) ? gh.repos[b.project.repo?.toLowerCase()]?.stars : null,
       stars1d: starGrowth(b.history, 1),
       stars7d: starGrowth(b.history, 7),
       stars30d: starGrowth(b.history, 30),
       stars365d: starGrowth(b.history, 365),
       momentum: scores[b.project.id],
+      momentumEarly: week[b.project.id]?.early ?? false,
       maintenance: maintenance(lastCommit: b.gh?.lastCommit, lastRelease: b.pub?.published, now: now),
       spark: dailyStarGains(b.history),
     );
@@ -284,20 +290,21 @@ Future<Map<String, PubStats>> _fetchPub(
   int concurrency,
   void Function(String)? log,
   void Function(String) warn, {
-  required bool Function(Project) weekly,
+  required bool Function(Project) expectWeekly,
 }) async {
   final published = projects.where((p) => p.pub != null).toList();
   log?.call('pub.dev: fetching ${published.length} packages');
   final out = <String, PubStats>{};
   await mapPool(published, concurrency, (project) async {
     try {
-      final series = weekly(project);
-      final stats = await pub.fetch(project.pub!, now: now, weekly: series);
+      final stats = await pub.fetch(project.pub!, now: now);
       if (stats == null) {
         warn('pub.dev: package "${project.pub}" not found');
       } else {
         out[project.id] = stats;
-        if (series && stats.weeklyDownloads == null) warn('pub.dev: no weekly downloads for ${project.pub}');
+        if (stats.weeklyDownloads == null && expectWeekly(project)) {
+          warn('pub.dev: no weekly downloads for ${project.pub}');
+        }
       }
     } on Object catch (e) {
       warn('pub.dev: ${project.pub}: $e');

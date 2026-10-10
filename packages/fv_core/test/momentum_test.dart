@@ -37,6 +37,22 @@ void main() {
     });
   });
 
+  group('starGrowthEstimate', () {
+    test('is measured once the history reaches back far enough', () {
+      expect(starGrowthEstimate(daily(List.generate(8, (i) => 100 + i)), 7), (gain: 7, early: false));
+    });
+
+    test('scales up a shorter history, flagged early', () {
+      expect(starGrowthEstimate(daily([100, 103]), 7), (gain: 21, early: true));
+      expect(starGrowthEstimate(daily([100, null, 104]), 7), (gain: 14, early: true));
+    });
+
+    test('is null with under two days of stars', () {
+      expect(starGrowthEstimate(daily([100]), 7), isNull);
+      expect(starGrowthEstimate(daily([null, 100, null]), 7), isNull);
+    });
+  });
+
   group('dailyStarGains', () {
     test('null with less than two star snapshots', () {
       expect(dailyStarGains(daily([5])), isNull);

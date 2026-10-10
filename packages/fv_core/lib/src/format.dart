@@ -23,6 +23,9 @@ String compactNumber(num? n) {
   return '$sign${abs.round()}';
 }
 
+/// A momentum score, `~42` while it's an early estimate.
+String momentumLabel(int? score, {bool early = false}) => score == null ? notAvailable : '${early ? '~' : ''}$score';
+
 /// `3002` → `3,002`: an exact count, for totals and page ranges.
 String groupedNumber(int n) => n.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+$)'), (_) => ',');
 

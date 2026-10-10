@@ -21,6 +21,22 @@ int? starGrowth(List<Snapshot> history, int days) {
   return latest.stars! - base.stars!;
 }
 
+/// [starGrowth] over [days] days, or while [history] is shorter than that,
+/// an estimate scaled up from the gain over the span it covers (at least a
+/// day); `early` marks the estimate. Null with under two days of stars.
+({int gain, bool early})? starGrowthEstimate(List<Snapshot> history, int days) {
+  final measured = starGrowth(history, days);
+  if (measured != null) return (gain: measured, early: false);
+  final starred = [
+    for (final s in history)
+      if (s.stars != null) s,
+  ];
+  if (starred.length < 2) return null;
+  final span = starred.last.day.difference(starred.first.day).inDays;
+  if (span < 1) return null;
+  return (gain: ((starred.last.stars! - starred.first.stars!) * days / span).round(), early: true);
+}
+
 /// Stars gained per day over the last [days] days, oldest first, for
 /// sparklines. Days without a snapshot count as 0. Null with less than two
 /// days of star history.

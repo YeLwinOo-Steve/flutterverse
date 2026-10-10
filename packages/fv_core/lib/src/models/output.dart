@@ -26,11 +26,13 @@ class ProjectRow {
     this.description,
     this.platforms = const [],
     this.stars,
+    this.repoStars,
     this.stars1d,
     this.stars7d,
     this.stars30d,
     this.stars365d,
     this.momentum,
+    this.momentumEarly = false,
     this.maintenance,
     this.likes,
     this.points,
@@ -66,11 +68,19 @@ class ProjectRow {
   final String? description;
   final List<String> platforms;
   final int? stars;
+
+  /// For a package in a shared repo, the whole repo's stars. Shown, marked
+  /// as the repo's, but never ranked: [stars] stays null.
+  final int? repoStars;
   final int? stars1d;
   final int? stars7d;
   final int? stars30d;
   final int? stars365d;
   final int? momentum;
+
+  /// [momentum] rests on under a week of star history, scaled up: an early
+  /// estimate until the week is complete.
+  final bool momentumEarly;
   final Maintenance? maintenance;
   final int? likes;
   final int? points;
@@ -96,6 +106,12 @@ class ProjectRow {
 
   bool get isPublished => pub != null;
 
+  /// The star count to display: [stars], or else [repoStars].
+  int? get shownStars => stars ?? repoStars;
+
+  /// [shownStars] is the shared repo's count, not the project's own.
+  bool get repoWideStars => stars == null && repoStars != null;
+
   /// 30-day star growth as a share of the stars 30 days ago.
   double? get growth30 {
     final s = stars, d = stars30d;
@@ -108,11 +124,13 @@ class ProjectRow {
     PubStats? pub,
     GhStats? gh,
     bool sharedRepo = false,
+    int? repoStars,
     int? stars1d,
     int? stars7d,
     int? stars30d,
     int? stars365d,
     int? momentum,
+    bool momentumEarly = false,
     Maintenance? maintenance,
     List<int>? spark,
   }) => ProjectRow(
@@ -130,11 +148,13 @@ class ProjectRow {
     description: project.description ?? pub?.description ?? gh?.description?.trim(),
     platforms: project.platforms ?? pub?.platforms ?? const [],
     stars: gh?.stars,
+    repoStars: repoStars,
     stars1d: stars1d,
     stars7d: stars7d,
     stars30d: stars30d,
     stars365d: stars365d,
     momentum: momentum,
+    momentumEarly: momentum != null && momentumEarly,
     maintenance: maintenance,
     likes: pub?.likes,
     points: pub?.points,
@@ -163,11 +183,13 @@ class ProjectRow {
     description: json['description'] as String?,
     platforms: asStrings(json['platforms']),
     stars: asInt(json['stars']),
+    repoStars: asInt(json['repoStars']),
     stars1d: asInt(json['stars1d']),
     stars7d: asInt(json['stars7d']),
     stars30d: asInt(json['stars30d']),
     stars365d: asInt(json['stars365d']),
     momentum: asInt(json['momentum']),
+    momentumEarly: json['momentumEarly'] as bool? ?? false,
     maintenance: Maintenance.parse(json['maintenance'] as String?),
     likes: asInt(json['likes']),
     points: asInt(json['points']),
@@ -196,11 +218,13 @@ class ProjectRow {
     'description': description,
     'platforms': platforms.isEmpty ? null : platforms,
     'stars': stars,
+    'repoStars': repoStars,
     'stars1d': stars1d,
     'stars7d': stars7d,
     'stars30d': stars30d,
     'stars365d': stars365d,
     'momentum': momentum,
+    'momentumEarly': momentumEarly ? true : null,
     'maintenance': maintenance?.name,
     'likes': likes,
     'points': points,
