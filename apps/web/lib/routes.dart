@@ -45,13 +45,12 @@ List<RouteBase> siteRoutes(SiteData data) {
   final index = data.index;
   final now = data.now.toIso8601String();
   final edition = data.hallOfFame.edition;
-  final count = index.projects.length;
   return [
     _page(
       '/',
       title: '$siteName: Flutter & Dart package rankings and trends',
       description:
-          'Daily rankings of $count Flutter and Dart packages, apps and tools by GitHub stars, '
+          'Daily rankings of Flutter and Dart packages, apps and tools by GitHub stars, '
           'pub.dev likes, downloads and momentum. See what is trending in Flutter.',
       jsonLd: [
         {
@@ -76,7 +75,7 @@ List<RouteBase> siteRoutes(SiteData data) {
       '/projects',
       title: _title('All Flutter & Dart projects and packages'),
       description:
-          'Browse $count Flutter and Dart packages, open source apps and tools. Filter by category, '
+          'Browse every popular Flutter and Dart package, open source app and tool. Filter by category, '
           'SDK and platform, and sort by stars, pub points or momentum.',
       builder: () => ProjectsView(
         index: previewOf(index, ProjectsView.previewRows(index, data.now)),
