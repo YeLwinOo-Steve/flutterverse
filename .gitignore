@@ -12,3 +12,6 @@ build/
 .fvm/
 # Local planning notes
 PLAN.md
+
+# Wrangler CLI cache (Cloudflare account details)
+.wrangler/
