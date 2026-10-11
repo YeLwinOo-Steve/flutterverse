@@ -36,19 +36,19 @@ enum ChartRange {
     return (points: all.sublist(all.length - (n < all.length ? n : all.length)), empty: null);
   }
 
-  if (d.row.sharedRepo) {
-    return (
-      points: const [],
-      empty: 'Lives in the ${d.row.repo} monorepo — per-package star history is not available.',
-    );
-  }
   if (d.row.repo == null) return (points: const [], empty: 'No GitHub repository.');
+  // A package sharing its repo charts the whole repo's stars instead.
   final all = [
     for (final s in d.history)
-      if (s.stars != null) (t: s.day, v: s.stars!),
+      if (s.stars ?? s.repoStars case final v?) (t: s.day, v: v),
   ];
   if (all.length < 2) {
-    return (points: const [], empty: 'Star history builds up from daily snapshots — check back tomorrow.');
+    return (
+      points: const [],
+      empty: d.row.sharedRepo
+          ? 'Star history for the whole ${d.row.repo} repo builds up from daily snapshots — check back tomorrow.'
+          : 'Star history builds up from daily snapshots — check back tomorrow.',
+    );
   }
   final days = switch (range) {
     ChartRange.day => 1,
@@ -106,15 +106,37 @@ class ChartGeometry {
 
   String get area => '${line}L800,200L0,200Z';
 
-  /// Y-axis labels from top to bottom: (fraction from top, label).
-  List<(double, String)> get gridLabels => [
-    for (final g in const [1.0, 0.66, 0.33, 0.0]) (1 - g, compactNumber(min + g * (max - min))),
-  ];
+  /// Y-axis labels from top to bottom: (fraction from top, label). Exact
+  /// numbers when the short ones would repeat (a narrow range like
+  /// 5,300–5,312 is all `5.3k`), and a label still repeating is dropped.
+  List<(double, String)> get gridLabels {
+    final values = [for (final g in _gridFractions) (1 - g, min + g * (max - min))];
+    final texts = [for (final (_, v) in values) label(v)];
+    final seen = <String>{};
+    return [
+      for (final (i, (top, _)) in values.indexed)
+        if (seen.add(texts[i])) (top, texts[i]),
+    ];
+  }
+
+  static const _gridFractions = [1.0, 0.66, 0.33, 0.0];
+
+  /// Whether short numbers (`5.3k`) would blur the y-axis, so values are
+  /// labelled exactly (`5,312`) instead.
+  late final bool exact = {for (final g in _gridFractions) compactNumber(min + g * (max - min))}.length < 4;
+
+  /// [v] as this chart labels it: short, or exact when the range is narrow.
+  String label(num v) => exact ? withCommas(v.round()) : compactNumber(v);
 
   static const gridPath = 'M0,0.0H800M0,66.7H800M0,133.3H800M0,200.0H800';
 
+  /// X-axis dates, spread evenly like the points: four, or fewer when
+  /// there are fewer points.
   List<String> get xLabels => [
-    for (final g in const [0.0, 1 / 3, 2 / 3, 1.0]) fullDate(points[(g * (n - 1)).round()].t),
+    for (final i in {
+      for (final g in const [0.0, 1 / 3, 2 / 3, 1.0]) (g * (n - 1)).round(),
+    })
+      fullDate(points[i].t),
   ];
 }
 

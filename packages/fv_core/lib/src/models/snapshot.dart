@@ -10,6 +10,7 @@ class Snapshot {
     this.likes,
     this.points,
     this.downloads,
+    this.repoStars,
   });
 
   /// UTC calendar day, `YYYY-MM-DD`.
@@ -20,6 +21,10 @@ class Snapshot {
   final int? likes;
   final int? points;
   final int? downloads;
+
+  /// The whole repo's stars, for a project sharing its repo with others,
+  /// whose own [stars] are null. Charted, never ranked.
+  final int? repoStars;
 
   DateTime get day => DateTime.parse('${date}T00:00:00Z');
 
@@ -33,6 +38,7 @@ class Snapshot {
     likes: asInt(json['likes']),
     points: asInt(json['points']),
     downloads: asInt(json['downloads']),
+    repoStars: asInt(json['repoStars']),
   );
 
   Json toJson() => compact({
@@ -43,5 +49,6 @@ class Snapshot {
     'likes': likes,
     'points': points,
     'downloads': downloads,
+    'repoStars': repoStars,
   });
 }

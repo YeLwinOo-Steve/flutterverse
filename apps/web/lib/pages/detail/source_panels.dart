@@ -47,7 +47,7 @@ SourcePanel? githubPanel(ProjectDetail d, DateTime now) {
       href: 'https://github.com/${r.repo}',
       ctaIcon: ctaIcon,
       note: r.sharedRepo
-          ? 'Lives in the ${r.repo} monorepo — per-package star history is not available.'
+          ? 'Lives in the ${r.repo} monorepo, shared with other packages, so its stars are the whole repo’s.'
           : 'GitHub data is unavailable right now.',
       rows: [
         (icon: Icons.star, label: r.repoWideStars ? 'Repo stars' : 'Stars', value: compactNumber(r.shownStars)),

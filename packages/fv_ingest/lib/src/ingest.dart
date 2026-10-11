@@ -190,6 +190,7 @@ Future<IngestResult> runIngest({
         likes: ps?.likes,
         points: ps?.points,
         downloads: ps?.downloads,
+        repoStars: omitted.contains(project.id) ? gh.repos[repo]?.stars : null,
       ),
     );
     built[project.id] = _Built(project, ps, ghs, snaps);
@@ -353,10 +354,14 @@ List<String> activityDue(
   Set<String> priority = const {},
   int maxAge = 7,
 }) {
-  final missing = [for (final r in repos) if (!have.containsKey(r)) r]
-    ..sort((a, b) => (priority.contains(a) ? 0 : 1).compareTo(priority.contains(b) ? 0 : 1));
-  final stale = [for (final r in repos) if (have[r] case final a? when a.ageAt(now) >= maxAge) r]
-    ..sort((a, b) => have[a]!.fetched.compareTo(have[b]!.fetched));
+  final missing = [
+    for (final r in repos)
+      if (!have.containsKey(r)) r,
+  ]..sort((a, b) => (priority.contains(a) ? 0 : 1).compareTo(priority.contains(b) ? 0 : 1));
+  final stale = [
+    for (final r in repos)
+      if (have[r] case final a? when a.ageAt(now) >= maxAge) r,
+  ]..sort((a, b) => have[a]!.fetched.compareTo(have[b]!.fetched));
   return [...missing, ...stale].take(budget).toList();
 }
 
