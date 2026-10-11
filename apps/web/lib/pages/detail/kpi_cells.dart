@@ -21,9 +21,15 @@ class KpiGrid extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final r = detail.row;
+    final repo = r.sharedRepo ? repoStarHistory(detail.history) : null;
     return section(classes: 'cell-grid kpis', [
-      _StarsCell(r),
-      _GainedCell(r),
+      _StarsCell(r, spark: repo == null ? r.spark : dailyStarGains(repo)),
+      _GainedCell(
+        r,
+        gains: repo == null
+            ? (r.stars1d, r.stars7d, r.stars30d, r.stars365d)
+            : (starGrowth(repo, 1), starGrowth(repo, 7), starGrowth(repo, 30), starGrowth(repo, 365)),
+      ),
       _MomentumCell(r),
       _PubCell(r),
       _MaintenanceCell(detail, now),
@@ -103,8 +109,11 @@ class KpiGrid extends StatelessComponent {
 Component _label(String text) => span(classes: 'eyebrow', [.text(text)]);
 
 class _StarsCell extends StatelessComponent {
-  const _StarsCell(this.r);
+  const _StarsCell(this.r, {required this.spark});
   final ProjectRow r;
+
+  /// Stars gained per day: the whole repo's for a package sharing it.
+  final List<int>? spark;
 
   @override
   Component build(BuildContext context) => div(classes: 'kpi', [
@@ -118,33 +127,35 @@ class _StarsCell extends StatelessComponent {
           .text('↑ ${signedNumber(r.stars30d)} this month'),
         ]),
     ]),
-    if (!r.sharedRepo) div(classes: 'kpi-spark', [Sparkline(r.spark, height: 44, area: true, fill: true)]),
+    if (!r.sharedRepo || spark != null)
+      div(classes: 'kpi-spark', [Sparkline(spark, height: 44, area: true, fill: true)]),
   ]);
 }
 
 class _GainedCell extends StatelessComponent {
-  const _GainedCell(this.r);
+  const _GainedCell(this.r, {required this.gains});
   final ProjectRow r;
+
+  /// Today, this week, this month and this year: the whole repo's for a
+  /// package sharing it.
+  final (int?, int?, int?, int?) gains;
 
   @override
   Component build(BuildContext context) {
-    if (r.sharedRepo) {
+    final (day, week, month, year) = gains;
+    final label = r.sharedRepo ? 'Repo stars gained' : 'Stars gained';
+    if (r.sharedRepo && day == null) {
       return div(classes: 'kpi', [
-        _label('Stars gained'),
+        _label(label),
         span(classes: 'kpi-note', [
-          .text('GitHub counts stars per repository, so there is no star growth to track for one package.'),
+          .text('Gains for the whole ${r.repo} repo build up from daily snapshots. Check back tomorrow.'),
         ]),
       ]);
     }
-    final values = [
-      ('Today', r.stars1d),
-      ('This week', r.stars7d),
-      ('This month', r.stars30d),
-      ('This year', r.stars365d),
-    ];
+    final values = [('Today', day), ('This week', week), ('This month', month), ('This year', year)];
     final most = math.max(1, values.map((v) => v.$2 ?? 0).reduce(math.max));
     return div(classes: 'kpi', [
-      _label('Stars gained'),
+      _label(label),
       div(classes: 'kpi-stack', styles: Styles(raw: {'gap': '12px'}), [
         for (final (label, v) in values)
           div(classes: 'gain-row', [
@@ -269,6 +280,12 @@ class _MaintenanceCell extends StatelessComponent {
     ]);
   }
 }
+
+/// [history] with each day's repo-wide stars standing in for the project's
+/// own, so the star growth helpers work for a package sharing its repo.
+List<Snapshot> repoStarHistory(List<Snapshot> history) => [
+  for (final s in history) Snapshot(date: s.date, stars: s.stars ?? s.repoStars),
+];
 
 /// What the star count of a package in a shared monorepo stands for.
 String _sharedRepoNote(String? repo) => 'Stars for the whole $repo repository, which it shares with other packages.';

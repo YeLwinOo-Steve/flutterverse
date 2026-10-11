@@ -152,6 +152,8 @@ projects:
     expect(rows.map((r) => r.stars), [null, null]);
     expect(rows.map((r) => r.sharedRepo), [true, true]);
     expect(rows.map((r) => r.lastCommit), everyElement(isNotNull));
+    final history = ProjectDetail.fromJson(readJson('p/a.json')).history.single;
+    expect((history.stars, history.repoStars), (null, 5000), reason: 'the repo stars are kept for the chart');
   });
 
   test('writes nothing when every source fails', () async {

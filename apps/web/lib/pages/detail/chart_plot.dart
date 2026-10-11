@@ -33,10 +33,14 @@ class ChartPlot extends StatelessComponent {
     final d = detail, pts = points;
     final g = ChartGeometry(pts);
     final stars = metric == ChartMetric.stars;
-    final headline = stars ? '${compactNumber(d.row.stars)} stars' : '${compactNumber(d.row.downloads)} / 30d';
+    final repoWide = d.row.sharedRepo;
+    final headline = stars
+        ? '${compactNumber(d.row.shownStars)} ${repoWide ? 'repo stars' : 'stars'}'
+        : '${compactNumber(d.row.downloads)} / 30d';
     final delta = pts.last.v - pts.first.v;
     final caption = stars
         ? '${signedNumber(delta)} over ${range == ChartRange.all ? 'all time' : range.label}'
+              '${repoWide ? ' · whole ${d.row.repo} repo' : ''}'
         : 'Weekly downloads on pub.dev';
     final t0 = pts.first.t, t1 = pts.last.t, span_ = t1.difference(t0).inMinutes;
     final marks = span_ <= 0
@@ -88,7 +92,7 @@ class ChartPlot extends StatelessComponent {
             styles: Styles(raw: {'top': '$endY%'}),
             [],
           ),
-          span(classes: 'chart-end-label', styles: Styles(raw: {'top': '$endY%'}), [.text(compactNumber(pts.last.v))]),
+          span(classes: 'chart-end-label', styles: Styles(raw: {'top': '$endY%'}), [.text(g.label(pts.last.v))]),
           if (hovered != null) ..._hoverLayer(g, hovered),
         ],
       ),
