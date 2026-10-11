@@ -1,5 +1,6 @@
 import '../json.dart';
 import '../metrics/maintenance.dart';
+import 'activity.dart';
 import 'catalog.dart';
 import 'gh_stats.dart';
 import 'project.dart';
@@ -243,11 +244,22 @@ class ProjectRow {
 
 /// `p/<id>.json`: the full detail page.
 class ProjectDetail {
-  const ProjectDetail({required this.row, this.pub, this.gh, this.history = const [], this.related = const []});
+  const ProjectDetail({
+    required this.row,
+    this.pub,
+    this.gh,
+    this.activity,
+    this.history = const [],
+    this.related = const [],
+  });
 
   final ProjectRow row;
   final PubStats? pub;
   final GhStats? gh;
+
+  /// The repo's commits per day over the past year, repo-wide even when
+  /// the repo holds several packages. Null until it has been fetched.
+  final CommitActivity? activity;
 
   /// Every snapshot since tracking began, oldest first.
   final List<Snapshot> history;
@@ -259,6 +271,7 @@ class ProjectDetail {
     row: ProjectRow.fromJson(json['row'] as Json),
     pub: json['pub'] == null ? null : PubStats.fromJson(json['pub'] as Json),
     gh: json['gh'] == null ? null : GhStats.fromJson(json['gh'] as Json),
+    activity: json['activity'] == null ? null : CommitActivity.fromJson(json['activity'] as Json),
     history: asList(json['history'], Snapshot.fromJson),
     related: asStrings(json['related']),
   );
@@ -267,6 +280,7 @@ class ProjectDetail {
     'row': row.toJson(),
     'pub': pub?.toJson(),
     'gh': gh?.toJson(),
+    'activity': activity?.toJson(),
     'history': [for (final s in history) s.toJson()],
     'related': related.isEmpty ? null : related,
   });

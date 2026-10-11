@@ -4,6 +4,7 @@ import 'discovery.dart';
 import 'http_util.dart';
 import 'sources/github_graphql.dart';
 import 'sources/pub_dev.dart';
+import 'writers/activity_store.dart';
 import 'writers/history_store.dart';
 import 'writers/json_writer.dart';
 
@@ -26,6 +27,8 @@ Future<IngestResult> runIngest({
   required HistoryStore history,
   required JsonWriter writer,
   required DateTime now,
+  ActivityStore? activity,
+  int activityBudget = 600,
   int concurrency = 4,
   void Function(String)? log,
 }) async {
@@ -105,8 +108,13 @@ Future<IngestResult> runIngest({
   final omitted = _withoutRepoCounters(projects, curated);
   if (omitted.isNotEmpty) log?.call('GitHub: ${omitted.length} projects share a repo, counters omitted');
 
+  final notable = {
+    for (final p in projects)
+      if (curated.contains(p.id) || favoriteSet.contains(p.pub)) ?p.repo?.toLowerCase(),
+  };
+
   // 5. GitHub stats for the rest. Contributors take one REST call each, so
-  // only curated projects and Flutter Favorites get them.
+  // only notable repos (curated projects and Flutter Favorites) get them.
   final gh = await _fetchGithub(
     projects,
     {
@@ -119,11 +127,25 @@ Future<IngestResult> runIngest({
     log,
     warn,
     known: found,
-    contributors: {
-      for (final p in projects)
-        if (curated.contains(p.id) || favoriteSet.contains(p.pub)) ?p.repo?.toLowerCase(),
-    },
+    contributors: notable,
   );
+
+  // 5b. Commit activity takes one REST call per repo, so each run refreshes
+  // only the repos with none yet or a week-old one, the notable ones first,
+  // and the rest carries over from earlier runs.
+  final commits = activity == null
+      ? const <String, CommitActivity>{}
+      : await _refreshActivity(
+          activity,
+          gh.repos.keys.toSet(),
+          github,
+          now,
+          budget: activityBudget,
+          priority: notable,
+          concurrency: concurrency,
+          log: log,
+          warn: warn,
+        );
 
   // 6. Discovered packages are categorised by their topics, name and
   // description.
@@ -209,7 +231,14 @@ Future<IngestResult> runIngest({
     rows.add(row);
     writer.write(
       'p/${b.project.id}.json',
-      ProjectDetail(row: row, pub: b.pub, gh: b.gh, history: b.history, related: b.project.related).toJson(),
+      ProjectDetail(
+        row: row,
+        pub: b.pub,
+        gh: b.gh,
+        activity: commits[b.project.repo?.toLowerCase()],
+        history: b.history,
+        related: b.project.related,
+      ).toJson(),
     );
   }
   writer.prune('p', {for (final p in projects) '${p.id}.json'});
@@ -311,6 +340,70 @@ Future<Map<String, PubStats>> _fetchPub(
     }
   });
   return out;
+}
+
+/// The repos to ask GitHub for commit activity this run, at most [budget]:
+/// those with none yet ([priority] ones first), then those [maxAge] days
+/// old or more, oldest first.
+List<String> activityDue(
+  Iterable<String> repos,
+  Map<String, CommitActivity> have,
+  DateTime now, {
+  required int budget,
+  Set<String> priority = const {},
+  int maxAge = 7,
+}) {
+  final missing = [for (final r in repos) if (!have.containsKey(r)) r]
+    ..sort((a, b) => (priority.contains(a) ? 0 : 1).compareTo(priority.contains(b) ? 0 : 1));
+  final stale = [for (final r in repos) if (have[r] case final a? when a.ageAt(now) >= maxAge) r]
+    ..sort((a, b) => have[a]!.fetched.compareTo(have[b]!.fetched));
+  return [...missing, ...stale].take(budget).toList();
+}
+
+/// Refreshes the due repos' activity in [store] and returns every tracked
+/// repo's. A repo GitHub is still computing (a 202) is asked once more at
+/// the end; it stops early when the hourly REST limit runs low.
+Future<Map<String, CommitActivity>> _refreshActivity(
+  ActivityStore store,
+  Set<String> repos,
+  GithubClient? github,
+  DateTime now, {
+  required int budget,
+  required Set<String> priority,
+  required int concurrency,
+  void Function(String)? log,
+  required void Function(String) warn,
+}) async {
+  final have = {
+    for (final e in store.read().entries)
+      if (repos.contains(e.key)) e.key: e.value,
+  };
+  if (github == null) return have;
+  final due = activityDue(repos, have, now, budget: budget, priority: priority);
+  var lowOnCalls = false;
+  final pending = <String>[];
+  Future<void> ask(String repo, {required bool again}) async {
+    if (lowOnCalls) return;
+    try {
+      final reply = await github.commitActivity(repo, now);
+      if (reply.remaining case final left? when left < 100) lowOnCalls = true;
+      if (reply.activity case final a?) {
+        have[repo] = a;
+      } else if (reply.pending && !again) {
+        pending.add(repo);
+      }
+    } on Object catch (e) {
+      warn('GitHub: commit activity for $repo: $e');
+    }
+  }
+
+  await mapPool(due, concurrency, (repo) => ask(repo, again: false));
+  await mapPool(List.of(pending), concurrency, (repo) => ask(repo, again: true));
+  if (lowOnCalls) warn('GitHub: REST rate limit low, stopped fetching commit activity early');
+  final left = activityDue(repos, have, now, budget: repos.length).length;
+  log?.call('GitHub: commit activity for ${due.length} repos, ${pending.length} retried; $left still due');
+  store.write(have);
+  return have;
 }
 
 class _GithubData {

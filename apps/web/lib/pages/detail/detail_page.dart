@@ -3,6 +3,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../../styles/css.dart';
+import 'commit_heatmap.dart';
 import 'detail_header.dart';
 import 'history_timeline.dart';
 import 'kpi_cells.dart';
@@ -38,6 +39,8 @@ class DetailPage extends StatelessComponent {
       div(classes: 'detail-cols', [
         div(classes: 'detail-main', [
           TrendChart(detail: detail),
+          if ((detail.activity, r.repo) case (final activity?, final repo?))
+            CommitHeatmap(activity: activity, repo: repo),
           HistoryTimeline(events: timelineOf(detail)),
           if (related.isNotEmpty) RelatedGrid(title: 'Ecosystem · commonly used together', rows: related),
           if (byAuthor.isNotEmpty) RelatedGrid(title: 'More by ${r.owner}', rows: byAuthor),
