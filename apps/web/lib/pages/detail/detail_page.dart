@@ -15,6 +15,7 @@ class DetailPage extends StatelessComponent {
   const DetailPage({
     required this.detail,
     required this.related,
+    required this.byAuthor,
     required this.categories,
     required this.now,
     super.key,
@@ -22,6 +23,9 @@ class DetailPage extends StatelessComponent {
 
   final ProjectDetail detail;
   final List<ProjectRow> related;
+
+  /// Other projects by the same GitHub owner or pub.dev publisher.
+  final List<ProjectRow> byAuthor;
   final Map<String, String> categories;
   final DateTime now;
 
@@ -35,7 +39,8 @@ class DetailPage extends StatelessComponent {
         div(classes: 'detail-main', [
           TrendChart(detail: detail),
           HistoryTimeline(events: timelineOf(detail)),
-          if (related.isNotEmpty) RelatedGrid(rows: related),
+          if (related.isNotEmpty) RelatedGrid(title: 'Ecosystem · commonly used together', rows: related),
+          if (byAuthor.isNotEmpty) RelatedGrid(title: 'More by ${r.owner}', rows: byAuthor),
         ]),
         aside(classes: 'detail-aside', [
           ?pubPanel(detail, now),

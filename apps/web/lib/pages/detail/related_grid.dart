@@ -6,16 +6,18 @@ import '../../components/ui/project_logo.dart';
 import '../../data/view.dart';
 import '../../styles/css.dart';
 
-/// Projects commonly used alongside this one, as curated in the seeds.
+/// A titled grid of project cards: the projects commonly used alongside
+/// this one, or more by its author.
 class RelatedGrid extends StatelessComponent {
-  const RelatedGrid({required this.rows, super.key});
+  const RelatedGrid({required this.title, required this.rows, super.key});
 
+  final String title;
   final List<ProjectRow> rows;
 
   @override
   Component build(BuildContext context) {
     return section(classes: 'detail-section', [
-      h2([.text('Ecosystem · commonly used together')]),
+      h2([.text(title)]),
       div(classes: 'related', [
         for (final r in rows)
           a(href: r.path, classes: 'related-card hover-border', [
@@ -26,7 +28,6 @@ class RelatedGrid extends StatelessComponent {
             ]),
           ]),
       ]),
-      span(classes: 'detail-section-note', [.text('Curated pairings, reviewed by Flutterverse editors.')]),
     ]);
   }
 

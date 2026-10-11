@@ -4,6 +4,7 @@ import 'package:jaspr_router/jaspr_router.dart';
 
 import 'app.dart';
 import 'components/layout/seo.dart';
+import 'data/author.dart';
 import 'data/full_index.dart';
 import 'data/site_data.dart';
 import 'pages/about/about_page.dart';
@@ -43,6 +44,7 @@ Route _page(
 /// detail and category pages get one route each.
 List<RouteBase> siteRoutes(SiteData data) {
   final index = data.index;
+  final byAuthor = authorIndex(index.projects);
   final now = data.now.toIso8601String();
   final edition = data.hallOfFame.edition;
   return [
@@ -136,7 +138,7 @@ List<RouteBase> siteRoutes(SiteData data) {
     for (final MapEntry(key: slug, value: label) in index.categories.entries)
       _category(data, slug, label),
     for (final MapEntry(key: id, value: detail) in data.details.entries)
-      _detail(data, id, detail),
+      _detail(data, id, detail, byAuthor),
     _page(
       '/404.html',
       title: _title('Page not found'),
@@ -180,7 +182,7 @@ Route _category(SiteData data, String slug, String label) {
   );
 }
 
-Route _detail(SiteData data, String id, ProjectDetail detail) {
+Route _detail(SiteData data, String id, ProjectDetail detail, Map<String, List<ProjectRow>> byAuthor) {
   final r = detail.row;
   final path = '/p/$id';
   final sdk = r.sdk ?? 'Flutter';
@@ -224,6 +226,7 @@ Route _detail(SiteData data, String id, ProjectDetail detail) {
     builder: () => DetailPage(
       detail: detail,
       related: [for (final rel in detail.related) ?data.row(rel)],
+      byAuthor: moreByAuthor(r, byAuthor, exclude: detail.related.toSet()),
       categories: data.index.categories,
       now: data.now,
     ),
