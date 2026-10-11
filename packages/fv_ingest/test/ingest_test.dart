@@ -50,9 +50,10 @@ hall_of_fame:
     };
   });
 
-  GithubClient github(int stars) => GithubClient(
+  GithubClient github(int stars, {http.Response Function()? activity}) => GithubClient(
     MockClient((req) async {
       if (req.url.path.endsWith('/contributors')) return http.Response('[{},{}]', 200);
+      if (req.url.path.endsWith('/stats/commit_activity')) return activity?.call() ?? http.Response('', 500);
       final query = (jsonDecode(req.body) as Map)['query'] as String;
       if (query.contains('user(')) {
         return http.Response(
@@ -274,5 +275,54 @@ projects:
       unorderedEquals(['/packages/dio/score', '/packages/http_x/score', '/packages/dio_extra/score']),
       reason: 'every package gets the weekly series',
     );
+  });
+
+  group('commit activity', () {
+    final week = DateTime.utc(2026, 9, 27).millisecondsSinceEpoch ~/ 1000;
+    final weeks = jsonEncode([
+      {
+        'week': week,
+        'days': [0, 1, 2, 0, 0, 3, 0],
+      },
+    ]);
+
+    test('activityDue takes missing repos (priority first), then the oldest stale ones', () {
+      CommitActivity at(String day) => CommitActivity(start: '2026-01-04', days: const [], fetched: day);
+      final have = {'fresh': at('2026-10-10'), 'old': at('2026-09-01'), 'older': at('2026-08-01')};
+      final now = DateTime.utc(2026, 10, 11);
+      final repos = ['fresh', 'old', 'b', 'older', 'a'];
+      expect(activityDue(repos, have, now, budget: 10, priority: {'a'}), ['a', 'b', 'older', 'old']);
+      expect(activityDue(repos, have, now, budget: 2), ['b', 'a']);
+    });
+
+    test('is fetched once a week, retries a 202 once, and lands in the detail file', () async {
+      var calls = 0;
+      final client = github(
+        100,
+        activity: () => ++calls == 1 ? http.Response('{}', 202) : http.Response(weeks, 200),
+      );
+      final store = ActivityStore(p.join(tmp.path, 'history', 'activity.json'));
+      Future<void> runOn(DateTime now) => runIngest(
+        catalog: catalog,
+        pub: PubDevClient(pubMock, retryDelay: Duration.zero),
+        github: client,
+        history: HistoryStore(p.join(tmp.path, 'history')),
+        writer: JsonWriter(p.join(tmp.path, 'out')),
+        now: now,
+        activity: store,
+      );
+
+      await runOn(DateTime.utc(2026, 10, 1));
+      expect(calls, 2, reason: 'the 202 is asked again');
+      expect(ProjectDetail.fromJson(readJson('p/dio.json')).activity!.total, 6);
+      expect(store.read().keys, ['cfug/dio']);
+
+      await runOn(DateTime.utc(2026, 10, 4));
+      expect(calls, 2, reason: 'three days old: carried over');
+      expect(ProjectDetail.fromJson(readJson('p/dio.json')).activity!.fetched, '2026-10-01');
+
+      await runOn(DateTime.utc(2026, 10, 8));
+      expect(calls, 3, reason: 'a week old: refreshed');
+    });
   });
 }

@@ -37,7 +37,7 @@ jobs:
             git worktree add --orphan -b data out
           fi
 
-      - run: dart run fv_ingest:ingest --out out/data --history out/history --concurrency 8
+      - run: dart run fv_ingest:ingest --out out/data --history out/history --activity out/history/activity.json --concurrency 8
         env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
 
       - name: Commit and push

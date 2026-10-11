@@ -10,6 +10,12 @@ Future<void> main(List<String> args) async {
     ..addOption('roadmap', defaultsTo: 'config/roadmap.json', help: 'Learning roadmap content.')
     ..addOption('out', defaultsTo: 'apps/web/web/data', help: 'Where to write the JSON the site serves.')
     ..addOption('history', defaultsTo: '.history', help: 'Where the per-project NDJSON history lives.')
+    ..addOption(
+      'activity',
+      defaultsTo: '.history/activity.json',
+      help: 'Where commit activity is kept between runs.',
+    )
+    ..addOption('activity-budget', defaultsTo: '600', help: 'Max commit activity REST calls per run.')
     ..addOption('concurrency', defaultsTo: '4', help: 'Max parallel pub.dev requests.')
     ..addFlag('help', abbr: 'h', negatable: false);
 
@@ -51,6 +57,8 @@ Future<void> main(List<String> args) async {
       history: HistoryStore(opts.option('history')!),
       writer: JsonWriter(opts.option('out')!),
       now: DateTime.now().toUtc(),
+      activity: ActivityStore(opts.option('activity')!),
+      activityBudget: int.parse(opts.option('activity-budget')!),
       concurrency: int.parse(opts.option('concurrency')!),
       log: stdout.writeln,
     );

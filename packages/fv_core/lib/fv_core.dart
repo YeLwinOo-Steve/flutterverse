@@ -8,6 +8,7 @@ export 'src/json.dart' show Json, schemaVersion;
 export 'src/metrics/maintenance.dart';
 export 'src/metrics/momentum.dart';
 export 'src/metrics/timeline.dart';
+export 'src/models/activity.dart';
 export 'src/models/catalog.dart';
 export 'src/models/gh_stats.dart';
 export 'src/models/output.dart';

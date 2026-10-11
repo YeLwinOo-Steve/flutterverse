@@ -143,6 +143,7 @@ tool/                 check_imports.dart enforces the package dependency rules
 | `roadmap.json` | The learning roadmap |
 | `meta.json` | `generatedAt` and the schema version |
 | `history/<id>.ndjson` | One line of raw counters per project per day |
+| `history/activity.json` | Each repo's commits per day over the past year, refreshed about weekly |
 
 </details>
 

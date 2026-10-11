@@ -217,5 +217,23 @@ void main() {
       );
       expect(await GithubClient(client, token: 't').contributors('cfug/dio'), 143);
     });
+
+    test('commitActivity: a 204 is a year of zeros, a 202 is pending, the limit is passed on', () async {
+      final now = DateTime.utc(2026, 10, 11);
+      Future<ActivityReply> reply(int status) => GithubClient(
+        MockClient((_) async => http.Response('', status, headers: {'x-ratelimit-remaining': '321'})),
+        token: 't',
+        retryDelay: Duration.zero,
+      ).commitActivity('a/b', now);
+
+      final empty = (await reply(204)).activity!;
+      expect(empty.days, hasLength(364));
+      expect(empty.total, 0);
+      expect(empty.dayAt(363), DateTime.utc(2026, 10, 17), reason: 'the week of now, through Saturday');
+
+      final pending = await reply(202);
+      expect((pending.activity, pending.pending, pending.remaining), (null, true, 321));
+      expect((await reply(404)).pending, isFalse);
+    });
   });
 }

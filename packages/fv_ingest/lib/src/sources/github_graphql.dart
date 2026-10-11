@@ -104,6 +104,32 @@ class GithubClient {
     return (jsonDecode(res.body) as List<Object?>).length;
   }
 
+  /// A repo's commits per day over the past year (REST only, one call).
+  /// GitHub answers 202 while it computes the stats for a repo nobody asked
+  /// about lately: that's [ActivityReply.pending], worth asking again in a
+  /// while. An empty repo (204) has a year of zeros.
+  Future<ActivityReply> commitActivity(String repo, DateTime now) async {
+    final uri = Uri.parse('$restBase/repos/$repo/stats/commit_activity');
+    final res = await withRetry(() => _http.get(uri, headers: _headers), baseDelay: retryDelay);
+    final remaining = int.tryParse(res.headers['x-ratelimit-remaining'] ?? '');
+    final activity = switch (res.statusCode) {
+      200 => CommitActivity.fromGithub(jsonDecode(res.body), now),
+      204 => CommitActivity.fromGithub(_emptyYear(now), now),
+      _ => null,
+    };
+    return ActivityReply(activity, pending: res.statusCode == 202, remaining: remaining);
+  }
+
+  /// 52 weeks of zeros ending with the week of [now], in GitHub's shape.
+  static List<Object?> _emptyYear(DateTime now) {
+    final today = DateTime.utc(now.year, now.month, now.day);
+    final sunday = today.subtract(Duration(days: today.weekday % 7));
+    return [
+      for (var w = 51; w >= 0; w--)
+        {'week': sunday.subtract(Duration(days: 7 * w)).millisecondsSinceEpoch ~/ 1000, 'days': List.filled(7, 0)},
+    ];
+  }
+
   /// A user or organization, or null if [login] doesn't exist.
   Future<GhAccount?> account(String login) async {
     final json = await _restJson('/users/${Uri.encodeComponent(login)}');
@@ -277,4 +303,16 @@ fragment F on Repository {
   isArchived
   description
 }''';
+}
+
+/// What [GithubClient.commitActivity] got back.
+class ActivityReply {
+  const ActivityReply(this.activity, {this.pending = false, this.remaining});
+
+  /// Null when GitHub is still computing ([pending]) or the call failed.
+  final CommitActivity? activity;
+  final bool pending;
+
+  /// REST calls left in this hour's rate limit, when GitHub said.
+  final int? remaining;
 }
