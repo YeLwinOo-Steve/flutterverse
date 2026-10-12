@@ -37,6 +37,9 @@ jobs:
       - run: dart pub get && dart pub global activate jaspr_cli
       - run: jaspr build --sitemap-domain=https://flutterverse.org --sitemap-exclude=/404
         working-directory: apps/web
+      # jaspr lists routes without a trailing slash, but Pages redirects
+      # `/rankings` to `/rankings/`; list the served URLs, matching canonicals.
+      - run: sed -i -E 's#<loc>([^<]*[^/<])</loc>#<loc>\1/</loc>#' apps/web/build/jaspr/sitemap.xml
       # Per-project JSON only feeds the build; leaving it out keeps the
       # deploy well under Cloudflare Pages' 20,000-file limit.
       - run: rm -rf apps/web/build/jaspr/data/p
