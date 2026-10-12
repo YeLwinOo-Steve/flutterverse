@@ -68,8 +68,10 @@ class Seo extends StatelessComponent {
   }
 }
 
-/// The absolute URL of [path] on [siteUrl].
-String pageUrl(String path) => path == '/' ? '$siteUrl/' : '$siteUrl$path';
+/// The absolute URL of [path] on [siteUrl], with the trailing slash Cloudflare
+/// Pages serves pages at (`/rankings` redirects to `/rankings/`), so canonical
+/// links never point at a redirect.
+String pageUrl(String path) => path.endsWith('/') ? '$siteUrl$path' : '$siteUrl$path/';
 
 /// JSON for an inline `<script>`: `</` is escaped so the data can't end it.
 String ldJson(Map<String, Object?> data) => jsonEncode({'@context': 'https://schema.org', ...data}).replaceAll('</', r'<\/');

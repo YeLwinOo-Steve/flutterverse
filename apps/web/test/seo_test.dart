@@ -9,6 +9,17 @@ void main() {
     expect(File('../../.github/workflows/deploy-web.yml').readAsStringSync(), contains('--sitemap-domain=$siteUrl'));
   });
 
+  test('pageUrl ends in a slash, as Pages serves it', () {
+    expect(pageUrl('/'), '$siteUrl/');
+    expect(pageUrl('/rankings'), '$siteUrl/rankings/');
+    expect(pageUrl('/p/drift'), '$siteUrl/p/drift/');
+    expect(breadcrumbs([('Categories', '/categories')]).toString(), contains('$siteUrl/categories/'));
+  });
+
+  test('the deploy adds the same slash to sitemap URLs', () {
+    expect(File('../../.github/workflows/deploy-web.yml').readAsStringSync(), contains(r'<loc>\1/</loc>'));
+  });
+
   test('clip cuts at a word boundary', () {
     expect(clip('short', 160), 'short');
     expect(clip('one two three four', 12), 'one two…');
