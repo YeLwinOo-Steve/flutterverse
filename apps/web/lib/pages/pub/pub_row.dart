@@ -127,5 +127,10 @@ class PubRow extends StatelessComponent {
       rule('.pub-row', {'grid-template-columns': '28px 44px minmax(0,1fr)'}),
       rule('.pub-stats', {'grid-column': '3'}),
     ]),
+    // Three stats don't fit beside the logo on a phone: give them the row.
+    below(560, [
+      rule('.pub-stats', {'grid-column': '1 / -1', 'justify-content': 'space-around', 'gap': '12px'}),
+      rule('.pub-stat', {'min-width': '0', 'align-items': 'center'}),
+    ]),
   ];
 }

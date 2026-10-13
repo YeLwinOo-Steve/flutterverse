@@ -100,7 +100,7 @@ class HofPage extends StatelessComponent {
     }),
     rule('.inductees', {'grid-template-columns': 'repeat(auto-fill,minmax(408px,1fr))'}),
     below(640, [
-      rule('.dev-grid, .inductees', {'grid-template-columns': '1fr'}),
+      rule('.dev-grid, .inductees', {'grid-template-columns': 'minmax(0,1fr)'}),
     ]),
   ];
 }

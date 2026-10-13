@@ -5,7 +5,8 @@ import '../../styles/css.dart';
 import '../ui/icon.dart';
 import '../ui/icons.dart';
 
-const _items = [
+/// The primary destinations, shared by the bar and the mobile menu.
+const navItems = [
   (key: 'trending', label: 'Trending', path: '/rankings', icon: Icons.trending),
   (key: 'pub', label: 'pub.dev', path: '/pub', icon: Icons.box),
   (key: 'explore', label: 'Projects', path: '/projects', icon: Icons.layers),
@@ -13,6 +14,9 @@ const _items = [
   (key: 'roadmap', label: 'Roadmap', path: '/roadmap', icon: Icons.roadmap),
   (key: 'about', label: 'About', path: '/about', icon: Icons.info),
 ];
+
+/// Below this width the bar's links collapse into the menu button.
+const navBreakpoint = 960;
 
 /// Which nav item a URL path belongs to.
 String? navSection(String path) {
@@ -26,6 +30,7 @@ String? navSection(String path) {
 }
 
 /// The primary navigation, fading out at the right edge when it overflows.
+/// Below [navBreakpoint] the [NavMenu] drawer replaces it.
 class SiteNav extends StatelessComponent {
   const SiteNav({super.key});
 
@@ -36,7 +41,7 @@ class SiteNav extends StatelessComponent {
       classes: 'site-nav',
       attributes: {'aria-label': 'Primary'},
       [
-        for (final item in _items)
+        for (final item in navItems)
           a(
             href: item.path,
             classes: item.key == current ? 'on' : null,
@@ -72,5 +77,8 @@ class SiteNav extends StatelessComponent {
     }),
     rule('.site-nav a:hover', {'color': 'var(--ink)'}),
     rule('.site-nav a.on', {'color': 'var(--ink)', 'background': 'var(--surface2)'}),
+    below(navBreakpoint, [
+      rule('.site-nav', {'display': 'none'}),
+    ]),
   ];
 }

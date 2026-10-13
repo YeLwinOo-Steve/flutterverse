@@ -180,7 +180,17 @@ class Lesson extends StatelessComponent {
       'font': mono(14, weight: 400),
       'white-space': 'nowrap',
       'width': 'fit-content',
+      'max-width': '100%',
     }),
+    // Long concept names wrap on a phone rather than run off the card.
+    below(480, [
+      rule('.concept-list span', {
+        'white-space': 'normal',
+        'height': 'auto',
+        'min-height': '34px',
+        'padding': '6px 12px',
+      }),
+    ]),
     rule('.resources', {
       'display': 'grid',
       'grid-template-columns': 'repeat(auto-fill,minmax(220px,1fr))',

@@ -59,7 +59,12 @@ class CategoryTabs extends StatefulComponent {
     rule('.cat-row:hover', {'color': 'var(--ink)'}),
     rule('.cat-row-main', {'display': 'flex', 'flex-direction': 'column', 'gap': '6px', 'min-width': '0'}),
     rule('.cat-row-title', {'display': 'flex', 'align-items': 'center', 'gap': '10px', 'flex-wrap': 'wrap'}),
-    rule('.cat-row-title > span:first-child', {'font-size': '16px', 'font-weight': '600'}),
+    rule('.cat-row-title > span:first-child', {
+      'font-size': '16px',
+      'font-weight': '600',
+      'min-width': '0',
+      'overflow-wrap': 'anywhere',
+    }),
     rule('.cat-row-desc', {
       'font-size': '14px',
       'color': 'var(--muted)',

@@ -25,6 +25,8 @@ abstract final class Icons {
   static const shield = 'M8 1.5l5.5 2V8c0 3.2-2.4 5.5-5.5 6.5C4.9 13.5 2.5 11.2 2.5 8V3.5z';
   static const shieldCheck = 'M8 1.5l5.5 2V8c0 3.2-2.4 5.5-5.5 6.5C4.9 13.5 2.5 11.2 2.5 8V3.5zM5.5 8l1.8 1.8L10.5 6.5';
   static const pulse = 'M1.5 8h3l1.5-4 3 8 1.5-4h4';
+  static const menu = 'M2 4h12M2 8h12M2 12h12';
+  static const close = 'M3.5 3.5l9 9M12.5 3.5l-9 9';
   static const search = 'M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM14.5 14.5l-3.6-3.6';
   static const grid = 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z';
   static const tick = 'M3 8.5 6.5 12 13 4.5';
