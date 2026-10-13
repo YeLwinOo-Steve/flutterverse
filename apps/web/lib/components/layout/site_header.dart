@@ -6,6 +6,7 @@ import '../ui/icon.dart';
 import '../ui/icons.dart';
 import 'brand_mark.dart';
 import 'lamp.dart';
+import 'nav_menu.dart';
 import 'site_nav.dart';
 
 /// The repository this site is built from.
@@ -49,6 +50,7 @@ class SiteHeader extends StatelessComponent {
           ),
           const Lamp(),
         ]),
+        const NavMenu(),
       ]),
     ]);
   }
@@ -148,6 +150,9 @@ class SiteHeader extends StatelessComponent {
       rule('.site-header .bar', {'padding': '0 16px', 'gap': '12px'}),
       rule('.bar-divider', {'display': 'none'}),
       rule('.brand span', {'display': 'none'}),
+    ]),
+    below(navBreakpoint, [
+      rule('.bar-tools', {'margin-left': 'auto'}),
     ]),
   ];
 }
