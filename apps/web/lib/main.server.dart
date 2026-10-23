@@ -6,6 +6,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/server.dart';
 
 import 'app.dart';
+import 'components/layout/analytics.dart';
 import 'components/layout/nav_menu.dart';
 import 'data/site_data.dart';
 import 'main.server.options.dart';
@@ -30,6 +31,7 @@ void main() {
       head: [
         script(content: themeBootScript),
         script(content: navBootScript),
+        script(content: analyticsBootScript),
         link(rel: 'preconnect', href: 'https://fonts.googleapis.com'),
         link(rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml'),
         // Google's search results need a raster icon at a multiple of 48px.
