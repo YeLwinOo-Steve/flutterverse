@@ -1,10 +1,11 @@
-/// PostHog's project key is write-only and ships to every visitor anyway, so
-/// it lives here rather than in a CI secret.
+/// Public, write-only PostHog project key: it ships to every visitor, so it
+/// isn't a secret. Abuse is limited by PostHog's authorized URLs, not by
+/// hiding it.
 const _posthogKey = 'phc_mmVyic6nawykYwYtZDUgFKm4B6wW9kxDnY6DaaLv7wWP';
 
 /// Inline in `<head>`: PostHog's loader stub, which queues calls until
-/// `array.js` arrives. Only the production host reports, so local builds and
-/// preview deploys stay out of the numbers. The `defaults` preset also counts
+/// `array.js` arrives. Only release builds embed it, and only the production
+/// host reports, so `jaspr serve` and preview deploys stay out of the numbers. The `defaults` preset also counts
 /// client-side route changes as pageviews.
 const analyticsBootScript =
     '''

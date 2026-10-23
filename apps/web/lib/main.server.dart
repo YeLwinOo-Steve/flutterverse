@@ -31,7 +31,7 @@ void main() {
       head: [
         script(content: themeBootScript),
         script(content: navBootScript),
-        script(content: analyticsBootScript),
+        if (kReleaseMode) script(content: analyticsBootScript),
         link(rel: 'preconnect', href: 'https://fonts.googleapis.com'),
         link(rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml'),
         // Google's search results need a raster icon at a multiple of 48px.
