@@ -25,7 +25,7 @@
 
 ## Overview
 
-- **Thousands of projects**: every Flutter Favorite, pub.dev's 3,000 most popular packages and every public Dart repo on GitHub with 100+ stars, discovered daily and sorted into categories by their topics; hand-picked entries in [`config/seeds.yaml`](config/seeds.yaml) refine them
+- **Thousands of projects**: every Flutter Favorite, pub.dev's 5,000 most popular packages and every public Dart repo on GitHub with 50+ stars, discovered daily and sorted into categories by their topics; hand-picked entries in [`config/seeds.yaml`](config/seeds.yaml) refine them
 - **Rankings and listings**: filter and sort by SDK, category, platform, stars, pub points and momentum
 - **Project pages**: trend charts, release timeline, maintenance status and related projects
 - **Flutter Favorites**: every package in pub.dev's Flutter Favorite program
@@ -46,7 +46,7 @@ flowchart LR
 
 1. A scheduled workflow runs **`fv_ingest`**, which discovers projects on pub.dev and GitHub (see `discovery:` in `config/seeds.yaml`), fetches their stats and scores every project.
 2. It writes per-screen JSON plus a daily history line per project, and commits them to the **`data`** branch.
-3. **`deploy-web`** pre-renders the [Jaspr](https://jaspr.site) site against that data and deploys it. Only the interactive pieces (tables, charts, the lamp) hydrate in the browser.
+3. **`deploy-web`** pre-renders the [Jaspr](https://jaspr.site) site against that data and deploys it. Only the interactive pieces (tables, charts, Hall of Fame search, the lamp) hydrate in the browser.
 
 Models, metrics and formatting live in **`fv_core`**, shared by the ingest job and the site, so the two can never disagree on a number.
 
@@ -162,7 +162,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the details.
 1. Push to GitHub (a public repo keeps Actions minutes free).
 2. Create a Cloudflare Pages project named `flutterverse` (direct upload).
 3. Add repository secrets `CF_API_TOKEN` (Pages: Edit) and `CF_ACCOUNT_ID`.
-4. Run the **ingest** workflow once by hand. It creates the `data` branch, and a successful run triggers **deploy-web**.
+4. Add `INGEST_GITHUB_TOKEN`: a [fine-grained token](https://github.com/settings/personal-access-tokens/new) with read-only access to public repositories and no permissions. Its 5,000 requests an hour cover thousands of repos; without it the ingest falls back to the workflow's built-in token, which allows far fewer. Paste the `github_pat_…` value itself: a wrong value fails every GitHub request.
+5. Run the **ingest** workflow once by hand. It creates the `data` branch, and a successful run triggers **deploy-web**.
 
 > [!NOTE]
 > GitHub disables scheduled workflows after 60 days without repository activity. If that happens, re-enable **ingest** from the Actions tab.
