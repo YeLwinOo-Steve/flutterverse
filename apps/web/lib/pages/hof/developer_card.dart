@@ -5,16 +5,19 @@ import 'package:jaspr/jaspr.dart';
 import '../../components/ui/icon.dart';
 import '../../components/ui/icons.dart';
 import '../../styles/css.dart';
-import 'hof_search.dart';
+import 'hof_filter.dart';
 
 /// A Hall of Fame developer with their GitHub stats and best-known repos.
 class DeveloperCard extends StatelessComponent {
-  const DeveloperCard({required this.developer, required this.projects, super.key});
+  const DeveloperCard({required this.developer, required this.projects, this.hidden = false, super.key});
 
   final HallOfFameDeveloper developer;
 
   /// Rows for [HallOfFameDeveloper.projects] that are tracked.
   final List<ProjectRow> projects;
+
+  /// Pre-rendered off its first page; `HofPager` shows it.
+  final bool hidden;
 
   @override
   Component build(BuildContext context) {
@@ -24,6 +27,7 @@ class DeveloperCard extends StatelessComponent {
     return div(
       classes: d.memorial ? 'dev-card memorial hover-border' : 'dev-card hover-border',
       attributes: {
+        if (hidden) 'hidden': '',
         'data-hof': hofSearchText([
           d.name,
           d.handle,

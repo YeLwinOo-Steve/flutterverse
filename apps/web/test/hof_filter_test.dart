@@ -1,4 +1,4 @@
-import 'package:fv_web/pages/hof/hof_search.dart';
+import 'package:fv_web/pages/hof/hof_filter.dart';
 import 'package:test/test.dart';
 
 void main() {

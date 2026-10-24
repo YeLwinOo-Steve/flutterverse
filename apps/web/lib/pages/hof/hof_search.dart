@@ -1,39 +1,13 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-import 'package:universal_web/web.dart' as web;
 
 import '../../components/ui/icon.dart';
 import '../../components/ui/icons.dart';
 import '../../styles/css.dart';
+import 'hof_filter.dart';
 
-/// The text a Hall of Fame card matches on, for its `data-hof` attribute.
-String hofSearchText(Iterable<String?> parts) => foldForSearch(parts.whereType<String>().join(' '));
-
-/// Lowercases [s], drops accents and punctuation, and collapses spaces, so
-/// "hracek" finds Hráček and "osullivan" finds O'Sullivan.
-String foldForSearch(String s) {
-  final out = StringBuffer();
-  for (final ch in s.toLowerCase().split('')) {
-    final c = _plain[ch] ?? ch;
-    if (RegExp(r'[a-z0-9 ]').hasMatch(c)) {
-      out.write(c);
-    } else if (RegExp(r'[\s/_.-]').hasMatch(c)) {
-      out.write(' ');
-    }
-  }
-  return out.toString().replaceAll(RegExp(' +'), ' ').trim();
-}
-
-const _plain = {
-  'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'å': 'a', 'ã': 'a', 'ç': 'c', 'č': 'c', 'ć': 'c', //
-  'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e', 'ě': 'e', 'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i', //
-  'ñ': 'n', 'ń': 'n', 'ó': 'o', 'ò': 'o', 'ô': 'o', 'ö': 'o', 'ø': 'o', 'õ': 'o', 'ř': 'r', //
-  'š': 's', 'ś': 's', 'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u', 'ů': 'u', 'ý': 'y', 'ž': 'z', 'ł': 'l',
-};
-
-/// Filters the pre-rendered Hall of Fame cards as you type. Each card carries
-/// its [hofSearchText] in `data-hof`; each grid has a hidden `data-hof-empty`
-/// message, shown when none of its cards match.
+/// Filters the Hall of Fame cards as you type, on [hofSearchText] (each
+/// card's `data-hof`). A new query starts every grid on its first page.
 @client
 class HofSearch extends StatefulComponent {
   const HofSearch({super.key});
@@ -73,29 +47,14 @@ class HofSearch extends StatefulComponent {
 }
 
 class _HofSearchState extends State<HofSearch> {
-  String _query = '';
-  int _matches = 0;
+  String _text = '';
+  int _count = 0;
 
-  void _filter(String query) {
-    final q = foldForSearch(query);
-    var matches = 0;
-    final grids = web.document.querySelectorAll('[data-hof-grid]');
-    for (var g = 0; g < grids.length; g++) {
-      final grid = grids.item(g) as web.Element;
-      final cards = grid.querySelectorAll('[data-hof]');
-      var shown = 0;
-      for (var i = 0; i < cards.length; i++) {
-        final card = cards.item(i) as web.Element;
-        final hit = q.isEmpty || (card.getAttribute('data-hof') ?? '').contains(q);
-        card.toggleAttribute('hidden', !hit);
-        if (hit) shown++;
-      }
-      grid.parentElement?.querySelector('[data-hof-empty]')?.toggleAttribute('hidden', shown > 0);
-      matches += shown;
-    }
+  void _filter(String text) {
+    final count = setHofQuery(text);
     setState(() {
-      _query = query;
-      _matches = matches;
+      _text = text;
+      _count = count;
     });
   }
 
@@ -105,7 +64,7 @@ class _HofSearchState extends State<HofSearch> {
       const Icon(Icons.search, size: 16, strokeWidth: 1.5),
       input<String>(
         type: InputType.search,
-        value: _query,
+        value: _text,
         attributes: {
           'placeholder': 'Search developers and projects',
           'aria-label': 'Search the Hall of Fame',
@@ -113,12 +72,12 @@ class _HofSearchState extends State<HofSearch> {
         },
         onInput: _filter,
       ),
-      if (_query.trim().isNotEmpty)
+      if (_text.trim().isNotEmpty)
         span(
           classes: 'hof-search-count',
           attributes: {'aria-live': 'polite'},
           [
-            .text('$_matches ${_matches == 1 ? 'match' : 'matches'}'),
+            .text('$_count ${_count == 1 ? 'match' : 'matches'}'),
           ],
         ),
     ]);

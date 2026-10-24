@@ -5,14 +5,17 @@ import 'package:jaspr/jaspr.dart';
 import '../../components/ui/project_logo.dart';
 import '../../data/view.dart';
 import '../../styles/css.dart';
-import 'hof_search.dart';
+import 'hof_filter.dart';
 
 /// A Hall of Fame project with its award and the editors' reasoning.
 class InducteeCard extends StatelessComponent {
-  const InducteeCard({required this.entry, required this.row, super.key});
+  const InducteeCard({required this.entry, required this.row, this.hidden = false, super.key});
 
   final HallOfFameProject entry;
   final ProjectRow row;
+
+  /// Pre-rendered off its first page; `HofPager` shows it.
+  final bool hidden;
 
   @override
   Component build(BuildContext context) {
@@ -23,6 +26,7 @@ class InducteeCard extends StatelessComponent {
     return div(
       classes: 'inductee',
       attributes: {
+        if (hidden) 'hidden': '',
         'data-hof': hofSearchText([r.name, r.id, r.repo, r.owner, entry.category]),
       },
       [

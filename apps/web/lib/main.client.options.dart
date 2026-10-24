@@ -23,6 +23,7 @@ import 'package:fv_web/pages/explore/category_tabs.dart'
     deferred as _category_tabs;
 import 'package:fv_web/pages/explore/explore_view.dart'
     deferred as _explore_view;
+import 'package:fv_web/pages/hof/hof_pager.dart' deferred as _hof_pager;
 import 'package:fv_web/pages/hof/hof_search.dart' deferred as _hof_search;
 import 'package:fv_web/pages/home/trending_card.dart'
     deferred as _trending_card;
@@ -94,6 +95,14 @@ ClientOptions get defaultClientOptions => ClientOptions(
         growth: (p['growth'] as Map<String, Object?>).cast<String, int>(),
       ),
       loader: _explore_view.loadLibrary,
+    ),
+    'hof_pager': ClientLoader(
+      (p) => _hof_pager.HofPager(
+        section: p['section'] as String,
+        total: p['total'] as int,
+        pageSize: p['pageSize'] as int,
+      ),
+      loader: _hof_pager.loadLibrary,
     ),
     'hof_search': ClientLoader(
       (p) => _hof_search.HofSearch(),
