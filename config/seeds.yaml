@@ -17,8 +17,8 @@
 # pub.dev's `pub_top` most popular packages, and public Dart repos on GitHub
 # with at least `github_min_stars` stars.
 discovery:
-  pub_top: 3000
-  github_min_stars: 100
+  pub_top: 5000
+  github_min_stars: 50
 
 categories:
   state-management: State management
@@ -127,6 +127,12 @@ projects:
   - { id: serverpod, kind: project, pub: serverpod, repo: serverpod/serverpod, categories: [backend, database], related: [drift, riverpod, melos] }
   - { id: shorebird, kind: project, repo: shorebirdtech/shorebird, sdk: Dart, platforms: [iOS, Android, macOS, Windows, Linux], categories: [developer-tooling, cli], related: [melos, very_good_cli, flutter_bloc] }
   - { id: wonderous, kind: project, repo: gskinnerTeam/flutter-wonderous-app, sdk: Flutter, platforms: [iOS, Android, Web, macOS, Windows], categories: [ui, animation, open-source-app], related: [flutter_animate, rive, go_router] }
+  # Flutter projects GitHub files under another language, so discovery misses them.
+  - { id: flet, pub: flet, repo: flet-dev/flet, categories: [ui, developer-tooling] }
+  - { id: webf, pub: webf, repo: openwebf/webf, categories: [ui] }
+  - { id: go-flutter, kind: project, repo: go-flutter-desktop/go-flutter, sdk: Flutter, platforms: [macOS, Windows, Linux], categories: [developer-tooling] }
+  - { id: rustdesk, kind: project, repo: rustdesk/rustdesk, sdk: Flutter, platforms: [iOS, Android, macOS, Windows, Linux], categories: [open-source-app] }
+  - { id: immich, kind: project, repo: immich-app/immich, sdk: Flutter, platforms: [iOS, Android], categories: [open-source-app, media] }
 
 # The current Hall of Fame edition. Reasons are editorial; keep them factual.
 hall_of_fame:

@@ -94,6 +94,64 @@ void main() {
     expect(repos['o/>=201-1']!.stars, 150);
   });
 
+  test('searchDartRepos retries a page that comes back empty', () async {
+    var pages = 0;
+    final client = MockClient((req) async {
+      final body = jsonDecode(req.body) as Map<String, Object?>;
+      if ((body['query'] as String).contains('repositoryCount')) {
+        return http.Response(jsonEncode({'data': {'search': {'repositoryCount': 10}}}), 200);
+      }
+      // The first page attempt is an empty 200, the second a null search.
+      if (++pages == 1) return http.Response('', 200);
+      if (pages == 2) return http.Response(jsonEncode({'data': {'search': null}}), 200);
+      return http.Response(
+        jsonEncode({
+          'data': {
+            'search': {
+              'pageInfo': {'hasNextPage': false, 'endCursor': null},
+              'nodes': [
+                {'nameWithOwner': 'o/app', 'stargazerCount': 120},
+              ],
+            },
+          },
+        }),
+        200,
+      );
+    });
+    final gh = GithubClient(client, token: 't', retryDelay: Duration.zero);
+    final repos = await gh.searchDartRepos(100);
+    expect(repos.keys, ['o/app']);
+    expect(pages, 3);
+  });
+
+  test('searchDartRepos retries a count that comes back null', () async {
+    var counts = 0;
+    final client = MockClient((req) async {
+      final body = jsonDecode(req.body) as Map<String, Object?>;
+      if ((body['query'] as String).contains('repositoryCount')) {
+        if (++counts == 1) return http.Response(jsonEncode({'data': {'search': null}}), 200);
+        return http.Response(jsonEncode({'data': {'search': {'repositoryCount': 1}}}), 200);
+      }
+      return http.Response(
+        jsonEncode({
+          'data': {
+            'search': {
+              'pageInfo': {'hasNextPage': false, 'endCursor': null},
+              'nodes': [
+                {'nameWithOwner': 'o/app', 'stargazerCount': 120},
+              ],
+            },
+          },
+        }),
+        200,
+      );
+    });
+    final gh = GithubClient(client, token: 't', retryDelay: Duration.zero);
+    final repos = await gh.searchDartRepos(100);
+    expect(repos.keys, ['o/app']);
+    expect(counts, 2);
+  });
+
   test('withRetry retries GitHub secondary rate limits', () async {
     var calls = 0;
     final res = await withRetry(() async {

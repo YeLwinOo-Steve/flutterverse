@@ -93,7 +93,11 @@ Future<IngestResult> runIngest({
   // package. Repo names are compared case-insensitively throughout.
   var found = const <String, GhStats>{};
   if (github != null && discovery.githubMinStars != null) {
-    found = await github.searchDartRepos(discovery.githubMinStars!, onError: warn);
+    try {
+      found = await github.searchDartRepos(discovery.githubMinStars!, onError: warn);
+    } on Object catch (e) {
+      warn('GitHub: discovery failed: $e');
+    }
     final tracked = {for (final p in projects) ?p.repo?.toLowerCase()};
     final ids = {for (final p in projects) p.id};
     final before = projects.length;

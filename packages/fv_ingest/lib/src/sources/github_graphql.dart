@@ -48,8 +48,11 @@ class GithubClient {
     final slices = <String>[];
     Future<void> split(int lo, int? hi) async {
       final query = 'language:Dart fork:false archived:false stars:${hi == null ? '>=$lo' : '$lo..$hi'}';
-      final data = await _post(_countQuery, {'q': query}, onError);
-      final count = ((data['search'] as Map<String, Object?>?)?['repositoryCount'] as num?)?.toInt() ?? 0;
+      final search = await _searchRetrying(() async {
+        final data = await _post(_countQuery, {'q': query}, onError);
+        return data['search'] as Map<String, Object?>? ?? (throw StateError('no search count'));
+      });
+      final count = (search['repositoryCount'] as num?)?.toInt() ?? 0;
       if (count > searchCap && hi != lo) {
         final mid = hi == null ? lo * 2 : (lo + hi) ~/ 2;
         await split(lo, mid);
@@ -66,9 +69,11 @@ class GithubClient {
       try {
         String? after;
         do {
-          final data = await _post(_searchQuery, {'q': query, 'after': after}, onError);
-          final search = data['search'] as Map<String, Object?>?;
-          if (search == null) throw StateError('no search results');
+          final cursor = after;
+          final search = await _searchRetrying(() async {
+            final data = await _post(_searchQuery, {'q': query, 'after': cursor}, onError);
+            return data['search'] as Map<String, Object?>? ?? (throw StateError('no search results'));
+          });
           for (final node in (search['nodes'] as List<Object?>).cast<Map<String, Object?>?>()) {
             if (node?['nameWithOwner'] case final String repo) out[repo] = _parseRepo(node!);
           }
@@ -84,6 +89,20 @@ class GithubClient {
 
   /// The most results one GitHub search returns.
   static const searchCap = 1000;
+
+  /// Runs one search request, retrying any failure: heavy searches sometimes
+  /// come back as an empty 200 or a `null` result, which [withRetry] can't
+  /// see, and a lost page would drop a whole star range for the day.
+  Future<T> _searchRetrying<T>(Future<T> Function() request, {int attempts = 3}) async {
+    for (var attempt = 1; ; attempt++) {
+      try {
+        return await request();
+      } on Object {
+        if (attempt >= attempts) rethrow;
+        await Future<void>.delayed(retryDelay * attempt);
+      }
+    }
+  }
 
   static const _countQuery = r'query($q: String!) { search(type: REPOSITORY, query: $q, first: 1) { repositoryCount } }';
 
