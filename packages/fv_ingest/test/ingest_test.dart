@@ -279,6 +279,44 @@ projects:
     );
   });
 
+  test('a failed GitHub discovery still writes the seeded projects', () async {
+    final seeds = parseSeeds('''
+categories: {networking: Networking}
+discovery: {pub_top: 0, github_min_stars: 100}
+projects:
+  - {id: dio, pub: dio, categories: [networking]}
+''');
+    final gh = GithubClient(
+      MockClient((req) async {
+        final query = (jsonDecode(req.body) as Map)['query'] as String;
+        if (query.contains('search(')) return http.Response(jsonEncode({'data': {'search': null}}), 200);
+        return http.Response(
+          jsonEncode({
+            'data': {
+              'r0': {'stargazerCount': 9000},
+            },
+          }),
+          200,
+        );
+      }),
+      token: 't',
+      retryDelay: Duration.zero,
+    );
+    final result = await runIngest(
+      catalog: seeds,
+      pub: PubDevClient(pubMock, retryDelay: Duration.zero),
+      github: gh,
+      history: HistoryStore(p.join(tmp.path, 'history')),
+      writer: JsonWriter(p.join(tmp.path, 'out')),
+      now: DateTime.utc(2026, 10, 1),
+    );
+    expect(result.written, isTrue);
+    expect(result.warnings, contains(startsWith('GitHub: discovery failed')));
+    final rows = {for (final r in IndexFile.fromJson(readJson('index.json')).projects) r.id: r};
+    expect(rows.keys, ['dio']);
+    expect(rows['dio']!.stars, 9000);
+  });
+
   group('commit activity', () {
     final week = DateTime.utc(2026, 9, 27).millisecondsSinceEpoch ~/ 1000;
     final weeks = jsonEncode([
