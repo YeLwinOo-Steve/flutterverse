@@ -18,6 +18,7 @@ import 'package:fv_web/data/codecs.dart' as _codecs;
 import 'package:fv_web/pages/detail/trend_chart.dart' as _trend_chart;
 import 'package:fv_web/pages/explore/category_tabs.dart' as _category_tabs;
 import 'package:fv_web/pages/explore/explore_view.dart' as _explore_view;
+import 'package:fv_web/pages/hof/hof_search.dart' as _hof_search;
 import 'package:fv_web/pages/home/trending_card.dart' as _trending_card;
 import 'package:fv_web/pages/projects/projects_view.dart' as _projects_view;
 import 'package:fv_web/pages/pub/pub_view.dart' as _pub_view;
@@ -67,6 +68,7 @@ ServerOptions get defaultServerOptions => ServerOptions(
       'explore_view',
       params: __explore_viewExploreView,
     ),
+    _hof_search.HofSearch: ClientTarget<_hof_search.HofSearch>('hof_search'),
     _trending_card.TrendingCard: ClientTarget<_trending_card.TrendingCard>(
       'trending_card',
       params: __trending_cardTrendingCard,

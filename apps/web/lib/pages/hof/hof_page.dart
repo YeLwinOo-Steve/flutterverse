@@ -7,6 +7,7 @@ import '../../components/ui/icons.dart';
 import '../../data/site_data.dart';
 import '../../styles/css.dart';
 import 'developer_card.dart';
+import 'hof_search.dart';
 import 'inductee_card.dart';
 
 /// `/hall-of-fame`. The propose buttons open dialogs hosted by
@@ -19,6 +20,13 @@ class HofPage extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final edition = data.hallOfFame.edition;
+    // Those honored in memory come first.
+    final developers = [
+      for (final d in edition?.developers ?? const <HallOfFameDeveloper>[])
+        if (d.memorial) d,
+      for (final d in edition?.developers ?? const <HallOfFameDeveloper>[])
+        if (!d.memorial) d,
+    ];
     return div(classes: 'hof', [
       div(classes: 'hof-head', [
         div(classes: 'hof-intro', [
@@ -31,6 +39,7 @@ class HofPage extends StatelessComponent {
             ),
           ]),
         ]),
+        const HofSearch(),
       ]),
       _sectionHead(
         'Developers',
@@ -42,9 +51,8 @@ class HofPage extends StatelessComponent {
           [const Icon(Icons.personAdd), .text('Propose a developer')],
         ),
       ),
-      div(classes: 'dev-grid', [
-        for (final d in edition?.developers ?? const <HallOfFameDeveloper>[])
-          DeveloperCard(developer: d, projects: [for (final id in d.projects) ?data.row(id)]),
+      _grid('dev-grid', [
+        for (final d in developers) DeveloperCard(developer: d, projects: [for (final id in d.projects) ?data.row(id)]),
       ]),
       _sectionHead(
         'Projects',
@@ -56,12 +64,26 @@ class HofPage extends StatelessComponent {
           [const Icon(Icons.folderAdd), .text('Propose a project')],
         ),
       ),
-      div(classes: 'cell-grid inductees', [
+      _grid('cell-grid inductees', [
         for (final e in edition?.projects ?? const <HallOfFameProject>[])
           if (data.row(e.id) case final row?) InducteeCard(entry: e, row: row),
       ]),
     ]);
   }
+
+  /// A card grid plus the empty state [HofSearch] shows when nothing in it
+  /// matches.
+  Component _grid(String classes, List<Component> cards) => div([
+    div(classes: classes, attributes: {'data-hof-grid': ''}, cards),
+    div(
+      classes: 'empty',
+      attributes: {'data-hof-empty': '', 'hidden': ''},
+      [
+        b([.text('No matches')]),
+        span([.text('Try a different name or handle.')]),
+      ],
+    ),
+  ]);
 
   Component _sectionHead(String title, String subtitle, Component action) => div(classes: 'hof-section-head', [
     div([

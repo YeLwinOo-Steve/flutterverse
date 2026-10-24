@@ -100,6 +100,7 @@ class HallOfFameDeveloper {
     required this.category,
     required this.tagline,
     this.projects = const [],
+    this.memorial = false,
     this.followers,
     this.repos,
   });
@@ -113,6 +114,9 @@ class HallOfFameDeveloper {
   /// [Project.id]s they're known for.
   final List<String> projects;
 
+  /// Honored in memory: shown first, in a quieter card.
+  final bool memorial;
+
   /// Filled in by ingest from GitHub; null when unavailable.
   final int? followers;
   final int? repos;
@@ -123,6 +127,7 @@ class HallOfFameDeveloper {
     category: category,
     tagline: tagline,
     projects: projects,
+    memorial: memorial,
     followers: followers,
     repos: repos,
   );
@@ -133,6 +138,7 @@ class HallOfFameDeveloper {
     category: json['category'] as String,
     tagline: json['tagline'] as String,
     projects: asStrings(json['projects']),
+    memorial: json['memorial'] == true,
     followers: asInt(json['followers']),
     repos: asInt(json['repos']),
   );
@@ -143,6 +149,7 @@ class HallOfFameDeveloper {
     'category': category,
     'tagline': tagline,
     'projects': projects,
+    if (memorial) 'memorial': true,
     'followers': followers,
     'repos': repos,
   });

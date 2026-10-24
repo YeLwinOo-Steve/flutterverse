@@ -133,6 +133,33 @@ projects:
   - { id: go-flutter, kind: project, repo: go-flutter-desktop/go-flutter, sdk: Flutter, platforms: [macOS, Windows, Linux], categories: [developer-tooling] }
   - { id: rustdesk, kind: project, repo: rustdesk/rustdesk, sdk: Flutter, platforms: [iOS, Android, macOS, Windows, Linux], categories: [open-source-app] }
   - { id: immich, kind: project, repo: immich-app/immich, sdk: Flutter, platforms: [iOS, Android], categories: [open-source-app, media] }
+  # Hall of Fame inductees and their best-known work. Discovered repos keep
+  # their discovered ids, so their URLs and history carry over.
+  - { id: rxdart, pub: rxdart, repo: ReactiveX/rxdart, categories: [state-management, utilities] }
+  - { id: flutter_hooks, pub: flutter_hooks, repo: rrousselGit/flutter_hooks, categories: [state-management, ui] }
+  - { id: mobx, pub: mobx, repo: mobxjs/mobx.dart, categories: [state-management] }
+  - { id: flutter_redux, pub: flutter_redux, repo: brianegan/flutter_redux, categories: [state-management, architecture] }
+  - { id: flex_color_scheme, pub: flex_color_scheme, repo: rydmike/flex_color_scheme, categories: [theming, ui] }
+  - { id: fluent_ui, pub: fluent_ui, repo: bdlukaa/fluent_ui, categories: [ui, theming] }
+  - { id: flutter_slidable, pub: flutter_slidable, repo: letsar/flutter_slidable, categories: [ui] }
+  - { id: flutter_staggered_grid_view, pub: flutter_staggered_grid_view, repo: letsar/flutter_staggered_grid_view, categories: [ui] }
+  - { id: vector_graphics, pub: vector_graphics, repo: flutter/packages, categories: [ui] }
+  - { id: cached_network_image, pub: cached_network_image, repo: Baseflow/flutter_cached_network_image, categories: [media, networking] }
+  - { id: just_audio, pub: just_audio, repo: ryanheise/just_audio, categories: [media] }
+  - { id: audio_service, pub: audio_service, repo: ryanheise/audio_service, categories: [media] }
+  - { id: flutter_local_notifications, pub: flutter_local_notifications, repo: MaikuB/flutter_local_notifications, categories: [device] }
+  - { id: slang, pub: slang, repo: slang-i18n/slang, categories: [localization, code-generation] }
+  - { id: win32, pub: win32, repo: halildurmus/win32, categories: [utilities] }
+  - { id: mason, pub: mason, repo: felangel/mason, categories: [code-generation, cli] }
+  - { id: dart_frog, pub: dart_frog, repo: dart-frog-dev/dart_frog, categories: [backend] }
+  - { id: flutter_launcher_icons, pub: flutter_launcher_icons, repo: fluttercommunity/flutter_launcher_icons, categories: [developer-tooling, cli] }
+  - { id: flutter-flutter, kind: project, repo: flutter/flutter, sdk: Flutter, categories: [ui, developer-tooling] }
+  - { id: brianegan-flutter_architecture_samples, kind: project, repo: brianegan/flutter_architecture_samples, sdk: Flutter, categories: [architecture, state-management] }
+  - { id: localsend-localsend, kind: project, repo: localsend/localsend, sdk: Flutter, platforms: [iOS, Android, macOS, Windows, Linux], categories: [open-source-app] }
+  - { id: appflowy-io-appflowy, kind: project, repo: AppFlowy-IO/AppFlowy, sdk: Flutter, platforms: [iOS, Android, macOS, Windows, Linux], categories: [open-source-app, ai] }
+  - { id: team-spotube-spotube, kind: project, repo: team-spotube/spotube, sdk: Flutter, categories: [open-source-app, media] }
+  - { id: krille-chan-fluffychat, kind: project, repo: krille-chan/fluffychat, sdk: Flutter, categories: [open-source-app] }
+  - { id: solido-awesome-flutter, kind: project, repo: Solido/awesome-flutter, sdk: Flutter, categories: [utilities] }
 
 # The current Hall of Fame edition. Reasons are editorial; keep them factual.
 hall_of_fame:
@@ -148,7 +175,27 @@ hall_of_fame:
     - { id: flutter_animate, category: Best Animation Project, reason: "Turned complex effect choreography into a readable, chainable API." }
     - { id: shorebird, category: Most Innovative, reason: "Brought over-the-air code push to compiled Flutter apps — previously thought impractical." }
     - { id: flame, category: Longest Running, reason: "Actively developed since 2017 — older than Flutter 1.0 itself." }
+    - { id: get, category: Most Liked, reason: "The most-liked package on pub.dev, bundling state, routing and dependency injection in one API." }
+    - { id: freezed, category: Code Gen Standard, reason: "Made immutable data classes and unions routine in Dart." }
+    - { id: json_serializable, category: Serialization Standard, reason: "The default JSON code generator for Dart since the Dart 2 era." }
+    - { id: go_router, category: Official Routing, reason: "Grew from a community package into Flutter's recommended router." }
+    - { id: rxdart, category: Elder Statesman, reason: "On pub.dev since 2015, before Flutter's first alpha, and still a staple of reactive Dart." }
+    - { id: flutter_hooks, category: Composition, reason: "Brought React-style hooks to Flutter widgets." }
+    - { id: flutter_local_notifications, category: Most Relied On, reason: "One of the most-liked plugins on pub.dev, and the standard way to schedule local notifications." }
+    - { id: cached_network_image, category: Everyday Essential, reason: "The standard way to load and cache network images since 2017." }
+    - { id: flutter_slidable, category: Best Interaction, reason: "The go-to swipe-action list item, liked by thousands of developers." }
+    - { id: flex_color_scheme, category: Best Theming, reason: "Comprehensive Material theming, from a single seed color to every component." }
+    - { id: win32, category: Dart on the Desktop, reason: "Made calling the Windows API from Dart practical, with millions of downloads." }
+    - { id: mason, category: Best Scaffolding, reason: "Template-based code generation used across the ecosystem." }
+    - { id: dart_frog, category: Server-Side Dart, reason: "A fast, minimalist backend framework that made Dart on the server approachable." }
+    - { id: localsend-localsend, category: Most Starred App, reason: "An open-source, cross-platform AirDrop alternative and one of the most-starred Flutter apps." }
+    - { id: appflowy-io-appflowy, category: Best Productivity App, reason: "An open-source Notion alternative built on Flutter, with tens of thousands of stars." }
+    - { id: immich, category: Best Self-Hosted App, reason: "The leading self-hosted photo library, with a Flutter mobile app." }
+    - { id: rustdesk, category: Best Desktop App, reason: "An open-source remote desktop whose cross-platform UI is Flutter." }
+    - { id: solido-awesome-flutter, category: Community Resource, reason: "The canonical curated list of Flutter libraries, tools and tutorials." }
+    - { id: team-spotube-spotube, category: Best Media App, reason: "An open-source music client showing Flutter on every desktop and mobile platform." }
   developers:
+    - { handle: dnfield, name: Dan Field, category: In Memoriam, memorial: true, tagline: "On the Flutter team from 2018 until his death in 2024. Author of flutter_svg and vector_graphics, which still render images in countless apps. Rest in peace, Dan.", projects: [flutter_svg, vector_graphics] }
     - { handle: felangel, name: Felix Angelov, category: Most Influential, tagline: "Creator of the bloc state management library.", projects: [flutter_bloc, mocktail] }
     - { handle: rrousselGit, name: Remi Rousselet, category: Most Prolific Author, tagline: "Author of Provider, Riverpod and Freezed.", projects: [riverpod, freezed, provider] }
     - { handle: simolus3, name: Simon Binder, category: Best Data Tooling, tagline: "Maintainer of drift, reactive SQLite for Dart.", projects: [drift] }
@@ -159,3 +206,26 @@ hall_of_fame:
     - { handle: schultek, name: Kilian Schulte, category: Dart Beyond Mobile, tagline: "Creator of Jaspr, the Dart web framework behind this site.", projects: [jaspr] }
     - { handle: vlidholt, name: Viktor Lidholt, category: Full-Stack Dart, tagline: "Creator of Serverpod, the app server written in Dart.", projects: [serverpod] }
     - { handle: leoafarias, name: Leo Farias, category: Developer Experience, tagline: "Creator of FVM and the Mix styling system.", projects: [mix] }
+    - { handle: Hixie, name: Ian Hickson, category: Flutter Architect, tagline: "Long-time Flutter tech lead; earlier, editor of the HTML spec.", projects: [flutter-flutter] }
+    - { handle: mraleph, name: Slava Egorov, category: Dart Engine, tagline: "Leads the Dart VM and compiler work at Google." }
+    - { handle: timsneath, name: Tim Sneath, category: Product Visionary, tagline: "Led Flutter and Dart product at Google; created the win32 package.", projects: [win32] }
+    - { handle: kevmoo, name: Kevin Moore, category: Dart Steward, tagline: "Dart product manager at Google; creator of json_serializable.", projects: [json_serializable] }
+    - { handle: csells, name: Chris Sells, category: Routing Pioneer, tagline: "Former Flutter product manager; created go_router.", projects: [go_router] }
+    - { handle: filiph, name: Filip Hráček, category: Community Voice, tagline: "Former Flutter developer relations; co-host of The Boring Flutter Development Show." }
+    - { handle: slightfoot, name: Simon Lightfoot, category: Community Mentor, tagline: "Co-founder of the Flutter Study Group, helping developers for years." }
+    - { handle: brianegan, name: Brian Egan, category: Architecture Teacher, tagline: "Author of flutter_redux and the Flutter architecture samples.", projects: [flutter_redux, brianegan-flutter_architecture_samples] }
+    - { handle: escamoteur, name: Thomas Burkhart, category: Dependency Injection, tagline: "Author of get_it and watch_it.", projects: [get_it] }
+    - { handle: rydmike, name: Mike Rydström, category: Theming Master, tagline: "Creator of flex_color_scheme.", projects: [flex_color_scheme] }
+    - { handle: jonataslaw, name: Jonny Borges, category: Most Liked Package, tagline: "Creator of GetX, the most-liked package on pub.dev.", projects: [get] }
+    - { handle: letsar, name: Romain Rastel, category: Widget Craft, tagline: "Author of flutter_slidable and flutter_staggered_grid_view.", projects: [flutter_slidable, flutter_staggered_grid_view] }
+    - { handle: pavanpodila, name: Pavan Podila, category: Reactive State, tagline: "Author of MobX for Dart.", projects: [mobx] }
+    - { handle: simc, name: Simon Choi, category: Local Storage, tagline: "Author of Hive and Isar.", projects: [isar, hive_ce] }
+    - { handle: luanpotter, name: Luan Nico, category: Games Founder, tagline: "Created the Flame game engine.", projects: [flame] }
+    - { handle: Tienisto, name: Tien Do, category: Open Source App Builder, tagline: "Creator of LocalSend and slang.", projects: [localsend-localsend, slang] }
+    - { handle: krille-chan, name: Christian Pauly, category: Decentralized Messaging, tagline: "Creator of FluffyChat, a Matrix client.", projects: [krille-chan-fluffychat] }
+    - { handle: Solido, name: Robert Felker, category: Community Curator, tagline: "Curator of awesome-flutter.", projects: [solido-awesome-flutter] }
+    - { handle: ryanheise, name: Ryan Heise, category: Audio, tagline: "Author of just_audio and audio_service.", projects: [just_audio, audio_service] }
+    - { handle: MaikuB, name: Michael Bui, category: Platform Integration, tagline: "Author of flutter_local_notifications.", projects: [flutter_local_notifications] }
+    - { handle: bdlukaa, name: Bruno D'Luka, category: Desktop Design, tagline: "Creator of fluent_ui.", projects: [fluent_ui] }
+    - { handle: bizz84, name: Andrea Bizzotto, category: Educator, tagline: "Creator of Code With Andrea." }
+    - { handle: MarkOSullivan94, name: Mark O'Sullivan, category: Everyday Tooling, tagline: "Lead maintainer of flutter_launcher_icons since its first release in 2017.", projects: [flutter_launcher_icons] }

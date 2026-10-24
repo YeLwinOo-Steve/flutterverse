@@ -5,6 +5,7 @@ import 'package:jaspr/jaspr.dart';
 import '../../components/ui/icon.dart';
 import '../../components/ui/icons.dart';
 import '../../styles/css.dart';
+import 'hof_search.dart';
 
 /// A Hall of Fame developer with their GitHub stats and best-known repos.
 class DeveloperCard extends StatelessComponent {
@@ -19,57 +20,83 @@ class DeveloperCard extends StatelessComponent {
   Component build(BuildContext context) {
     final d = developer;
     final stars = projects.fold<int>(0, (sum, row) => sum + (row.stars ?? 0));
-    return div(classes: 'dev-card hover-border', [
-      div(classes: 'dev-body', [
-        div(classes: 'dev-top', [
-          div(
-            classes: 'dev-avatar',
-            attributes: {'role': 'img', 'aria-label': d.name},
-            styles: Styles(
-              raw: {
-                'background': 'var(--surface2) url(https://github.com/${d.handle}.png?size=160) center/cover no-repeat',
-              },
+    final likes = projects.fold<int>(0, (sum, row) => sum + (row.likes ?? 0));
+    return div(
+      classes: d.memorial ? 'dev-card memorial hover-border' : 'dev-card hover-border',
+      attributes: {
+        'data-hof': hofSearchText([
+          d.name,
+          d.handle,
+          d.category,
+          for (final p in projects) ...[p.id, p.name],
+        ]),
+      },
+      [
+        div(classes: 'dev-body', [
+          div(classes: 'dev-top', [
+            div(
+              classes: 'dev-avatar',
+              attributes: {'role': 'img', 'aria-label': d.name},
+              styles: Styles(
+                raw: {
+                  'background':
+                      'var(--surface2) url(https://github.com/${d.handle}.png?size=160) center/cover no-repeat',
+                },
+              ),
+              [],
             ),
-            [],
+            span(classes: 'dev-cat', [.text(d.category)]),
+          ]),
+          div(classes: 'dev-id', [
+            div(classes: 'dev-name', [
+              span([.text(d.name)]),
+              span(classes: 'dev-handle', [.text('@${d.handle}')]),
+            ]),
+            span(classes: 'dev-tagline', [.text(d.tagline)]),
+          ]),
+          div(classes: 'dev-stats', [
+            _stat(Icons.people, compactNumber(d.followers), 'followers'),
+            _stat(Icons.book, compactNumber(d.repos), 'repos'),
+            // Packages in shared monorepos have no stars of their own.
+            if (stars == 0 && likes > 0)
+              _stat(Icons.heart, compactNumber(likes), 'likes')
+            else
+              _stat(Icons.star, compactNumber(stars), 'stars'),
+          ]),
+        ]),
+        div(classes: 'dev-pinned', [
+          for (final p in projects.take(2))
+            a(href: '/p/${p.id}', classes: 'dev-pin hover-row', [
+              const Icon(Icons.book, strokeWidth: 1.4, classes: 'muted'),
+              div(classes: 'dev-pin-text', [
+                // The repo's name, as GitHub pins show it, unless the repo is
+                // a shared monorepo (no stars of its own).
+                span(classes: 'dev-pin-name', [
+                  .text(p.stars == null ? p.name : p.repo?.split('/').last ?? p.name),
+                ]),
+                span(classes: 'dev-pin-desc', [.text(p.description ?? '')]),
+              ]),
+              span(classes: 'dev-pin-stars', [
+                if (p.stars == null && p.likes != null) ...[
+                  const Icon(Icons.heart, size: 14, strokeWidth: 1.4),
+                  .text(compactNumber(p.likes)),
+                ] else ...[
+                  const Icon(Icons.star, size: 14, strokeWidth: 1.4),
+                  .text(compactNumber(p.stars)),
+                ],
+              ]),
+            ]),
+        ]),
+        div(classes: 'dev-cta', [
+          a(
+            href: 'https://github.com/${d.handle}',
+            target: Target.blank,
+            attributes: {'rel': 'noopener'},
+            [const Icon(Icons.github, filled: true), .text('View on GitHub')],
           ),
-          span(classes: 'dev-cat', [.text(d.category)]),
         ]),
-        div(classes: 'dev-id', [
-          div(classes: 'dev-name', [
-            span([.text(d.name)]),
-            span(classes: 'dev-handle', [.text('@${d.handle}')]),
-          ]),
-          span(classes: 'dev-tagline', [.text(d.tagline)]),
-        ]),
-        div(classes: 'dev-stats', [
-          _stat(Icons.people, compactNumber(d.followers), 'followers'),
-          _stat(Icons.book, compactNumber(d.repos), 'repos'),
-          _stat(Icons.star, compactNumber(stars), 'stars'),
-        ]),
-      ]),
-      div(classes: 'dev-pinned', [
-        for (final p in projects.take(2))
-          a(href: '/p/${p.id}', classes: 'dev-pin hover-row', [
-            const Icon(Icons.book, strokeWidth: 1.4, classes: 'muted'),
-            div(classes: 'dev-pin-text', [
-              span(classes: 'dev-pin-name', [.text(p.repo?.split('/').last ?? p.id)]),
-              span(classes: 'dev-pin-desc', [.text(p.description ?? '')]),
-            ]),
-            span(classes: 'dev-pin-stars', [
-              const Icon(Icons.star, size: 14, strokeWidth: 1.4),
-              .text(compactNumber(p.stars)),
-            ]),
-          ]),
-      ]),
-      div(classes: 'dev-cta', [
-        a(
-          href: 'https://github.com/${d.handle}',
-          target: Target.blank,
-          attributes: {'rel': 'noopener'},
-          [const Icon(Icons.github, filled: true), .text('View on GitHub')],
-        ),
-      ]),
-    ]);
+      ],
+    );
   }
 
   Component _stat(String icon, String value, String label) => span(classes: 'dev-stat', [
@@ -173,5 +200,14 @@ class DeveloperCard extends StatelessComponent {
       'font-weight': '500',
     }),
     rule('.dev-cta a:hover', {'border-color': 'var(--ink)', 'color': 'var(--ink)'}),
+    // In memoriam: a quieter card, with the portrait in black and white.
+    rule('.dev-card.memorial', {'background': 'var(--surface2)'}),
+    rule('.dev-card.memorial .dev-avatar', {'filter': 'grayscale(1)'}),
+    rule('.dev-card.memorial .dev-cat', {
+      'background': 'transparent',
+      'color': 'var(--ink)',
+      'box-shadow': 'inset 0 0 0 1px var(--line)',
+    }),
+    rule('.dev-card.memorial .dev-tagline', {'color': 'var(--ink)'}),
   ];
 }
