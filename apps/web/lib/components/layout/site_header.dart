@@ -153,6 +153,9 @@ class SiteHeader extends StatelessComponent {
     ]),
     below(navBreakpoint, [
       rule('.bar-tools', {'margin-left': 'auto'}),
+      // Ahead of the search button, so its rope hangs clear of the buttons
+      // and the menu.
+      rule('.bar-tools .lamp', {'order': '-1', 'margin-left': '0', 'margin-right': '12px'}),
     ]),
   ];
 }
