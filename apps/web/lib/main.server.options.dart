@@ -18,6 +18,8 @@ import 'package:fv_web/data/codecs.dart' as _codecs;
 import 'package:fv_web/pages/detail/trend_chart.dart' as _trend_chart;
 import 'package:fv_web/pages/explore/category_tabs.dart' as _category_tabs;
 import 'package:fv_web/pages/explore/explore_view.dart' as _explore_view;
+import 'package:fv_web/pages/hof/hof_pager.dart' as _hof_pager;
+import 'package:fv_web/pages/hof/hof_search.dart' as _hof_search;
 import 'package:fv_web/pages/home/trending_card.dart' as _trending_card;
 import 'package:fv_web/pages/projects/projects_view.dart' as _projects_view;
 import 'package:fv_web/pages/pub/pub_view.dart' as _pub_view;
@@ -67,6 +69,11 @@ ServerOptions get defaultServerOptions => ServerOptions(
       'explore_view',
       params: __explore_viewExploreView,
     ),
+    _hof_pager.HofPager: ClientTarget<_hof_pager.HofPager>(
+      'hof_pager',
+      params: __hof_pagerHofPager,
+    ),
+    _hof_search.HofSearch: ClientTarget<_hof_search.HofSearch>('hof_search'),
     _trending_card.TrendingCard: ClientTarget<_trending_card.TrendingCard>(
       'trending_card',
       params: __trending_cardTrendingCard,
@@ -104,6 +111,11 @@ Map<String, Object?> __explore_viewExploreView(_explore_view.ExploreView c) => {
   'index': _codecs.IndexData(c.index).encode(),
   'counts': c.counts,
   'growth': c.growth,
+};
+Map<String, Object?> __hof_pagerHofPager(_hof_pager.HofPager c) => {
+  'section': c.section,
+  'total': c.total,
+  'pageSize': c.pageSize,
 };
 Map<String, Object?> __trending_cardTrendingCard(
   _trending_card.TrendingCard c,
