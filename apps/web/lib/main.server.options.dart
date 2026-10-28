@@ -115,6 +115,7 @@ Map<String, Object?> __copy_buttonCopyButton(_copy_button.CopyButton c) => {
   'text': c.text,
   'label': c.label,
   'event': c.event,
+  'compact': c.compact,
 };
 Map<String, Object?> __trend_chartTrendChart(_trend_chart.TrendChart c) => {
   'detail': _codecs.DetailData(c.detail).encode(),

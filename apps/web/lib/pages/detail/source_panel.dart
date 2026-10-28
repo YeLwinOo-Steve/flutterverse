@@ -1,6 +1,7 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../components/ui/copy_button.dart';
 import '../../components/ui/icon.dart';
 import '../../styles/css.dart';
 
@@ -17,6 +18,7 @@ class SourcePanel extends StatelessComponent {
     required this.href,
     required this.ctaIcon,
     this.note,
+    this.install,
     this.tiles = const [],
     this.rows = const [],
     this.topics = const [],
@@ -32,6 +34,9 @@ class SourcePanel extends StatelessComponent {
   final String href;
   final Component ctaIcon;
   final String? note;
+
+  /// A shell command to add the package, shown with a copy button.
+  final String? install;
   final List<Fact> tiles;
   final List<Fact> rows;
   final List<String> topics;
@@ -47,6 +52,11 @@ class SourcePanel extends StatelessComponent {
         ]),
       ]),
       if (note != null) div(classes: 'src-note', [.text(note!)]),
+      if (install != null)
+        div(classes: 'src-install', [
+          code(classes: 'mono', [.text(install!)]),
+          CopyButton(text: install!, event: 'install_copy', compact: true),
+        ]),
       if (tiles.isNotEmpty)
         div(classes: 'src-tiles', [
           for (final t in tiles)
@@ -118,6 +128,26 @@ class SourcePanel extends StatelessComponent {
       'color': 'var(--muted)',
       'border-bottom': '1px solid var(--line)',
       'line-height': '1.5',
+    }),
+    // The code and its copy button share one bordered box, on one line.
+    rule('.src-install', {
+      'display': 'flex',
+      'align-items': 'center',
+      'gap': '4px',
+      'margin': '14px 20px',
+      'padding': '3px 3px 3px 12px',
+      'background': 'var(--bg)',
+      'border': '1px solid var(--line)',
+      'border-radius': '2px',
+    }),
+    rule('.src-install code', {
+      'flex': '1',
+      'min-width': '0',
+      'font-size': '12.5px',
+      'white-space': 'nowrap',
+      'overflow-x': 'auto',
+      'user-select': 'all',
+      'scrollbar-width': 'none',
     }),
     rule('.src-tiles', {
       'display': 'grid',

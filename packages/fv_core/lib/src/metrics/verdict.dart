@@ -95,7 +95,9 @@ VerdictResult? verdictOf(ProjectRow? row, {required DateTime now, bool discontin
     verdict: verdict,
     reasons: [
       if (verdict == null) 'no commit or release date',
-      if (row.maintenance case final m?) m.label.toLowerCase(),
+      // Stable overrides Slowing or Low activity on purpose: naming them
+      // would contradict the verdict.
+      if (row.maintenance case final m? when verdict != Verdict.stable) m.label.toLowerCase(),
       ...facts,
     ],
     rising: rising,

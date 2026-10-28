@@ -2,6 +2,7 @@ import 'package:fv_core/fv_core.dart';
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../components/ui/icons.dart';
 import '../../components/ui/seg_control.dart';
 import '../../styles/css.dart';
 import 'chart_data.dart';
@@ -59,6 +60,10 @@ class _TrendChartState extends State<TrendChart> {
       div(classes: 'chart-head', [
         ChipTabs<ChartMetric>(
           options: const [(ChartMetric.stars, 'Stars'), (ChartMetric.downloads, 'Downloads')],
+          icon: (m) => switch (m) {
+            ChartMetric.stars => Icons.star,
+            ChartMetric.downloads => Icons.download,
+          },
           selected: _metric,
           onSelect: (m) => setState(() {
             _metric = m;
