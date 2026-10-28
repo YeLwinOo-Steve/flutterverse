@@ -136,6 +136,78 @@ hall_of_fame:
     expect(Meta.fromJson(readJson('meta.json')).schema, schemaVersion);
   });
 
+  test('writes discontinued.json and a badge per judged package', () async {
+    Map<String, Object?> info({Map<String, Object?> deps = const {}, bool discontinued = false, String? by}) => {
+      'isDiscontinued': discontinued,
+      'replacedBy': ?by,
+      'latest': {
+        'version': '1.0.0',
+        'published': '2026-09-20T00:00:00Z',
+        'pubspec': {'repository': 'https://github.com/cfug/dio', 'dependencies': deps},
+      },
+    };
+    final pub = MockClient((req) async {
+      return switch (req.url.path) {
+        '/api/packages/dio' => http.Response(
+          jsonEncode(
+            info(
+              deps: {
+                'pedantic': '^1.0.0',
+                'meta': '^1.0.0',
+                'flutter': {'sdk': 'flutter'},
+                'mine': {'path': '../mine'},
+              },
+            ),
+          ),
+          200,
+        ),
+        '/api/packages/old' => http.Response(jsonEncode(info(discontinued: true)), 200),
+        '/api/packages/pedantic' => http.Response(jsonEncode(info(discontinued: true, by: 'lints')), 200),
+        '/api/packages/meta' => http.Response(jsonEncode(info()), 200),
+        '/api/packages/js' => http.Response(jsonEncode(info(discontinued: true)), 200),
+        '/api/search' => http.Response(jsonEncode({'packages': <Object>[]}), 200),
+        _ when req.url.path.endsWith('/score') => http.Response(jsonEncode({'tags': <String>[]}), 200),
+        _ => http.Response('', 404),
+      };
+    });
+    final requested = <String>[];
+    await runIngest(
+      catalog: parseSeeds('''
+discovery: {discontinued_watch: [js, dio]}
+categories: {networking: Networking}
+projects:
+  - {id: dio, pub: dio, categories: [networking]}
+  - {id: old, pub: old, repo: a/old, categories: [networking]}
+'''),
+      pub: PubDevClient(
+        MockClient((req) {
+          requested.add(req.url.path);
+          return pub.send(http.Request(req.method, req.url)).then(http.Response.fromStream);
+        }),
+        retryDelay: Duration.zero,
+      ),
+      github: github(10),
+      history: HistoryStore(p.join(tmp.path, 'history')),
+      writer: JsonWriter(p.join(tmp.path, 'out')),
+      now: DateTime.utc(2026, 10, 2),
+    );
+
+    expect(DiscontinuedFile.fromJson(readJson('discontinued.json')).packages, {
+      'js': null,
+      'old': null,
+      'pedantic': 'lints',
+    });
+    expect(requested, isNot(contains('/api/packages/mine')), reason: 'path dependencies are skipped');
+    expect(requested.where((r) => r == '/api/packages/dio'), hasLength(1), reason: 'tracked: not looked up again');
+    expect(readJson('badge/dio.json'), {
+      'schemaVersion': 1,
+      'label': 'Flutterverse',
+      'message': 'Healthy',
+      'color': '0468D7',
+    });
+    expect(readJson('badge/old.json')['message'], 'Replace now');
+  });
+
   test('omits repo-wide counters for packages sharing a monorepo', () async {
     final result = await run(
       DateTime.utc(2026, 10, 1),

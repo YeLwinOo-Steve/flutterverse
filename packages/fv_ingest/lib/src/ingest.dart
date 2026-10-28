@@ -84,6 +84,20 @@ Future<IngestResult> runIngest({
     expectWeekly: (p) => curated.contains(p.id) || favoriteSet.contains(p.pub),
   );
 
+  // 2b. Discontinued packages never reach the index, so Doctor learns about
+  // them from `discontinued.json`: tracked ones pub.dev flags, plus the watch
+  // list and the untracked dependencies of tracked packages, one level deep
+  // (package info only: no score or weekly series).
+  final discontinued = await _discontinued(
+    projects,
+    pubStats,
+    discovery.discontinuedWatch,
+    pub,
+    concurrency,
+    log,
+    warn,
+  );
+
   // 3. Resolve repos from the pubspec when the seed doesn't name one.
   projects = [
     for (final p in projects) p.repo != null ? p : p.copyWith(repo: githubRepoFromUrl(pubStats[p.id]?.repository)),
@@ -217,6 +231,7 @@ Future<IngestResult> runIngest({
 
   // 9. Output.
   final rows = <ProjectRow>[];
+  final badges = <String>{};
   for (final b in built.values) {
     final row = ProjectRow.build(
       project: b.project,
@@ -234,6 +249,15 @@ Future<IngestResult> runIngest({
       spark: dailyStarGains(b.history),
     );
     rows.add(row);
+    if (row.pub case final name?) {
+      final badge = badgeJson(
+        verdictOf(row, now: now, discontinued: discontinued.contains(name), replacedBy: discontinued.packages[name])!,
+      );
+      if (badge != null) {
+        writer.write('badge/$name.json', badge);
+        badges.add('$name.json');
+      }
+    }
     writer.write(
       'p/${b.project.id}.json',
       ProjectDetail(
@@ -246,7 +270,9 @@ Future<IngestResult> runIngest({
       ).toJson(),
     );
   }
-  writer.prune('p', {for (final p in projects) '${p.id}.json'});
+  writer
+    ..prune('p', {for (final p in projects) '${p.id}.json'})
+    ..prune('badge', badges);
 
   final hof = catalog.hallOfFame;
   writer
@@ -255,6 +281,7 @@ Future<IngestResult> runIngest({
       IndexFile(categories: catalog.categories, categoryGroups: catalog.categoryGroups, projects: rows).toJson(),
     )
     ..write('pub.json', PubFile(flutterFavorites: favorites).toJson())
+    ..write('discontinued.json', discontinued.toJson())
     ..write(
       'hof.json',
       HallOfFameFile(
@@ -345,6 +372,35 @@ Future<Map<String, PubStats>> _fetchPub(
     }
   });
   return out;
+}
+
+/// Every discontinued package Doctor should know about, by name, sorted.
+Future<DiscontinuedFile> _discontinued(
+  List<Project> projects,
+  Map<String, PubStats> pubStats,
+  List<String> watch,
+  PubDevClient pub,
+  int concurrency,
+  void Function(String)? log,
+  void Function(String) warn,
+) async {
+  final found = <String, String?>{
+    for (final p in projects)
+      if (pubStats[p.id] case final s? when s.discontinued) p.pub!: s.replacedBy,
+  };
+  final tracked = {for (final p in projects) ?p.pub};
+  final lookups = {...watch, for (final s in pubStats.values) ...s.dependencies}.difference(tracked).toList();
+  var failed = 0;
+  await mapPool(lookups, concurrency, (name) async {
+    try {
+      if (await pub.status(name) case (discontinued: true, :final replacedBy)) found[name] = replacedBy;
+    } on Object {
+      failed++;
+    }
+  });
+  if (failed > 0) warn('pub.dev: discontinued check failed for $failed of ${lookups.length} packages');
+  log?.call('pub.dev: ${found.length} discontinued packages (${lookups.length} untracked checked)');
+  return DiscontinuedFile(packages: {for (final k in found.keys.toList()..sort()) k: found[k]});
 }
 
 /// The repos to ask GitHub for commit activity this run, at most [budget]:

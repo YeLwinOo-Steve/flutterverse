@@ -15,10 +15,18 @@
 
 # Tracked automatically, on top of `projects:` below: every Flutter Favorite,
 # pub.dev's `pub_top` most popular packages, and public Dart repos on GitHub
-# with at least `github_min_stars` stars.
+# with at least `github_min_stars` stars. `discontinued_watch` names packages
+# to check for pub.dev's discontinued flag although nothing tracked depends on
+# them, so Pubspec Doctor can warn about them (old tutorials and AI assistants
+# still suggest these).
 discovery:
   pub_top: 5000
   github_min_stars: 50
+  discontinued_watch: [
+    pedantic, js, flutter_markdown, effective_dart, uni_links, device_info, package_info, connectivity, share,
+    battery, sensors, android_alarm_manager, android_intent, wifi_info_flutter, firebase_admob, e2e,
+    location_permissions,
+  ]
 
 categories:
   state-management: State management

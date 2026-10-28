@@ -33,6 +33,13 @@ class PubDevClient {
     return parsePackage(info, score, weekly: series, now: now);
   }
 
+  /// Whether pub.dev marks [name] discontinued, from the package info alone
+  /// (no score or downloads). Null if the package doesn't exist.
+  Future<PackageStatus?> status(String name) async {
+    final info = await _getJson('/api/packages/$name');
+    return info == null ? null : parseStatus(info);
+  }
+
   /// The [limit] most popular package names, most popular first. Search only
   /// pages through 100 results, but the list pub.dev serves IDEs for name
   /// completion holds the top 20,000 in popularity order.
@@ -85,6 +92,19 @@ const _platformNames = {
   'linux': 'Linux',
 };
 
+/// pub.dev's discontinued flag and suggested replacement.
+typedef PackageStatus = ({bool discontinued, String? replacedBy});
+
+PackageStatus parseStatus(Map<String, Object?> info) =>
+    (discontinued: info['isDiscontinued'] == true, replacedBy: info['replacedBy'] as String?);
+
+/// The pub.dev-hosted dependency names in a pubspec map: not SDK, git or
+/// path ones.
+List<String> hostedDependencies(Map<String, Object?> pubspec) => [
+  for (final MapEntry(:key, :value) in ((pubspec['dependencies'] as Map<String, Object?>?) ?? const {}).entries)
+    if (value is! Map || !(value.containsKey('sdk') || value.containsKey('git') || value.containsKey('path'))) key,
+];
+
 /// Builds [PubStats] from `/api/packages/<name>` and its `/score`.
 PubStats parsePackage(
   Map<String, Object?> info,
@@ -108,6 +128,7 @@ PubStats parsePackage(
   ]..sort((a, b) => a.date.compareTo(b.date));
 
   final platformTags = tagged('platform:');
+  final status = parseStatus(info);
   final license = tagged('license:').where((l) => !const {'fsf-libre', 'osi-approved'}.contains(l)).firstOrNull;
 
   return PubStats(
@@ -142,6 +163,9 @@ PubStats parsePackage(
         if (t is String) t.toLowerCase(),
     ],
     flutterFavorite: tags.contains('is:flutter-favorite'),
+    discontinued: status.discontinued,
+    replacedBy: status.replacedBy,
+    dependencies: hostedDependencies(pubspec),
   );
 }
 

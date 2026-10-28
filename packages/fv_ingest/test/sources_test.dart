@@ -104,6 +104,31 @@ void main() {
       expect(await PubDevClient(client).fetch('missing', now: now), isNull);
     });
 
+    test('reads the discontinued flag and hosted dependencies', () {
+      final s = parsePackage(
+        {
+          'isDiscontinued': true,
+          'replacedBy': 'lints',
+          'latest': {
+            'pubspec': {
+              'dependencies': {
+                'meta': '^1.0.0',
+                'any_version': null,
+                'flutter': {'sdk': 'flutter'},
+                'forked': {'git': 'https://github.com/a/b'},
+                'mirrored': {'hosted': 'https://pub.dev', 'version': '^1.0.0'},
+              },
+            },
+          },
+        },
+        const {},
+        now: now,
+      );
+      expect(s.discontinued, isTrue);
+      expect(s.replacedBy, 'lints');
+      expect(s.dependencies, ['meta', 'any_version', 'mirrored']);
+    });
+
     test('retries on 429 and follows pagination', () async {
       var calls = 0;
       final client = MockClient((req) async {
