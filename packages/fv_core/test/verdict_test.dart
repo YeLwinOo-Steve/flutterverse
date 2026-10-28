@@ -82,8 +82,15 @@ void main() {
 
   test('reasons print the facts behind the verdict', () {
     final r = verdictOf(row(released: daysAgo(420), growth: 0.12), now: now)!;
-    expect(r.reasons, ['slowing', 'last release 1.2y ago', '150/160 pub points', 'downloads up 12% this quarter']);
+    expect(r.reasons, ['last release 1.2y ago', '150/160 pub points', 'downloads up 12% this quarter']);
     expect(verdictOf(row(growth: -0.004), now: now)!.reasons.last, 'downloads flat this quarter');
+  });
+
+  test('reasons name the maintenance class unless Stable overrides it', () {
+    expect(verdictOf(row(points: 50), now: now)!.reasons.first, 'slowing', reason: 'Watch');
+    expect(verdictOf(row(maintenance: Maintenance.low, points: 50), now: now)!.reasons.first, 'low activity');
+    expect(verdictOf(row(maintenance: Maintenance.active), now: now)!.reasons.first, 'active');
+    expect(verdictOf(row(), now: now)!.reasons, isNot(contains('slowing')), reason: 'Stable');
   });
 
   group('badgeJson', () {

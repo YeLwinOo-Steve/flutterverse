@@ -83,6 +83,7 @@ ClientOptions get defaultClientOptions => ClientOptions(
         text: p['text'] as String,
         label: p['label'] as String,
         event: p['event'] as String?,
+        compact: p['compact'] as bool,
       ),
       loader: _copy_button.loadLibrary,
     ),

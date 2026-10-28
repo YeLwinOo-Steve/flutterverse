@@ -5,6 +5,9 @@ import '../../components/ui/icon.dart';
 import '../../components/ui/icons.dart';
 import 'source_panel.dart';
 
+/// `flutter pub add <name>`, or `dart pub add` for a pure Dart package.
+String installCommand(ProjectRow r) => '${r.sdk == 'Dart' ? 'dart' : 'flutter'} pub add ${r.pub}';
+
 /// The pub.dev panel, or null for unpublished projects.
 SourcePanel? pubPanel(ProjectDetail d, DateTime now) {
   final p = d.pub, r = d.row;
@@ -16,6 +19,7 @@ SourcePanel? pubPanel(ProjectDetail d, DateTime now) {
     cta: 'View on pub.dev',
     href: 'https://pub.dev/packages/${r.pub}',
     ctaIcon: span(classes: 'pub-favicon', []),
+    install: installCommand(r),
     tiles: [
       (icon: Icons.heart, label: 'Likes', value: compactNumber(p.likes)),
       (icon: Icons.check, label: 'Pub points', value: '${p.points ?? notAvailable}/${p.maxPoints ?? 160}'),

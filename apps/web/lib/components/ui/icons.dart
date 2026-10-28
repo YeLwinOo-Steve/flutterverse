@@ -29,6 +29,7 @@ abstract final class Icons {
   static const close = 'M3.5 3.5l9 9M12.5 3.5l-9 9';
   static const search = 'M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM14.5 14.5l-3.6-3.6';
   static const grid = 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z';
+  static const copy = 'M5.5 5.5h8v8h-8zM3.5 10.5h-1v-8h8v1';
   static const tick = 'M3 8.5 6.5 12 13 4.5';
   static const chevronDown = 'M3.5 6 8 10.5 12.5 6';
   static const chevronLeft = 'M10 3 5 8l5 5';
