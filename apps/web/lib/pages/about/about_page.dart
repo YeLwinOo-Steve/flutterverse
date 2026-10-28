@@ -1,6 +1,7 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../components/project/verdict_legend.dart';
 import '../../components/ui/icon.dart';
 import '../../components/ui/icons.dart';
 import '../../styles/css.dart';
@@ -41,6 +42,13 @@ class AboutPage extends StatelessComponent {
       'Every package and project, grouped by category and filterable by platform and health.',
       'Explore →',
       '/projects',
+    ),
+    (
+      Icons.pulse,
+      'Check your pubspec',
+      'Pubspec Doctor gives every dependency a verdict, with the reasons and better-kept alternatives.',
+      'Open Doctor →',
+      '/doctor',
     ),
     (
       Icons.trophy,
@@ -94,6 +102,10 @@ class AboutPage extends StatelessComponent {
               span(classes: 'about-cta', [.text(cta)]),
             ]),
         ]),
+      ]),
+      section(classes: 'about-block', [
+        span(classes: 'eyebrow wide', [.text('Pubspec Doctor verdicts')]),
+        const VerdictLegend(),
       ]),
       section(classes: 'about-split', [
         div(classes: 'about-sources', [
@@ -173,7 +185,10 @@ class AboutPage extends StatelessComponent {
     rule('.about-p', {'font-size': '15px', 'line-height': '1.55', 'color': 'var(--muted)'}),
     rule('.about-pillars', {'display': 'grid', 'grid-template-columns': '1fr', 'gap': '16px'}),
     above(760, [
-      rule('.about-pillars', {'grid-template-columns': 'repeat(3,minmax(0,1fr))'}),
+      rule('.about-pillars', {'grid-template-columns': 'repeat(2,minmax(0,1fr))'}),
+    ]),
+    above(1100, [
+      rule('.about-pillars', {'grid-template-columns': 'repeat(4,minmax(0,1fr))'}),
     ]),
     rule('.about-pillar', {
       'display': 'flex',

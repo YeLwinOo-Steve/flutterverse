@@ -17,8 +17,10 @@ import 'package:fv_web/components/layout/intro_controller.dart'
 import 'package:fv_web/components/layout/lamp.dart' deferred as _lamp;
 import 'package:fv_web/components/nominate/nominations.dart'
     deferred as _nominations;
+import 'package:fv_web/components/ui/copy_button.dart' deferred as _copy_button;
 import 'package:fv_web/data/codecs.dart' as _codecs;
 import 'package:fv_web/pages/detail/trend_chart.dart' deferred as _trend_chart;
+import 'package:fv_web/pages/doctor/doctor_tool.dart' deferred as _doctor_tool;
 import 'package:fv_web/pages/explore/category_tabs.dart'
     deferred as _category_tabs;
 import 'package:fv_web/pages/explore/explore_view.dart'
@@ -76,11 +78,23 @@ ClientOptions get defaultClientOptions => ClientOptions(
       ),
       loader: _nominations.loadLibrary,
     ),
+    'copy_button': ClientLoader(
+      (p) => _copy_button.CopyButton(
+        text: p['text'] as String,
+        label: p['label'] as String,
+        event: p['event'] as String?,
+      ),
+      loader: _copy_button.loadLibrary,
+    ),
     'trend_chart': ClientLoader(
       (p) => _trend_chart.TrendChart(
         detail: _codecs.DetailData.decode(p['detail'] as Map<String, Object?>),
       ),
       loader: _trend_chart.loadLibrary,
+    ),
+    'doctor_tool': ClientLoader(
+      (p) => _doctor_tool.DoctorTool(now: p['now'] as String),
+      loader: _doctor_tool.loadLibrary,
     ),
     'category_tabs': ClientLoader(
       (p) => _category_tabs.CategoryTabs(

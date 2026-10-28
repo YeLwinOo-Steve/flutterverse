@@ -9,6 +9,7 @@ import 'data/full_index.dart';
 import 'data/site_data.dart';
 import 'pages/about/about_page.dart';
 import 'pages/detail/detail_page.dart';
+import 'pages/doctor/doctor_page.dart';
 import 'pages/explore/category_page.dart';
 import 'pages/explore/explore_view.dart';
 import 'pages/hof/hof_page.dart';
@@ -96,6 +97,14 @@ List<RouteBase> siteRoutes(SiteData data) {
         total: index.projects.where((r) => r.isPublished).length,
         now: now,
       ),
+    ),
+    _page(
+      '/doctor',
+      title: _title('Pubspec Doctor: check your Flutter dependencies'),
+      description:
+          'Paste a pubspec.yaml, pubspec.lock or package list and see which Flutter and Dart dependencies are '
+          'healthy, stable, slowing or discontinued, with alternatives. Runs in your browser.',
+      builder: () => DoctorPage(now: data.now, tracked: index.projects.where((r) => r.isPublished).length),
     ),
     _page(
       '/hall-of-fame',
@@ -229,6 +238,7 @@ Route _detail(SiteData data, String id, ProjectDetail detail, Map<String, List<P
       byAuthor: moreByAuthor(r, byAuthor, exclude: detail.related.toSet()),
       categories: data.index.categories,
       now: data.now,
+      verdict: data.verdict(r),
     ),
   );
 }

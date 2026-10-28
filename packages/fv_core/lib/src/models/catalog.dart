@@ -37,7 +37,7 @@ class Catalog {
 /// discover nothing, so a catalog without a `discovery:` section only tracks
 /// its seeds.
 class Discovery {
-  const Discovery({this.pubTop = 0, this.githubMinStars});
+  const Discovery({this.pubTop = 0, this.githubMinStars, this.discontinuedWatch = const []});
 
   /// How many of pub.dev's most popular packages to track. Every Flutter
   /// Favorite is tracked whenever discovery is on.
@@ -47,10 +47,18 @@ class Discovery {
   /// many stars; null skips GitHub discovery.
   final int? githubMinStars;
 
+  /// Packages to check for pub.dev's discontinued flag although nothing
+  /// tracked depends on them, such as ones AI assistants still suggest.
+  /// They go in `discontinued.json`, never the index.
+  final List<String> discontinuedWatch;
+
   bool get enabled => pubTop > 0 || githubMinStars != null;
 
-  factory Discovery.fromJson(Json json) =>
-      Discovery(pubTop: asInt(json['pub_top']) ?? 0, githubMinStars: asInt(json['github_min_stars']));
+  factory Discovery.fromJson(Json json) => Discovery(
+    pubTop: asInt(json['pub_top']) ?? 0,
+    githubMinStars: asInt(json['github_min_stars']),
+    discontinuedWatch: asStrings(json['discontinued_watch']),
+  );
 }
 
 /// One yearly Hall of Fame edition.

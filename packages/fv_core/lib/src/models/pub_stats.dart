@@ -37,6 +37,9 @@ class PubStats {
     this.platforms = const [],
     this.topics = const [],
     this.flutterFavorite = false,
+    this.discontinued = false,
+    this.replacedBy,
+    this.dependencies = const [],
   });
 
   final String? version;
@@ -82,9 +85,22 @@ class PubStats {
 
   /// Display names: `iOS`, `Android`, `Web`, `WASM`, `macOS`, `Windows`, `Linux`.
   final List<String> platforms;
+
   /// The pubspec's `topics`, such as `state-management`.
   final List<String> topics;
   final bool flutterFavorite;
+
+  // Ingest-only: these feed `discontinued.json` and are never written to
+  // `p/<id>.json`, so they're absent after a JSON round trip.
+
+  /// pub.dev marks the package discontinued.
+  final bool discontinued;
+
+  /// The package pub.dev suggests instead of a [discontinued] one.
+  final String? replacedBy;
+
+  /// The latest version's pub.dev-hosted `dependencies`, by name.
+  final List<String> dependencies;
 
   /// Relative change in weekly downloads over the last quarter (13 weeks).
   double? get downloadGrowth {
@@ -116,6 +132,9 @@ class PubStats {
     platforms: platforms,
     topics: topics,
     flutterFavorite: flutterFavorite ?? this.flutterFavorite,
+    discontinued: discontinued,
+    replacedBy: replacedBy,
+    dependencies: dependencies,
   );
 
   factory PubStats.fromJson(Json json) => PubStats(

@@ -5,6 +5,7 @@ import 'package:jaspr/jaspr.dart';
 import '../../styles/css.dart';
 import 'commit_heatmap.dart';
 import 'detail_header.dart';
+import 'doctor_panel.dart';
 import 'history_timeline.dart';
 import 'kpi_cells.dart';
 import 'related_grid.dart';
@@ -19,6 +20,7 @@ class DetailPage extends StatelessComponent {
     required this.byAuthor,
     required this.categories,
     required this.now,
+    this.verdict,
     super.key,
   });
 
@@ -29,6 +31,9 @@ class DetailPage extends StatelessComponent {
   final List<ProjectRow> byAuthor;
   final Map<String, String> categories;
   final DateTime now;
+
+  /// Pubspec Doctor's verdict, for a published package.
+  final VerdictResult? verdict;
 
   @override
   Component build(BuildContext context) {
@@ -46,6 +51,7 @@ class DetailPage extends StatelessComponent {
           if (byAuthor.isNotEmpty) RelatedGrid(title: 'More by ${r.owner}', rows: byAuthor),
         ]),
         aside(classes: 'detail-aside', [
+          if ((r.pub, verdict) case (final name?, final v?)) DoctorPanel(package: name, result: v),
           ?pubPanel(detail, now),
           ?githubPanel(detail, now),
           if (r.platforms.isNotEmpty)

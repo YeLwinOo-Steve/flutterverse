@@ -10,6 +10,7 @@ const navItems = [
   (key: 'trending', label: 'Trending', path: '/rankings', icon: Icons.trending),
   (key: 'pub', label: 'pub.dev', path: '/pub', icon: Icons.box),
   (key: 'explore', label: 'Projects', path: '/projects', icon: Icons.layers),
+  (key: 'doctor', label: 'Doctor', path: '/doctor', icon: Icons.pulse),
   (key: 'hof', label: 'Hall of Fame', path: '/hall-of-fame', icon: Icons.trophy),
   (key: 'roadmap', label: 'Roadmap', path: '/roadmap', icon: Icons.roadmap),
   (key: 'about', label: 'About', path: '/about', icon: Icons.info),
@@ -23,6 +24,7 @@ String? navSection(String path) {
   if (path.startsWith('/rankings')) return 'trending';
   if (path.startsWith('/pub')) return 'pub';
   if (path.startsWith('/projects') || path.startsWith('/p/') || path.startsWith('/categories')) return 'explore';
+  if (path.startsWith('/doctor')) return 'doctor';
   if (path.startsWith('/hall-of-fame')) return 'hof';
   if (path.startsWith('/roadmap')) return 'roadmap';
   if (path.startsWith('/about')) return 'about';
@@ -70,11 +72,14 @@ class SiteNav extends StatelessComponent {
       'align-items': 'center',
       'gap': '7px',
       'font': sans(14, weight: 500),
-      'padding': '6px 12px',
+      'padding': '6px 10px',
       'border-radius': '2px',
       'white-space': 'nowrap',
       'color': 'var(--muted)',
     }),
+    // The capped header has no room for every item's icon too, so the bar
+    // shows labels only; the menu drawer keeps the icons.
+    rule('.site-nav a .icon', {'display': 'none'}),
     rule('.site-nav a:hover', {'color': 'var(--ink)'}),
     rule('.site-nav a.on', {'color': 'var(--ink)', 'background': 'var(--surface2)'}),
     below(navBreakpoint, [

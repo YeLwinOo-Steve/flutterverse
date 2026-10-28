@@ -32,6 +32,9 @@ jobs:
           else
             echo "No data branch yet; building without data."
           fi
+      # README badges link to /badge/<package>.json for years, so they live at
+      # their own short path rather than under /data/.
+      - run: if [ -d apps/web/web/data/badge ]; then mv apps/web/web/data/badge apps/web/web/badge; fi
       - uses: dart-lang/setup-dart@v1
         with: { sdk: stable }
       - run: dart pub get && dart pub global activate jaspr_cli

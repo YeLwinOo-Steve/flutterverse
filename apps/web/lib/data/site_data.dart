@@ -13,6 +13,7 @@ class SiteData {
     this.details = const {},
     this.hallOfFame = const HallOfFameFile(),
     this.roadmap = const RoadmapFile(tracks: {}),
+    this.discontinued = const DiscontinuedFile(),
   });
 
   final Meta? meta;
@@ -20,6 +21,14 @@ class SiteData {
   final Map<String, ProjectDetail> details;
   final HallOfFameFile hallOfFame;
   final RoadmapFile roadmap;
+  final DiscontinuedFile discontinued;
+
+  /// The Doctor verdict for a published [row], or null for an unpublished one.
+  VerdictResult? verdict(ProjectRow row) {
+    final name = row.pub;
+    if (name == null) return null;
+    return verdictOf(row, now: now, discontinued: discontinued.contains(name), replacedBy: discontinued.packages[name]);
+  }
 
   /// The reference time for relative dates, so builds are reproducible.
   DateTime get now => meta?.generatedAt ?? DateTime.now().toUtc();
@@ -50,6 +59,7 @@ class SiteData {
       },
       hallOfFame: read('hof.json', HallOfFameFile.fromJson) ?? const HallOfFameFile(),
       roadmap: read('roadmap.json', RoadmapFile.fromJson) ?? const RoadmapFile(tracks: {}),
+      discontinued: read('discontinued.json', DiscontinuedFile.fromJson) ?? const DiscontinuedFile(),
     );
   }
 }

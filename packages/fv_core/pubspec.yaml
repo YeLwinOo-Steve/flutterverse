@@ -5,5 +5,10 @@ resolution: workspace
 environment:
   sdk: ^3.10.0
 
+# Pure Dart, so it still compiles for the web: Pubspec Doctor parses pasted
+# pubspecs in the browser.
+dependencies:
+  yaml: ^3.1.0
+
 dev_dependencies:
   test: ^1.26.0
