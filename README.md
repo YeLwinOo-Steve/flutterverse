@@ -2,7 +2,7 @@
   <img width="128" height="128" src="apps/web/web/favicon.svg" alt="Flutterverse logo">
   <h1><b>Flutterverse</b></h1>
   <p>
-    The Flutter &amp; Dart ecosystem, measured daily: stars, pub.dev scores, momentum and a community Hall of Fame.
+    The Flutter &amp; Dart ecosystem, measured daily: stars, pub.dev scores, momentum, a dependency checker and a community Hall of Fame.
   </p>
   <p><a href="https://flutterverse.org"><b>flutterverse.org</b></a></p>
 </div>
@@ -17,17 +17,19 @@
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome"></a>
 </p>
 
-| 📈 | 🚀 | 🏆 | 🗺️ |
-|:---:|:---:|:---:|:---:|
-| **Daily stats** | **Momentum** | **Hall of Fame** | **Roadmap** |
-| GitHub stars, forks and issues plus pub.dev likes, points and downloads, refreshed every day | A 0–100 score for what's taking off right now, not just what's biggest | A yearly, editorially curated edition of standout projects and developers | A metro-map learning path through Dart and Flutter, with saved progress |
+| 📈 | 🚀 | 🩺 | 🏆 | 🗺️ |
+|:---:|:---:|:---:|:---:|:---:|
+| **Daily stats** | **Momentum** | **Pubspec Doctor** | **Hall of Fame** | **Roadmap** |
+| GitHub stars, forks and issues plus pub.dev likes, points and downloads, refreshed every day | A 0–100 score for what's taking off right now, not just what's biggest | Paste a pubspec and see which dependencies are healthy, slowing or discontinued, with alternatives | A yearly, editorially curated edition of standout projects and developers | A metro-map learning path through Dart and Flutter, with saved progress |
 
 
 ## Overview
 
 - **Thousands of projects**: every Flutter Favorite, pub.dev's 5,000 most popular packages and every public Dart repo on GitHub with 50+ stars, discovered daily and sorted into categories by their topics; hand-picked entries in [`config/seeds.yaml`](config/seeds.yaml) refine them
 - **Rankings and listings**: filter and sort by SDK, category, platform, stars, pub points and momentum
-- **Project pages**: trend charts, release timeline, maintenance status and related projects
+- **Project pages**: trend charts, release timeline, maintenance status, Doctor verdict and related projects
+- **Pubspec Doctor**: paste a `pubspec.yaml`, `pubspec.lock` or package list and get a verdict for every dependency, a project score and better-kept alternatives. It runs in your browser, so nothing is uploaded
+- **README badges**: maintainers can show their package's verdict with a Shields.io badge, copied from its project page
 - **Flutter Favorites**: every package in pub.dev's Flutter Favorite program
 - **Honest numbers**: when a source fails or history is too short, the site shows **N/A** rather than a made-up 0
 - **$0 to run**: no servers, just GitHub Actions, a `data` branch and a static site
@@ -46,7 +48,7 @@ flowchart LR
 
 1. A scheduled workflow runs **`fv_ingest`**, which discovers projects on pub.dev and GitHub (see `discovery:` in `config/seeds.yaml`), fetches their stats and scores every project.
 2. It writes per-screen JSON plus a daily history line per project, and commits them to the **`data`** branch.
-3. **`deploy-web`** pre-renders the [Jaspr](https://jaspr.site) site against that data and deploys it. Only the interactive pieces (tables, charts, Hall of Fame search, the lamp) hydrate in the browser.
+3. **`deploy-web`** pre-renders the [Jaspr](https://jaspr.site) site against that data and deploys it. Only the interactive pieces (tables, charts, Pubspec Doctor, Hall of Fame search, the lamp) hydrate in the browser.
 
 Models, metrics and formatting live in **`fv_core`**, shared by the ingest job and the site, so the two can never disagree on a number.
 
@@ -110,6 +112,21 @@ For a project with under a week of history, the week is estimated from the days 
 
 </details>
 
+<details>
+<summary><b>Doctor verdicts</b>: Replace now, Healthy, Stable, Watch or At risk</summary>
+
+The first rule that matches wins:
+
+1. **Replace now**: discontinued on pub.dev, or the GitHub repo is archived
+2. **Healthy**: maintenance is Active
+3. **Stable**: not Active, but 140+ pub points, a release within 3 years and downloads down no more than 10% a quarter, for finished packages such as `http` or `crypto`
+4. **Watch**: Slowing
+5. **At risk**: Low activity
+
+Without maintenance data there's no verdict ("Not enough data"), never a guess. A Healthy or Stable package with a high momentum score is tagged **Rising**. The project score is the share of direct dependencies with a verdict that are Healthy or Stable. Transitive, untracked, git and path dependencies are left out. The rules live in [`verdict.dart`](packages/fv_core/lib/src/metrics/verdict.dart) and are shared by Doctor, the project pages and the badges.
+
+</details>
+
 Star growth needs history, because GitHub only reports current counts (and no longer exposes stargazer dates), so trend numbers fill in as the daily history builds up.
 
 
@@ -139,6 +156,8 @@ tool/                 check_imports.dart enforces the package dependency rules
 | `index.json` | Slim rows for the listing and rankings tables |
 | `p/<id>.json` | Full detail and up to 90 days of history |
 | `pub.json` | Every Flutter Favorite |
+| `discontinued.json` | Packages pub.dev marks discontinued, and what it suggests instead, for Doctor |
+| `badge/<package>.json` | Each package's README badge in Shields.io's endpoint format, served at `/badge/<package>.json` |
 | `hof.json` | The Hall of Fame edition, with developers' GitHub stats |
 | `roadmap.json` | The learning roadmap |
 | `meta.json` | `generatedAt` and the schema version |
