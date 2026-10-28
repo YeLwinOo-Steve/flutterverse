@@ -4,3 +4,7 @@
 # Not content-hashed, so cache briefly; serve stale while revalidating.
 /main.css
   Cache-Control: public, max-age=600, stale-while-revalidate=86400
+# Shields.io reads the README badges from here; an hour keeps them fresh.
+/badge/*
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
