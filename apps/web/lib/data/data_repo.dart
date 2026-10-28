@@ -19,4 +19,14 @@ abstract final class DataRepo {
   });
 
   static Future<IndexFile> index() async => IndexFile.fromJson(await _get('index.json'));
+
+  /// Empty when the file is missing, as before the first ingest that writes
+  /// it: Doctor still works, it just can't flag untracked discontinued ones.
+  static Future<DiscontinuedFile> discontinued() async {
+    try {
+      return DiscontinuedFile.fromJson(await _get('discontinued.json'));
+    } on Object {
+      return const DiscontinuedFile();
+    }
+  }
 }

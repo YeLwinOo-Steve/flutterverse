@@ -14,8 +14,10 @@ import 'package:fv_web/components/layout/intro_controller.dart'
     as _intro_controller;
 import 'package:fv_web/components/layout/lamp.dart' as _lamp;
 import 'package:fv_web/components/nominate/nominations.dart' as _nominations;
+import 'package:fv_web/components/ui/copy_button.dart' as _copy_button;
 import 'package:fv_web/data/codecs.dart' as _codecs;
 import 'package:fv_web/pages/detail/trend_chart.dart' as _trend_chart;
+import 'package:fv_web/pages/doctor/doctor_tool.dart' as _doctor_tool;
 import 'package:fv_web/pages/explore/category_tabs.dart' as _category_tabs;
 import 'package:fv_web/pages/explore/explore_view.dart' as _explore_view;
 import 'package:fv_web/pages/hof/hof_pager.dart' as _hof_pager;
@@ -57,9 +59,17 @@ ServerOptions get defaultServerOptions => ServerOptions(
       'nominations',
       params: __nominationsNominations,
     ),
+    _copy_button.CopyButton: ClientTarget<_copy_button.CopyButton>(
+      'copy_button',
+      params: __copy_buttonCopyButton,
+    ),
     _trend_chart.TrendChart: ClientTarget<_trend_chart.TrendChart>(
       'trend_chart',
       params: __trend_chartTrendChart,
+    ),
+    _doctor_tool.DoctorTool: ClientTarget<_doctor_tool.DoctorTool>(
+      'doctor_tool',
+      params: __doctor_toolDoctorTool,
     ),
     _category_tabs.CategoryTabs: ClientTarget<_category_tabs.CategoryTabs>(
       'category_tabs',
@@ -101,8 +111,16 @@ ServerOptions get defaultServerOptions => ServerOptions(
 Map<String, Object?> __nominationsNominations(_nominations.Nominations c) => {
   'categories': c.categories,
 };
+Map<String, Object?> __copy_buttonCopyButton(_copy_button.CopyButton c) => {
+  'text': c.text,
+  'label': c.label,
+  'event': c.event,
+};
 Map<String, Object?> __trend_chartTrendChart(_trend_chart.TrendChart c) => {
   'detail': _codecs.DetailData(c.detail).encode(),
+};
+Map<String, Object?> __doctor_toolDoctorTool(_doctor_tool.DoctorTool c) => {
+  'now': c.now,
 };
 Map<String, Object?> __category_tabsCategoryTabs(
   _category_tabs.CategoryTabs c,
