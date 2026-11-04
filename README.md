@@ -29,6 +29,7 @@
 - **Rankings and listings**: filter and sort by SDK, category, platform, stars, pub points and momentum
 - **Project pages**: trend charts, release timeline, maintenance status, Doctor verdict and related projects
 - **Pubspec Doctor**: paste a `pubspec.yaml`, `pubspec.lock` or package list and get a verdict for every dependency, a project score and better-kept alternatives. It runs in your browser, so nothing is uploaded
+- **Flutter jobs**: open Flutter and Dart roles pulled every day from the hiring systems (Greenhouse, Lever, Ashby) of the companies in [`config/jobs.yaml`](config/jobs.yaml), Workable's official job feed, and the monthly Hacker News hiring thread. Every row links to the company's own posting; nothing is applied for on the site
 - **README badges**: maintainers can show their package's verdict with a Shields.io badge, copied from its project page
 - **Flutter Favorites**: every package in pub.dev's Flutter Favorite program
 - **Honest numbers**: when a source fails or history is too short, the site shows **N/A** rather than a made-up 0
@@ -64,6 +65,7 @@ dart pub get                                    # once, at the root
 # Fetch data into apps/web/web/data (history goes to .history/).
 # GITHUB_TOKEN is optional; without it GitHub numbers are N/A.
 GITHUB_TOKEN=$(gh auth token) dart run fv_ingest:ingest
+dart run fv_ingest:jobs                         # optional: open Flutter roles
 
 cd apps/web && jaspr serve                      # http://localhost:8080
 ```
@@ -78,6 +80,7 @@ dart run tool/check_imports.dart
 (cd packages/fv_ingest && dart test)
 (cd apps/web && dart test)
 dart run fv_ingest:validate_seeds --remote
+dart run fv_ingest:validate_jobs --remote
 ```
 
 </details>
@@ -158,10 +161,12 @@ tool/                 check_imports.dart enforces the package dependency rules
 | `pub.json` | Every Flutter Favorite |
 | `discontinued.json` | Packages pub.dev marks discontinued, and what it suggests instead, for Doctor |
 | `badge/<package>.json` | Each package's README badge in Shields.io's endpoint format, served at `/badge/<package>.json` |
+| `jobs.json` | Open Flutter roles: title, company, location, remote flag, link and first-seen day only |
 | `hof.json` | The Hall of Fame edition, with developers' GitHub stats |
 | `roadmap.json` | The learning roadmap |
 | `meta.json` | `generatedAt` and the schema version |
 | `history/<id>.ndjson` | One line of raw counters per project per day |
+| `history/jobs.json` | The jobs step's state: last run's rows and each company's failure streak |
 | `history/activity.json` | Each repo's commits per day over the past year, refreshed about weekly |
 
 </details>
@@ -170,6 +175,7 @@ tool/                 check_imports.dart enforces the package dependency rules
 ## Contributing
 
 - **Add a project:** popular ones are found automatically. For anything else, or to fix a name or category, send a one-file PR to [`config/seeds.yaml`](config/seeds.yaml). CI checks the package and repo exist.
+- **List your company's Flutter jobs:** add it to [`config/jobs.yaml`](config/jobs.yaml) with a PR. CI checks that its feed answers. To be removed, open an issue.
 - **Nominate for the Hall of Fame:** use the **Propose** buttons on the site, or the issue forms. Nominations are checked automatically, then reviewed by the editorial team.
 - **Work on the code:** follow [GUIDELINES.md](GUIDELINES.md). Small components, `fv_core` for shared logic, `null` for missing data.
 

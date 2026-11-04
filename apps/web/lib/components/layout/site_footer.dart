@@ -23,6 +23,7 @@ class SiteFooter extends StatelessComponent {
         ('pub.dev packages', '/pub', null),
         ('Projects', '/projects', null),
         ('Categories', '/categories', null),
+        ('Flutter jobs', '/jobs', null),
       ],
     ),
     (

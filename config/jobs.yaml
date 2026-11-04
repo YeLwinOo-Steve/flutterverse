@@ -1,0 +1,98 @@
+# Companies the daily jobs step polls for open Flutter and Dart roles.
+# Jobs only links out: each row on /jobs goes to the company's own posting.
+#
+# Add a company with a pull request. Fields:
+#   id       lowercase slug, unique here
+#   name     display name (quote it if it has a comma)
+#   ats      greenhouse | lever | ashby
+#   token    the board name in the hiring system's URL:
+#              job-boards.greenhouse.io/<token>   jobs.lever.co/<token>   jobs.ashbyhq.com/<token>
+#   region   Lever only: eu, for accounts on jobs.eu.lever.co
+#   careers  optional https URL of the company's own careers page
+#
+# Keep companies with no Flutter role open today: they cost one request a
+# day and show up when they hire. Check with:
+#   dart run fv_ingest:validate_jobs --remote
+#
+# Opening the PR? Use the jobs template: add `?template=jobs-company.md` to the
+# compare page URL, e.g.
+#   https://github.com/YeLwinOo-Steve/flutterverse/compare/main...<you>:<branch>?template=jobs-company.md
+# No PR? Use the "List a company on Jobs" issue form. To be removed, use the
+# "Remove roles from Jobs" form: https://github.com/YeLwinOo-Steve/flutterverse/issues/new/choose
+
+# Roles from Workable's job feed (all Workable customers) are dropped for these names
+# (any case): recruiters, staffing firms and marketplaces that post other
+# companies' roles, and posters that hide the employer.
+exclude_companies:
+  - Company
+  - Pavago
+  - Two95 International
+  - Workana
+  - Xcellink
+
+companies:
+  - {id: acorns, name: "Acorns", ats: ashby, token: acorns}
+  - {id: afero, name: "Afero", ats: lever, token: afero}
+  - {id: apadmi, name: "Apadmi", ats: greenhouse, token: apadmi}
+  - {id: appnation, name: "AppNation", ats: lever, token: appnation}
+  - {id: brainrocket, name: "BrainRocket", ats: greenhouse, token: brainrocketltd}
+  - {id: canonical, name: "Canonical", ats: greenhouse, token: canonical}
+  - {id: capco, name: "Capco", ats: greenhouse, token: capco}
+  - {id: capital-on-tap, name: "Capital on Tap", ats: greenhouse, token: capitalontap}
+  - {id: clera, name: "Clera", ats: ashby, token: Clera}
+  - {id: coins-ph, name: "Coins.ph", ats: lever, token: coins}
+  - {id: creatio, name: "Creatio", ats: lever, token: creatio, region: eu}
+  - {id: cresta, name: "Cresta", ats: greenhouse, token: cresta}
+  - {id: degreed, name: "Degreed", ats: greenhouse, token: degreed}
+  - {id: droids-on-roids, name: "Droids On Roids", ats: greenhouse, token: droidsonroids}
+  - {id: eliseai, name: "EliseAI", ats: ashby, token: eliseai}
+  - {id: eltropy, name: "Eltropy", ats: greenhouse, token: eltropyinc}
+  - {id: finch-care, name: "Finch Care", ats: ashby, token: finch}
+  - {id: flutterflow, name: "FlutterFlow", ats: ashby, token: flutterflow}
+  - {id: futo, name: "FUTO", ats: lever, token: futo-org}
+  - {id: galvany, name: "GALVANY", ats: ashby, token: galvany}
+  - {id: glomopay, name: "Glomopay", ats: ashby, token: glomo}
+  - {id: headspace, name: "Headspace", ats: greenhouse, token: hs}
+  - {id: highlevel, name: "HighLevel", ats: lever, token: gohighlevel}
+  - {id: hudu, name: "Hudu", ats: ashby, token: hudu}
+  - {id: idt, name: "IDT", ats: lever, token: idt}
+  - {id: in-the-pocket, name: "In The Pocket", ats: greenhouse, token: inthepocket}
+  - {id: joblogic, name: "Joblogic", ats: greenhouse, token: joblogic}
+  - {id: kalshi, name: "Kalshi", ats: ashby, token: kalshi}
+  - {id: kikoff, name: "Kikoff", ats: greenhouse, token: kikoff}
+  - {id: kled-ai, name: "Kled AI", ats: ashby, token: kled-ai}
+  - {id: labhouse, name: "LABHOUSE", ats: ashby, token: labhouse}
+  - {id: leona-health, name: "Leona Health", ats: ashby, token: leona}
+  - {id: life-church, name: "Life.Church", ats: lever, token: life}
+  - {id: mapbox, name: "Mapbox", ats: ashby, token: Mapbox}
+  - {id: microblink, name: "Microblink", ats: greenhouse, token: microblink}
+  - {id: moniepoint, name: "Moniepoint", ats: greenhouse, token: moniepoint}
+  - {id: nubank, name: "Nubank", ats: ashby, token: nubank}
+  - {id: okx, name: "OKX", ats: greenhouse, token: okx}
+  - {id: palo-it, name: "PALO IT", ats: ashby, token: palo-it}
+  - {id: plane, name: "Plane", ats: ashby, token: plane}
+  - {id: plaud, name: "Plaud", ats: ashby, token: Plaud}
+  - {id: posthog, name: "PostHog", ats: ashby, token: posthog}
+  - {id: radar, name: "Radar", ats: ashby, token: radar}
+  - {id: reaktor, name: "Reaktor", ats: ashby, token: Reaktor}
+  - {id: revenuecat, name: "RevenueCat", ats: ashby, token: revenuecat}
+  - {id: riseguide, name: "RiseGuide", ats: ashby, token: RiseGuide}
+  - {id: scandit, name: "Scandit", ats: greenhouse, token: scandit}
+  - {id: sentry, name: "Sentry", ats: ashby, token: sentry}
+  - {id: smart-state, name: "Smart State", ats: greenhouse, token: smartstate}
+  - {id: softana, name: "Softana", ats: greenhouse, token: softana}
+  - {id: sourgum, name: "Sourgum", ats: ashby, token: sourgum}
+  - {id: spruceid, name: "SpruceID", ats: ashby, token: spruceid}
+  - {id: supabase, name: "Supabase", ats: ashby, token: supabase}
+  - {id: tide, name: "Tide", ats: greenhouse, token: tide}
+  - {id: tin-can, name: "Tin Can", ats: ashby, token: tin-can}
+  - {id: twin-health, name: "Twin Health", ats: greenhouse, token: twinhealth}
+  - {id: valtech, name: "Valtech", ats: greenhouse, token: valtech}
+  - {id: vio, name: "Vio", ats: ashby, token: vio}
+  - {id: weave, name: "Weave", ats: ashby, token: weave}
+  - {id: wisecode, name: "WISEcode", ats: lever, token: wisecode}
+  - {id: yadda, name: "Yadda", ats: ashby, token: yadda}
+  - {id: zartis, name: "Zartis", ats: lever, token: zartis}
+  - {id: zeely, name: "Zeely", ats: ashby, token: zeely}
+  - {id: zenoti, name: "Zenoti", ats: greenhouse, token: zenoti}
+  - {id: zocks, name: "Zocks", ats: lever, token: zocks}

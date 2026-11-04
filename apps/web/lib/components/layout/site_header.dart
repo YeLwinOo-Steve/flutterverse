@@ -146,6 +146,11 @@ class SiteHeader extends StatelessComponent {
       'color': 'var(--ink)',
       'border-radius': '2px',
     }),
+    // The bar's links carry icons; between the menu breakpoint and here the
+    // divider's room goes to them.
+    below(1200, [
+      rule('.bar-divider', {'display': 'none'}),
+    ]),
     below(720, [
       rule('.site-header .bar', {'padding': '0 16px', 'gap': '12px'}),
       rule('.bar-divider', {'display': 'none'}),

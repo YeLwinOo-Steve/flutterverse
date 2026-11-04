@@ -4,17 +4,26 @@ import 'package:jaspr/jaspr.dart';
 import '../../styles/css.dart';
 import '../ui/icon.dart';
 import '../ui/icons.dart';
+import 'nav_more.dart';
 
-/// The primary destinations, shared by the bar and the mobile menu.
-const navItems = [
+/// The bar's top-level destinations, in order.
+const navPrimary = [
   (key: 'trending', label: 'Trending', path: '/rankings', icon: Icons.trending),
   (key: 'pub', label: 'pub.dev', path: '/pub', icon: Icons.box),
   (key: 'explore', label: 'Projects', path: '/projects', icon: Icons.layers),
+  (key: 'jobs', label: 'Jobs', path: '/jobs', icon: Icons.briefcase),
   (key: 'doctor', label: 'Doctor', path: '/doctor', icon: Icons.pulse),
+];
+
+/// The destinations inside the bar's "More" dropdown.
+const navMore = [
   (key: 'hof', label: 'Hall of Fame', path: '/hall-of-fame', icon: Icons.trophy),
   (key: 'roadmap', label: 'Roadmap', path: '/roadmap', icon: Icons.roadmap),
   (key: 'about', label: 'About', path: '/about', icon: Icons.info),
 ];
+
+/// Every destination, for the mobile menu, which stays one flat list.
+const navItems = [...navPrimary, ...navMore];
 
 /// Below this width the bar's links collapse into the menu button.
 const navBreakpoint = 960;
@@ -25,13 +34,14 @@ String? navSection(String path) {
   if (path.startsWith('/pub')) return 'pub';
   if (path.startsWith('/projects') || path.startsWith('/p/') || path.startsWith('/categories')) return 'explore';
   if (path.startsWith('/doctor')) return 'doctor';
+  if (path.startsWith('/jobs')) return 'jobs';
   if (path.startsWith('/hall-of-fame')) return 'hof';
   if (path.startsWith('/roadmap')) return 'roadmap';
   if (path.startsWith('/about')) return 'about';
   return null;
 }
 
-/// The primary navigation, fading out at the right edge when it overflows.
+/// The primary navigation: the [navPrimary] links, then [NavMore].
 /// Below [navBreakpoint] the [NavMenu] drawer replaces it.
 class SiteNav extends StatelessComponent {
   const SiteNav({super.key});
@@ -43,13 +53,14 @@ class SiteNav extends StatelessComponent {
       classes: 'site-nav',
       attributes: {'aria-label': 'Primary'},
       [
-        for (final item in navItems)
+        for (final item in navPrimary)
           a(
             href: item.path,
             classes: item.key == current ? 'on' : null,
             attributes: {if (item.key == current) 'aria-current': 'page'},
             [Icon(item.icon), .text(item.label)],
           ),
+        NavMore(current: current),
       ],
     );
   }
@@ -61,12 +72,10 @@ class SiteNav extends StatelessComponent {
       'gap': '2px',
       'flex': '1',
       'min-width': '0',
-      'overflow-x': 'auto',
-      'scrollbar-width': 'none',
-      '-webkit-mask-image': 'linear-gradient(to right,#000 calc(100% - 28px),transparent)',
-      'mask-image': 'linear-gradient(to right,#000 calc(100% - 28px),transparent)',
-      'padding-right': '28px',
+      'align-items': 'center',
     }),
+    // No overflow scroll or edge fade: they would clip the open More panel,
+    // and six entries fit from the breakpoint up.
     rule('.site-nav a', {
       'display': 'flex',
       'align-items': 'center',
@@ -77,9 +86,7 @@ class SiteNav extends StatelessComponent {
       'white-space': 'nowrap',
       'color': 'var(--muted)',
     }),
-    // The capped header has no room for every item's icon too, so the bar
-    // shows labels only; the menu drawer keeps the icons.
-    rule('.site-nav a .icon', {'display': 'none'}),
+    rule('.site-nav .icon', {'flex-shrink': '0'}),
     rule('.site-nav a:hover', {'color': 'var(--ink)'}),
     rule('.site-nav a.on', {'color': 'var(--ink)', 'background': 'var(--surface2)'}),
     below(navBreakpoint, [

@@ -29,6 +29,7 @@ import 'package:fv_web/pages/hof/hof_pager.dart' deferred as _hof_pager;
 import 'package:fv_web/pages/hof/hof_search.dart' deferred as _hof_search;
 import 'package:fv_web/pages/home/trending_card.dart'
     deferred as _trending_card;
+import 'package:fv_web/pages/jobs/jobs_view.dart' deferred as _jobs_view;
 import 'package:fv_web/pages/projects/projects_view.dart'
     deferred as _projects_view;
 import 'package:fv_web/pages/pub/pub_view.dart' deferred as _pub_view;
@@ -129,6 +130,13 @@ ClientOptions get defaultClientOptions => ClientOptions(
         now: p['now'] as String,
       ),
       loader: _trending_card.loadLibrary,
+    ),
+    'jobs_view': ClientLoader(
+      (p) => _jobs_view.JobsView(
+        jobs: _codecs.JobsData.decode(p['jobs'] as Map<String, Object?>),
+        now: p['now'] as String,
+      ),
+      loader: _jobs_view.loadLibrary,
     ),
     'projects_view': ClientLoader(
       (p) => _projects_view.ProjectsView(

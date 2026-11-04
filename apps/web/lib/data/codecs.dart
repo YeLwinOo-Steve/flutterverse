@@ -29,3 +29,11 @@ extension type RoadmapData(RoadmapFile file) implements RoadmapFile {
   @encoder
   Map<String, Object?> encode() => file.toJson();
 }
+
+extension type JobsData(JobsFile file) implements JobsFile {
+  @decoder
+  static JobsData decode(Map<String, Object?> json) => JobsData(JobsFile.fromJson(json));
+
+  @encoder
+  Map<String, Object?> encode() => file.toJson();
+}
