@@ -1,0 +1,54 @@
+name: List a company on Jobs
+description: Ask for a company's open Flutter roles to appear on flutterverse Jobs.
+title: 'Jobs: add '
+labels: [jobs]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Jobs lists open Flutter and Dart roles from a company's own hiring system and links straight to each posting.
+        Nothing is hosted, applied for or paid for on Flutterverse.
+
+        Prefer a pull request? Add a line to [`config/jobs.yaml`](../blob/main/config/jobs.yaml) and pick the **jobs-company** template.
+  - type: input
+    id: company
+    attributes:
+      label: Company name
+      placeholder: Acme
+    validations:
+      required: true
+  - type: dropdown
+    id: ats
+    attributes:
+      label: Hiring system
+      description: Only these three publish the public feed Jobs reads.
+      options:
+        - Greenhouse
+        - Lever
+        - Ashby
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: board
+    attributes:
+      label: Job board URL
+      description: The page that lists all of the company's open roles on that system.
+      placeholder: https://jobs.ashbyhq.com/acme
+    validations:
+      required: true
+  - type: input
+    id: careers
+    attributes:
+      label: Careers page (optional)
+      description: The company's own careers page. The company name on each card links here.
+      placeholder: https://acme.com/careers
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you send
+      options:
+        - label: I work at this company, or the company is happy to be listed.
+          required: false
+        - label: The company hires for Flutter or Dart, now or regularly.
+          required: true

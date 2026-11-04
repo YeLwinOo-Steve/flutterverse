@@ -9,6 +9,8 @@ executables:
   ingest:
   validate_seeds:
   triage_nomination:
+  jobs:
+  validate_jobs:
 
 dependencies:
   args: ^2.7.0

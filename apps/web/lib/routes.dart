@@ -14,6 +14,7 @@ import 'pages/explore/category_page.dart';
 import 'pages/explore/explore_view.dart';
 import 'pages/hof/hof_page.dart';
 import 'pages/home/home_page.dart';
+import 'pages/jobs/jobs_page.dart';
 import 'pages/projects/projects_view.dart';
 import 'pages/pub/pub_view.dart';
 import 'pages/rankings/rankings_view.dart';
@@ -107,6 +108,14 @@ List<RouteBase> siteRoutes(SiteData data) {
       builder: () => DoctorPage(now: data.now, tracked: index.projects.where((r) => r.isPublished).length),
     ),
     _page(
+      '/jobs',
+      title: _title('Flutter jobs: open Flutter and Dart developer roles'),
+      description:
+          'Open Flutter and Dart developer jobs, pulled every day from companies\' own hiring pages. '
+          'Filter by remote and search by title, company or location, then apply on the company\'s site.',
+      builder: () => JobsPage(jobs: data.jobs, now: data.jobs.generatedAt ?? data.now),
+    ),
+    _page(
       '/hall-of-fame',
       title: _title('Flutter Hall of Fame${edition == null ? '' : ' ${edition.year}'}'),
       description:
@@ -144,10 +153,8 @@ List<RouteBase> siteRoutes(SiteData data) {
           'databases, UI, animation, testing and more.',
       builder: () => ExploreView.summarize(index),
     ),
-    for (final MapEntry(key: slug, value: label) in index.categories.entries)
-      _category(data, slug, label),
-    for (final MapEntry(key: id, value: detail) in data.details.entries)
-      _detail(data, id, detail, byAuthor),
+    for (final MapEntry(key: slug, value: label) in index.categories.entries) _category(data, slug, label),
+    for (final MapEntry(key: id, value: detail) in data.details.entries) _detail(data, id, detail, byAuthor),
     _page(
       '/404.html',
       title: _title('Page not found'),
@@ -244,5 +251,4 @@ Route _detail(SiteData data, String id, ProjectDetail detail, Map<String, List<P
 }
 
 /// "State management" → "state management"; acronyms such as "UI" stay.
-String _lowerLabel(String label) =>
-    label.split(' ').map((w) => w == w.toUpperCase() ? w : w.toLowerCase()).join(' ');
+String _lowerLabel(String label) => label.split(' ').map((w) => w == w.toUpperCase() ? w : w.toLowerCase()).join(' ');

@@ -23,6 +23,7 @@ import 'package:fv_web/pages/explore/explore_view.dart' as _explore_view;
 import 'package:fv_web/pages/hof/hof_pager.dart' as _hof_pager;
 import 'package:fv_web/pages/hof/hof_search.dart' as _hof_search;
 import 'package:fv_web/pages/home/trending_card.dart' as _trending_card;
+import 'package:fv_web/pages/jobs/jobs_view.dart' as _jobs_view;
 import 'package:fv_web/pages/projects/projects_view.dart' as _projects_view;
 import 'package:fv_web/pages/pub/pub_view.dart' as _pub_view;
 import 'package:fv_web/pages/rankings/rankings_view.dart' as _rankings_view;
@@ -88,6 +89,10 @@ ServerOptions get defaultServerOptions => ServerOptions(
       'trending_card',
       params: __trending_cardTrendingCard,
     ),
+    _jobs_view.JobsView: ClientTarget<_jobs_view.JobsView>(
+      'jobs_view',
+      params: __jobs_viewJobsView,
+    ),
     _projects_view.ProjectsView: ClientTarget<_projects_view.ProjectsView>(
       'projects_view',
       params: __projects_viewProjectsView,
@@ -138,6 +143,10 @@ Map<String, Object?> __hof_pagerHofPager(_hof_pager.HofPager c) => {
 Map<String, Object?> __trending_cardTrendingCard(
   _trending_card.TrendingCard c,
 ) => {'index': _codecs.IndexData(c.index).encode(), 'now': c.now};
+Map<String, Object?> __jobs_viewJobsView(_jobs_view.JobsView c) => {
+  'jobs': _codecs.JobsData(c.jobs).encode(),
+  'now': c.now,
+};
 Map<String, Object?> __projects_viewProjectsView(
   _projects_view.ProjectsView c,
 ) => {

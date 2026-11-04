@@ -1,5 +1,5 @@
-# Daily data job: fetches pub.dev and GitHub stats and commits them to the
-# `data` branch. A successful run triggers deploy-web.
+# Daily data job: fetches pub.dev and GitHub stats, and open Flutter jobs,
+# and commits them to the `data` branch. A successful run triggers deploy-web.
 
 name: ingest
 
@@ -42,6 +42,11 @@ jobs:
       # thousands of repos. Pushing to `data` still uses the built-in one.
       - run: dart run fv_ingest:ingest --out out/data --history out/history --activity out/history/activity.json --concurrency 8
         env: { GITHUB_TOKEN: '${{ secrets.INGEST_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}' }
+
+      # Open Flutter roles from config/jobs.yaml and Hacker News. Its own step
+      # so a jobs failure never blocks the daily data commit.
+      - run: dart run fv_ingest:jobs --out out/data --state out/history/jobs.json
+        continue-on-error: true
 
       - name: Commit and push
         working-directory: out

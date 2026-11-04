@@ -1,0 +1,49 @@
+# The Jobs page fills these fields in from a job card through query
+# parameters named after each field's `id` (see jobReportUrl in
+# apps/web/lib/pages/jobs/jobs_filter.dart). Rename ids in both places.
+name: Report or remove a job
+description: Report a listed role (closed, not Flutter) or ask for a company's roles to come off Jobs.
+title: 'Jobs: remove '
+labels: [jobs]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reports and removal requests are handled within a week. A removed company is taken out of
+        `config/jobs.yaml`, and its roles drop off the page on the next daily run.
+  - type: input
+    id: company
+    attributes:
+      label: Company
+      placeholder: Acme
+    validations:
+      required: true
+  - type: input
+    id: job-title
+    attributes:
+      label: Job title
+      description: Leave empty to remove all of the company's roles.
+  - type: input
+    id: job-link
+    attributes:
+      label: Job link
+      description: The posting's URL, as linked from the Jobs page.
+  - type: input
+    id: location
+    attributes:
+      label: Location
+  - type: dropdown
+    id: reason
+    attributes:
+      label: Reason
+      options:
+        - The role has closed
+        - It isn't a Flutter or Dart role
+        - Remove all of our company's roles
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details (optional)

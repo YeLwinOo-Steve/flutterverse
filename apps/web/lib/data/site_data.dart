@@ -14,6 +14,7 @@ class SiteData {
     this.hallOfFame = const HallOfFameFile(),
     this.roadmap = const RoadmapFile(tracks: {}),
     this.discontinued = const DiscontinuedFile(),
+    this.jobs = const JobsFile(),
   });
 
   final Meta? meta;
@@ -22,6 +23,9 @@ class SiteData {
   final HallOfFameFile hallOfFame;
   final RoadmapFile roadmap;
   final DiscontinuedFile discontinued;
+
+  /// Open Flutter roles; empty before the first jobs run.
+  final JobsFile jobs;
 
   /// The Doctor verdict for a published [row], or null for an unpublished one.
   VerdictResult? verdict(ProjectRow row) {
@@ -60,6 +64,7 @@ class SiteData {
       hallOfFame: read('hof.json', HallOfFameFile.fromJson) ?? const HallOfFameFile(),
       roadmap: read('roadmap.json', RoadmapFile.fromJson) ?? const RoadmapFile(tracks: {}),
       discontinued: read('discontinued.json', DiscontinuedFile.fromJson) ?? const DiscontinuedFile(),
+      jobs: read('jobs.json', JobsFile.fromJson) ?? const JobsFile(),
     );
   }
 }

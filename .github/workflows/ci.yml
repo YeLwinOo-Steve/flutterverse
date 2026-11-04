@@ -30,6 +30,8 @@ jobs:
       # Checks that every package exists on pub.dev and every repo resolves.
       - run: dart run fv_ingest:validate_seeds --remote
         env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+      # Checks that every company's jobs feed answers.
+      - run: dart run fv_ingest:validate_jobs --remote
 
   web:
     runs-on: ubuntu-latest

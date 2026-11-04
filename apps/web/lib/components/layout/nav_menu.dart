@@ -6,12 +6,19 @@ import '../ui/icon.dart';
 import '../ui/icons.dart';
 import 'site_nav.dart';
 
-/// Inline in `<head>`, so it works before hydration: Escape closes the menu,
-/// and a page restored from the back/forward cache comes back with it closed.
+/// Inline in `<head>`, so it works before hydration. Escape closes the menu
+/// and the bar's More panel (returning focus to its summary), a click outside
+/// More or on one of its links closes it, and a page restored from the
+/// back/forward cache comes back with both closed.
 const navBootScript = '''
-(function(){function c(){var m=document.getElementById('nav-open');if(m)m.checked=false;}
-addEventListener('keydown',function(e){if(e.key==='Escape')c();});
-addEventListener('pageshow',function(e){if(e.persisted)c();});})();''';
+(function(){function m(){var c=document.getElementById('nav-open');if(c)c.checked=false;}
+function d(f){var o=document.querySelectorAll('details.nav-more[open]');for(var i=0;i<o.length;i++){
+if(f&&o[i].contains(f))continue;o[i].open=false;}return o;}
+addEventListener('keydown',function(e){if(e.key!=='Escape')return;m();var o=d();
+for(var i=0;i<o.length;i++){if(o[i].contains(document.activeElement))o[i].querySelector('summary').focus();}});
+addEventListener('click',function(e){var t=e.target;if(!(t instanceof Element))return;
+if(t.closest('.nav-more-panel a'))d();else d(t.closest('details.nav-more'));});
+addEventListener('pageshow',function(e){if(e.persisted){m();d();}});})();''';
 
 /// The menu button and drop-down drawer that stand in for [SiteNav] below
 /// [navBreakpoint].

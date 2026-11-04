@@ -49,6 +49,16 @@ dart run fv_ingest:validate_seeds --remote  # also checks pub.dev/GitHub (set GI
 
 CI runs the same checks on every pull request.
 
+## Jobs
+
+Companies on the Jobs page live in [`config/jobs.yaml`](config/jobs.yaml).
+To list one, either send a PR adding a line (open it with
+`?template=jobs-company.md` on the compare URL to get the jobs checklist), or
+use the **List a company on Jobs** issue form. To take a company off, use the
+**Remove roles from Jobs** form; removals are handled within a week. CI runs
+`dart run fv_ingest:validate_jobs --remote` on every PR, which checks each
+company's feed answers.
+
 ## Hall of Fame nominations
 
 Anyone with a GitHub account can nominate a developer or project, from the
