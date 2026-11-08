@@ -70,7 +70,7 @@ class JobsView extends StatefulComponent {
       'grid-template-columns': 'repeat(2,minmax(0,1fr))',
       'gap': '16px',
     }),
-    rule('.jobs-grid > li', {'display': 'flex'}),
+    rule('.jobs-grid > li', {'display': 'flex', 'min-width': '0'}),
     rule('.jobs-grid > li > .job-card', {'flex': '1'}),
     rule('.jobs-sentinel', {
       'display': 'flex',
@@ -80,8 +80,10 @@ class JobsView extends StatefulComponent {
       'color': 'var(--muted)',
     }),
     rule('.jobs-end', {'text-align': 'center', 'font': mono(12, weight: 400), 'color': 'var(--muted)'}),
+    // minmax(0,…): a bare 1fr track never shrinks below its content's
+    // min width, which pushed cards past the screen edge on phones.
     below(860, [
-      rule('.jobs-grid', {'grid-template-columns': '1fr'}),
+      rule('.jobs-grid', {'grid-template-columns': 'minmax(0,1fr)'}),
     ]),
   ];
 }
