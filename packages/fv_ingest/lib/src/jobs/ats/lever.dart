@@ -7,7 +7,10 @@ import 'job_board.dart';
 
 /// Lever's postings API: `api.lever.co/v0/postings/<slug>?mode=json`.
 ///
-/// Pages of [pageSize] through `skip` and `limit`. Some accounts live only
+/// Pages of [pageSize] through `skip` and `limit`. Pay comes from
+/// `salaryRange` (`min`, `max`, `currency`, `interval`), and its
+/// `salaryDescriptionPlain` joins the text, where "negotiable" may be.
+/// Some accounts live only
 /// on `api.eu.lever.co`: `region: eu` goes there directly, and a 404 on the
 /// global host retries there.
 class LeverBoard implements JobBoard {
@@ -52,9 +55,35 @@ class LeverBoard implements JobBoard {
       id: '${j['id']}',
       title: title,
       url: url,
-      text: [?(j['descriptionPlain'] as String?), ...lists, ?(j['additionalPlain'] as String?)].join('\n'),
+      text: [
+        ?(j['descriptionPlain'] as String?),
+        ...lists,
+        ?(j['additionalPlain'] as String?),
+        ?(j['salaryDescriptionPlain'] as String?),
+      ].join('\n'),
       location: nonBlank((j['categories'] as Json?)?['location']),
       remote: j['workplaceType'] == 'remote' ? true : null,
+      salary: leverPay(j['salaryRange']),
     );
   }
+}
+
+/// Lever's `salaryRange`. Its `interval` is `per-year-salary`,
+/// `per-month-salary`, `per-hour-wage` and so on; `one-time` has no period.
+Salary? leverPay(Object? range) {
+  if (range is! Json) return null;
+  int? whole(Object? v) => v is num && v > 0 ? v.round() : null;
+  final min = whole(range['min']);
+  final max = whole(range['max']);
+  if (min == null && max == null) return null;
+  final interval = '${range['interval'] ?? ''}';
+  return Salary(
+    min: min,
+    max: max,
+    currency: nonBlank(range['currency'])?.toUpperCase(),
+    per: [
+      for (final p in PayPeriod.values)
+        if (interval.contains(p.name)) p,
+    ].firstOrNull,
+  );
 }

@@ -7,6 +7,7 @@ import 'hn_hiring.dart';
 import 'jobs_config.dart';
 import 'jobs_store.dart';
 import 'posting.dart';
+import 'salary.dart';
 import 'company_search.dart';
 
 /// Hacker News rows use this as their company id.
@@ -98,6 +99,7 @@ Future<JobsResult> runJobs({
       url: p.url,
       location: p.location,
       remote: p.remote,
+      salary: p.salary ?? salaryFromText(p.text),
       source: source,
       match: match,
       firstSeen: prevById[id]?.firstSeen ?? today,

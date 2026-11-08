@@ -67,6 +67,12 @@ class JobCard extends StatelessComponent {
         ),
       ]),
       div(classes: 'job-card-tags', [
+        if (j.salary case final pay?)
+          span(
+            classes: pay.negotiable ? 'job-tag pay negotiable' : 'job-tag pay',
+            attributes: {'title': pay.negotiable ? 'The posting says pay is negotiable' : 'Pay as the posting states it'},
+            [const Icon(Icons.cash, size: 12), .text(pay.negotiable ? 'Salary negotiable' : pay.label)],
+          ),
         if (j.remote == true) span(classes: 'job-tag remote', [const Icon(Icons.globe, size: 12), .text('Remote')]),
         if (j.match == JobMatch.mentions) span(classes: 'job-tag', [.text('Uses Flutter')]),
       ]),
@@ -101,6 +107,9 @@ class JobCard extends StatelessComponent {
       'display': 'flex',
       'flex-direction': 'column',
       'gap': '16px',
+      // Never wider than its grid cell: long company names and locations
+      // ellipsize instead of stretching the card.
+      'min-width': '0',
       'padding': '22px 22px 18px',
       'background': 'var(--surface)',
       'border': '1px solid var(--line)',
@@ -165,8 +174,10 @@ class JobCard extends StatelessComponent {
       'font-weight': '600',
       'line-height': '1.35',
       'letter-spacing': '-0.01em',
+      'overflow-wrap': 'anywhere',
+      // Room for most titles; Hacker News headers run to 140 characters.
       'display': '-webkit-box',
-      '-webkit-line-clamp': '2',
+      '-webkit-line-clamp': '3',
       '-webkit-box-orient': 'vertical',
       'overflow': 'hidden',
     }),
@@ -230,6 +241,14 @@ class JobCard extends StatelessComponent {
       'color': 'var(--muted)',
     }),
     rule('.job-tag.remote', {'background': 'var(--accent-soft)', 'color': 'var(--pos)'}),
+    rule('.job-tag.pay', {
+      'font': mono(12, weight: 600),
+      'color': 'var(--ink)',
+      'background': 'transparent',
+      'box-shadow': 'inset 0 0 0 1px var(--line)',
+    }),
+    rule('.job-tag.pay.negotiable', {'font-weight': '500', 'color': 'var(--muted)'}),
+    rule('.job-tag .icon', {'flex-shrink': '0'}),
     rule('.job-card-foot', {
       'display': 'flex',
       'align-items': 'center',
@@ -238,7 +257,14 @@ class JobCard extends StatelessComponent {
       'margin-top': 'auto',
       'font-size': '13px',
     }),
-    rule('.job-card-meta', {'font': mono(12, weight: 400), 'color': 'var(--muted)', 'white-space': 'nowrap'}),
+    rule('.job-card-meta', {
+      'font': mono(12, weight: 400),
+      'color': 'var(--muted)',
+      'white-space': 'nowrap',
+      'overflow': 'hidden',
+      'text-overflow': 'ellipsis',
+      'min-width': '0',
+    }),
     rule('.job-card-go', {
       'display': 'inline-flex',
       'align-items': 'center',
@@ -249,6 +275,26 @@ class JobCard extends StatelessComponent {
     }),
     rule('.job-card-go .icon', {'flex-shrink': '0', 'transition': 'transform .15s ease'}),
     rule('.job-card:hover .job-card-go .icon', {'transform': 'translate(2px,-2px)'}),
+    // Phones: the title gets the card's full width on its own row, under a
+    // short row of tile, company and flag, instead of a ~200px column beside
+    // the tile, and shows in full.
+    below(560, [
+      rule('.job-card', {'padding': '18px 16px 16px', 'gap': '14px'}),
+      rule('.job-card.fresh', {'padding-top': '26px'}),
+      rule('.job-card-head', {
+        'display': 'grid',
+        'grid-template-columns': 'auto minmax(0,1fr) auto',
+        'align-items': 'center',
+        'column-gap': '12px',
+        'row-gap': '12px',
+      }),
+      rule('.job-card-heading', {'display': 'contents'}),
+      rule('.job-card-tile', {'width': '36px', 'height': '36px', 'font-size': '13px', 'grid-row': '1'}),
+      rule('.job-card-sub', {'grid-row': '1', 'grid-column': '2'}),
+      rule('.job-card-report', {'grid-row': '1', 'grid-column': '3', 'margin': '0 -6px 0 0'}),
+      rule('.job-card-title', {'grid-row': '2', 'grid-column': '1 / -1', '-webkit-line-clamp': 'unset', 'display': 'block'}),
+      rule('.job-card-foot', {'flex-wrap': 'wrap', 'row-gap': '8px'}),
+    ]),
     css.media(MediaQuery.raw('(prefers-reduced-motion: reduce)'), [
       rule('.job-card, .job-card-go .icon, .job-card-report', {'transition': 'none'}),
       rule('.job-card:hover', {'transform': 'none'}),

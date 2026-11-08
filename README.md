@@ -29,7 +29,7 @@
 - **Rankings and listings**: filter and sort by SDK, category, platform, stars, pub points and momentum
 - **Project pages**: trend charts, release timeline, maintenance status, Doctor verdict and related projects
 - **Pubspec Doctor**: paste a `pubspec.yaml`, `pubspec.lock` or package list and get a verdict for every dependency, a project score and better-kept alternatives. It runs in your browser, so nothing is uploaded
-- **Flutter jobs**: open Flutter and Dart roles pulled every day from the hiring systems (Greenhouse, Lever, Ashby) of the companies in [`config/jobs.yaml`](config/jobs.yaml), Workable's official job feed, and the monthly Hacker News hiring thread. Every row links to the company's own posting; nothing is applied for on the site
+- **Flutter jobs**: open Flutter and Dart roles pulled every day from the hiring systems (Greenhouse, Lever, Ashby) of the companies in [`config/jobs.yaml`](config/jobs.yaml), Workable's official job feed, and the monthly Hacker News hiring thread. Each card shows the pay the posting states (from the hiring system's pay fields, or a range or "negotiable" in the description), and links to the company's own posting; nothing is applied for on the site
 - **README badges**: maintainers can show their package's verdict with a Shields.io badge, copied from its project page
 - **Flutter Favorites**: every package in pub.dev's Flutter Favorite program
 - **Honest numbers**: when a source fails or history is too short, the site shows **N/A** rather than a made-up 0
@@ -161,7 +161,7 @@ tool/                 check_imports.dart enforces the package dependency rules
 | `pub.json` | Every Flutter Favorite |
 | `discontinued.json` | Packages pub.dev marks discontinued, and what it suggests instead, for Doctor |
 | `badge/<package>.json` | Each package's README badge in Shields.io's endpoint format, served at `/badge/<package>.json` |
-| `jobs.json` | Open Flutter roles: title, company, location, remote flag, link and first-seen day only |
+| `jobs.json` | Open Flutter roles: title, company, location, remote flag, stated pay, link and first-seen day only |
 | `hof.json` | The Hall of Fame edition, with developers' GitHub stats |
 | `roadmap.json` | The learning roadmap |
 | `meta.json` | `generatedAt` and the schema version |

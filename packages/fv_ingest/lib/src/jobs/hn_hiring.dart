@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../http_util.dart';
 import 'ats/job_board.dart';
 import 'posting.dart';
+import 'salary.dart';
 
 /// The monthly "Ask HN: Who is hiring?" thread, read through YC's official
 /// Hacker News API (hacker-news.firebaseio.com). YC's terms forbid scraping
@@ -71,6 +72,8 @@ Posting? parseHnPost(String id, String html) {
     url: 'https://news.ycombinator.com/item?id=$id',
     text: htmlToText(html),
     remote: _remote.hasMatch(first) ? true : null,
+    // The header line is where posts put pay: `Acme | Flutter | $150k-$190k`.
+    salary: salaryFromText(first, lenient: true),
     company: company.isEmpty || company.length > 60 ? 'Hacker News post' : company,
   );
 }
