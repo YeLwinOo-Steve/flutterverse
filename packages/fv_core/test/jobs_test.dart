@@ -72,4 +72,35 @@ void main() {
     expect(JobsFile.fromJson(json).toJson(), json);
     expect(JobsFile.fromJson(json).jobs.last.firstSeen, '2026-10-30');
   });
+
+  group('Salary', () {
+    test('labels ranges, periods and currencies', () {
+      expect(const Salary(min: 150000, max: 220000, currency: 'USD', per: PayPeriod.year).label, r'$150K–$220K/yr');
+      expect(const Salary(min: 3500, max: 4200, currency: 'EUR', per: PayPeriod.month).label, '€3,500–€4,200/mo');
+      expect(const Salary(min: 35, max: 38, currency: 'CAD', per: PayPeriod.hour).label, 'CAD 35–38/hr');
+      expect(const Salary(min: 62500, max: 62500, currency: 'GBP').label, '£62.5K');
+      expect(const Salary(min: 60000, currency: 'GBP').label, 'From £60K');
+      expect(const Salary(max: 1200000, currency: 'INR', per: PayPeriod.year).label, 'Up to ₹1.2M/yr');
+      expect(const Salary(min: 90000, max: 110000).label, '90K–110K', reason: 'no currency stated');
+      expect(const Salary.negotiable().label, 'Negotiable');
+    });
+
+    test('round-trips on a job, and is left out when unknown', () {
+      const pay = Salary(min: 150000, max: 220000, currency: 'USD', per: PayPeriod.year);
+      final j = Job.fromJson(
+        (Job.fromJson(job('a').toJson()).toJson()..['salary'] = pay.toJson()),
+      );
+      expect(j.salary, pay);
+      expect(Job.fromJson(j.toJson()).salary, pay);
+      expect(
+        Job.fromJson({
+          ...job('b').toJson(),
+          'salary': {'negotiable': true},
+        }).salary,
+        const Salary.negotiable(),
+      );
+      expect(job('c').toJson().containsKey('salary'), isFalse);
+      expect(j.copyWith(location: 'Berlin').salary, pay, reason: 'folding locations keeps the pay');
+    });
+  });
 }

@@ -54,4 +54,5 @@ abstract final class Icons {
   static const globe =
       'M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM1.5 8h13M8 1.5c1.8 1.8 2.6 4 2.6 6.5S9.8 12.7 8 14.5C6.2 12.7 5.4 10.5 5.4 8S6.2 3.3 8 1.5z';
   static const flag = 'M3 14.5V2M3 2.5h8.5l-1.8 3 1.8 3H3';
+  static const cash = 'M1.5 4.5h13v7h-13zM8 9.8a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6zM4 8h.01M12 8h.01';
 }

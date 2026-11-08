@@ -24,6 +24,9 @@ final greenhouseBody = jsonEncode({
       'absolute_url': 'https://example.com/2',
       'location': {'name': 'Remote, United States'},
       'content': '&lt;p&gt;Our app is written in &lt;b&gt;Flutter&lt;/b&gt;.&lt;/p&gt;',
+      'pay_input_ranges': [
+        {'min_cents': 15000000, 'max_cents': 22000000, 'currency_type': 'USD', 'title': 'Base Range', 'blurb': ''},
+      ],
     },
     {
       'id': 3,
@@ -60,6 +63,17 @@ final ashbyBody = jsonEncode({
       'workplaceType': 'Hybrid',
       'isListed': true,
       'descriptionPlain': 'Own products end to end.',
+      'compensation': {
+        'summaryComponents': [
+          {
+            'compensationType': 'Salary',
+            'interval': '1 YEAR',
+            'currencyCode': 'EUR',
+            'minValue': 55000,
+            'maxValue': 70000,
+          },
+        ],
+      },
     },
     {
       'id': 'a2',
@@ -137,7 +151,10 @@ companies:
   group('boards', () {
     test('Greenhouse decodes escaped HTML and reads Remote from the location', () async {
       final client = MockClient((req) async {
-        expect(req.url.toString(), 'https://boards-api.greenhouse.io/v1/boards/apadmi/jobs?content=true');
+        expect(
+          req.url.toString(),
+          'https://boards-api.greenhouse.io/v1/boards/apadmi/jobs?content=true&pay_transparency=true',
+        );
         return http.Response(greenhouseBody, 200);
       });
       final posts = await GreenhouseBoard(client).fetch(greenhouse);
@@ -146,6 +163,8 @@ companies:
       expect(posts[1].remote, isTrue);
       expect(posts[0].remote, isNull, reason: 'not stated is unknown, never false');
       expect(posts[0].location, 'Amsterdam');
+      expect(posts[1].salary, const Salary(min: 150000, max: 220000, currency: 'USD'));
+      expect(posts[0].salary, isNull);
     });
 
     test('Lever pages through results and reads lists', () async {
@@ -176,11 +195,15 @@ companies:
     });
 
     test('Ashby skips unlisted roles and prefers workplaceType over isRemote', () async {
-      final client = MockClient((req) async => http.Response(ashbyBody, 200));
+      final client = MockClient((req) async {
+        expect(req.url.queryParameters['includeCompensation'], 'true');
+        return http.Response(ashbyBody, 200);
+      });
       final posts = await AshbyBoard(client).fetch(ashby);
       expect(posts.map((p) => p.id), ['a1', 'a3']);
       expect(posts[0].remote, isNull, reason: 'Hybrid, though isRemote says true');
       expect(posts[1].remote, isTrue);
+      expect(posts[0].salary, const Salary(min: 55000, max: 70000, currency: 'EUR', per: PayPeriod.year));
     });
 
     test('a non-200 answer is a feed error', () async {
@@ -463,6 +486,28 @@ companies:
       expect(job.id, 'hn:hn:10');
       expect(job.company, 'Acme');
       expect(job.source, JobSource.hn);
+    });
+
+    test('pay: the system\'s own field first, else what the description says', () async {
+      await run({
+        'acme': [
+          Posting(
+            id: '1',
+            title: 'Flutter Engineer',
+            url: 'https://example.com/1',
+            text: 'Salary: \$1 - \$2 per hour',
+            salary: const Salary(min: 90000, max: 110000, currency: 'EUR', per: PayPeriod.year),
+          ),
+          post('2', 'Flutter Developer', text: 'Salary is negotiable.'),
+          post('3', 'Dart Developer', text: 'Base salary range: \$120,000 - \$140,000.'),
+          post('4', 'Flutter Lead', text: 'Great team.'),
+        ],
+      }, DateTime.utc(2026, 11, 1));
+      final pay = {for (final j in output().jobs) j.id: j.salary};
+      expect(pay['lever:acme:1'], const Salary(min: 90000, max: 110000, currency: 'EUR', per: PayPeriod.year));
+      expect(pay['lever:acme:2'], const Salary.negotiable());
+      expect(pay['lever:acme:3'], const Salary(min: 120000, max: 140000, currency: 'USD'));
+      expect(pay['lever:acme:4'], isNull);
     });
   });
 }

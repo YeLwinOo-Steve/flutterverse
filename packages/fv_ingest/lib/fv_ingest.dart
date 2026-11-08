@@ -14,6 +14,7 @@ export 'src/jobs/polite_client.dart';
 export 'src/jobs/posting.dart';
 export 'src/jobs/company_search.dart';
 export 'src/jobs/run_jobs.dart';
+export 'src/jobs/salary.dart';
 export 'src/jobs/workable_feed.dart';
 export 'src/nominations.dart';
 export 'src/seeds.dart';

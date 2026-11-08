@@ -1,3 +1,5 @@
+import 'package:fv_core/fv_core.dart';
+
 /// An open role as a hiring system lists it, before matching. Lives only in
 /// memory: [text] is read to find Flutter and then dropped.
 class Posting {
@@ -9,6 +11,7 @@ class Posting {
     this.location,
     this.remote,
     this.company,
+    this.salary,
   });
 
   /// The system's own id for the posting.
@@ -25,6 +28,10 @@ class Posting {
 
   /// The company name, for sources that aren't per-company (Hacker News).
   final String? company;
+
+  /// Pay from the system's own pay fields, when it has them. Postings
+  /// without one fall back to what [text] says (`salaryFromText`).
+  final Salary? salary;
 }
 
 /// A feed answered with something other than a usable list.
