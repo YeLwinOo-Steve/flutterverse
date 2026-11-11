@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
-        with: { sdk: stable }
+        with: { sdk: 3.13.7 }   # see note in ingest.yml
       - run: dart pub get
       - run: dart analyze --fatal-infos
       - run: dart run tool/check_imports.dart
@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
-        with: { sdk: stable }
+        with: { sdk: 3.13.7 }   # see note in ingest.yml
       - run: dart pub get && dart pub global activate jaspr_cli
       # Builds without data: proves the site compiles and handles a fresh repo.
       - run: jaspr build

@@ -23,8 +23,11 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4   # main: the code
+      # Pinned, not `stable`: jaspr_builder 0.23.x needs analyzer 12, and every
+      # build_web_compilers that accepts analyzer 12 caps the SDK below 3.14.
+      # Move back to `stable` once a stable jaspr_builder supports analyzer 13+.
       - uses: dart-lang/setup-dart@v1
-        with: { sdk: stable }
+        with: { sdk: 3.13.7 }
       - run: dart pub get
 
       # The `data` branch holds data/ and history/; create it on the first run.
