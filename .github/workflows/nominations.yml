@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
-        with: { sdk: stable }
+        with: { sdk: 3.13.7 }   # see note in ingest.yml
       - run: dart pub get
       # The issue body is untrusted: it's read from the event file by the
       # script, never interpolated into a shell command.
